@@ -1,0 +1,619 @@
+--DCL 
+1 grant  : 
+	used to grant the table or view
+
+2 revoke
+	used to take back the table or view
+================================
+root -------------> hr
+emp -----------> 
+
+grant all on emp to hr;
+			|	|
+			T	user
+
+grant select on emp to hr;
+grant select , insert on emp to hr;
+
+============
+root	< ---------hr 
+revoke all on emp from hr;
+revoke insert , update on emp from hr;
+===privileges
+all
+select
+insert
+update
+delete
+drop
+truncate
+alter
+references		--> fk
+=================
+what is transaction?
+    it is group of dql (select), dml(insert, update,delete) statements
+   eg : zomato ordering food, atm , flipcart
+
+insert ...........
+update
+insert ...........
+update
+commit; 		--> 1st transaction
+select
+update
+insert ...........
+update
+update ..
+rollback;		--> 2nd transaction
+select
+update..
+update
+delete
+commit;   --> 3rd  transaction
+====
+TCL
+commit  : to save the changes permanently to the server
+rollback : undo the transaction
+savepoint  : --
+--------------------
+create table emp2(
+empno int,
+ename  varchar(20),
+sal int);
+
+insert into emp2 values(1, 'pr', 40000);
+insert into emp2 values(2, 'uma', 40000);
+select * from emp2;
+rollback;  --> will undo till the last commit / ddl statement 
+
+--note
+all the commands auto commit by default
+
+set autocommit=0;
+truncate table emp2;  --> all ddl the ddl (create/ alter/ drop / truncate)command are autcommit
+insert into emp2 values(1, 'pr', 40000);
+insert into emp2 values(2, 'uma', 40000);
+select * from emp2;
+rollback;
+select * from emp2;  --> 0 rows
+
+--------------
+ insert into emp2 values(2, 'uma', 40000);
+insert into emp2 values(1, 'pr', 40000);
+commit;
+==============
+commit;
+insert   X
+insert  X
+update  X
+rollback;
+select   X
+insert   X
+update  X
+update  X
+rollback;
+select 
+insert
+update
+commit;
+
+===============
+savepoint  
+	it used to bookmark
+       works in oracle 
+      rollback uses savapoint 
+
+
+windows key -- sqlplus ---  
+--to clear screen
+cl scr
+
+connect hr
+pass : hr
+--to see table names
+select * from tab;
+
+create table emp2(
+empno int,
+ename varchar2(20),
+sal int);
+
+
+insert into emp2 values(1, 'uma', 30000);
+insert into emp2 values(2, 'uma', 30000);
+savepoint a;
+insert into emp2 values(3, 'uma', 30000);
+insert into emp2 values(4, 'uma', 30000);
+savepoint b;
+insert into emp2 values(5, 'uma', 30000);
+insert into emp2 values(6, 'uma', 30000);
+rollback to b;
+insert into emp2 values(7, 'uma', 30000);
+rollback to a;
+insert into emp2 values(8, 'uma', 30000);
+insert into emp2 values(9, 'uma', 30000);
+commit;
+select * from emp2;
+================
+MySQL workbench
+	graphical tool for MySQL
+	fast to use 
+
+=================
+auto_increment
+   it is used to generate the sequence of numbers
+  1,2.......100
+  used with pk , srno column, empno, rollNo, custno 
+  auto_increment has to be pk and int 
+
+MySQL --> auto_increment
+oracle--> sequence
+sql server --> identity
+
+create table emp3(
+empno int auto_increment primary key,
+ename varchar(20) not null,
+sal int not null);
+
+insert into emp3 values(default, 'pr', 30000);
+insert into emp3 values(default, 'pr', 30000);
+insert into emp3 values(default, 'pr', 30000);
+insert into emp3 (ename , sal ) values( 'pr', 30000);
+select * from emp3;
+=========================
+--set operators
+1 union
+2 union all
+3 minus		--> only in oracle
+4 intersect	--> only in oracle
+
+eg pass_student_details , rechecking_student_details
+confirmed_ticket_passangers  , waiting_ticket_passangers
+
+create table present_bike(
+modelno int,
+color varchar(20));
+
+insert into present_bike values(1, 'red');
+insert into present_bike values(2, 'black');
+
+create table sold_bike(
+modelno int,
+color varchar(20));
+insert into sold_bike values(1, 'red');
+insert into sold_bike values(3, 'blue');
+--  3
+select * from present_bike
+union
+select * from sold_bike;
+
+--4
+select * from present_bike
+union all
+select * from sold_bike;
+
+--red  1
+select * from present_bike
+intersect
+select * from sold_bike;
+
+--1 black
+select * from present_bike
+minus
+select * from sold_bike;
+
+===================
+spool d:\priti\ora_comm.txt
+ select * from emp;
+ select * from dept;
+..
+..
+spool out
+
+==========================
+---ranking functions
+1 rank() : skip the number if the sal is same
+2 row_number()  : 1,2...... : continuous
+3 dense_rank()  : better 
+--1
+select ename ,sal, row_number() over(order by sal desc)   ranking
+from emp;
+--2
+select ename , sal, rank() over(order by sal desc)   ranking
+from emp;
+--3
+select ename , sal, dense_rank() over(order by sal desc)   ranking
+from emp;
+
+--display name of first highest paid employees
+select ename , ranking from 
+(select ename , sal, dense_rank() over(order by sal desc)   ranking
+from emp)
+where ranking =1;
+
+--display name of second highly  paid employees
+--display name of first 2 highest paid employees
+select ename , ranking from 
+(select ename , sal, dense_rank() over(order by sal desc)   ranking
+from emp)
+where ranking  <= 2;
+
+--display name of first 5 highest paid employees
+select ename , ranking from 
+(select ename , sal, dense_rank() over(order by sal desc)   ranking
+from emp)
+where ranking  <= 5;
+
+================
+--functions in MySQL
+1 numeric functions
+2 character/ String functions
+3 date functions
+
+--String functions
+select lcase('CDAC') ;
+select ucase('cdac');
+select lcase(Ucase('Cdac'));
+select ascii('ABCD');
+ select concat('priti', ' dalvi');
+ select concat(ename, ' is  a ',job, ' earns salary : ' , sal) from emp;
+select concat(ename , ' joined on ' , hiredate) from emp;
+--ename --lower case
+select replace('priti', 'i', 'ee');
+select length('lti infotech')
+ select rtrim('      cdac    ') name ;
+ select ltrim('      cdac    ') name ;
+ select trim('      cdac    ') name ;
+select lpad('nikita', 10, '*');
+select rpad('nikita', 10, '*');
+select lpad(rpad('nikita', 10, '*'), 14, '*');   nested function
+--to print the part of the string
+select substr('ashutosh', 4);
+select substr('ashutosh', 5, 3);
+  5 -start pt
+  3 --> no of ch
+--to find the position of the ch
+select instr('ashutosh', 'o')
+
+==numeric functions
+select sqrt(144);			12
+select sign(-88);			-1
+select abs(-88); 			88
+select pow(5,2);			25
+select round(123.678,2);		  123.68 
+                           ---->
+ select round(123.678,1);		123.7
+ select round(123.678,0);		124
+ select round(123.421,2);		123.42
+ select round(123.421,-1);		 120
+ select round(173.421,-2);   		200
+ select round(1623.421,-3);		 2000 
+                    <----
+-1   rounds to nearest  10
+-2   rounds to nearest  100
+-3   rounds to nearest  1000
+ifnull
+select ceiling(12.4) ;   13
+select floor(12.4) ;   12
+select format(1234.56712, 2);		  1,234.57 
+select greatest(44,43,66,5,89,90,33);
+select least(44,43,66,5,89,90,33);
+ select truncate(123.427,2);		123.42
+
+--date function
+select sysdate();		date and time 
+select curdate();		 2024-10-26 
+select  curtime()		time 
+select now();  			date and time
+select datediff('2024-12-26' , curdate());		--diff in days
+select date_format('2024-10-26',  '%M');    october
+				   1			2
+1 value
+2 format
+select date_format('2024-10-26',  '%m');
+%M
+%m
+%d
+%y
+%Y
+%D
+26/10/2024
+
+select date_format(curdate(), '%d/%m/%Y %h:%i:%s');
+select ename , date_format(hiredate, '%d/%m/%Y')  hiredate
+from emp;
+ename 	hiredate 
+smith	10/3/2012
+..
+..
+============
+select ename , round( datediff(curdate(), hiredate) /365)  as expr_yr 
+from emp
+ename 	expr_yr
+smith	2
+allen		5
+.
+==========
+datediff()   --> to find age 
+		--> to find expr
+
+=====
+subquery
+query with in the query
+Q1(Q2)
+ Q1	 : 	outer query
+Q2	: 	inner query
+
+--display the name of the emp, who is doing the same job as that of smith
+select ename from emp where job= 
+(select job from emp where ename ='smith') 
+and ename != 'smith';
+
+--display the name of the emp, who is not doing the same job as that of smith
+select ename, job from emp where job != 
+(select job from emp where ename ='smith') 
+and ename != 'smith';
+
+--display the name of the emp, who salary is greater than the average salary
+select ename , sal from emp where sal >
+(select avg(sal) from emp );
+
+--display the name of the emp, who is working in ACCOUNTING department
+select ename from emp
+where deptno =
+(select deptno from dept where dname ='accounting')
+
+--display the name of the emp, who is working in RESEARCH department
+select ename from emp
+where deptno=
+(select deptno from dept where dname ='research')
+
+--display the name of the emp, who works in new york
+select ename from emp
+where deptno=
+(select deptno from dept where loc='new york');
+
+
+--display the name of the emp, who is doing the same job as that of smith and allen 
+select ename , job from emp
+where job  in
+(select job from emp where ename in ('smith', 'allen'));
+
+--display the name of the emp, who is not doing the same job as that of smith and allen 
+select ename , job from emp
+where job  not in
+(select job from emp where ename in ('smith', 'allen'));
+
+--predicates
+>all
+<all
+>any
+<any
+exists
+
+----display the name of the emp, whose sal is greater than all emp from deptno 20
+select ename , sal from emp 
+where sal >all
+(select sal from emp
+where deptno = 20)
+
+--or
+select ename , sal from emp 
+where sal >
+(select max(sal) from emp
+where deptno = 20)
+
+
+ sal     |
++---------+
+|  800.00 |			1200		n
+| 2975.00 |		1500		n
+| 3000.00 |		2200		n
+| 1100.00 |		5000		y
+| 3000.00 |		6000		y
+
+
+----display the name of the emp, whose sal is greater than any  emp from deptno 20
+select ename , sal from emp 
+where sal >any
+(select sal from emp
+where deptno = 20)
+
+--or
+select ename , sal from emp 
+where sal >
+(select min(sal) from emp
+where deptno = 20)
+
++---------+
+|  800.00 |			1200		y
+| 2975.00 |		1500		y
+| 3000.00 |		2200		y
+| 1100.00 |		5000		y
+| 3000.00 |		6000		y
+
+--exists
+  will check the existence of the row
+
+--eg : display the details from dept tables where the employee exists
+dept : 10 20, 30 40
+emp 10 20 30
+
+select * from dept 
+where exists (
+select * from emp
+where emp.deptno=dept.deptno);
+
+--eg : display the details from dept tables where the employee not exists
+select * from dept 
+where not exists (
+select * from emp
+
+
+
+
+
+where emp.deptno=dept.deptno);
+
+
+----------------------------
+joins    
+PLSQL 
+NOQL
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+last_day()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+==================
+
+
+
+
+
+-------
+autoincrement
+ACID
+set operators
+subquery
+joins

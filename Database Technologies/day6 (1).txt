@@ -1,0 +1,490 @@
+--display the name of emp having expr > 12 yr
+select ename , round( datediff(curdate(), hiredate) /365)  as expr_yr 
+from emp
+where round( datediff(curdate(), hiredate) /365)   > 12;
+ 
+
+--6 display the position where "le" is occurring
+select ename , instr(ename , 'le') as position from emp;
+
+--9 show the names, date on which they have completed 5 yr
+ select ename , hiredate , adddate(hiredate, 3) from emp;
+
+====================================
+--join
+   it is used to join 2 or more tables
+
+--types of joins
+1 inner join  / equi join / natural join 
+2 outer join 
+  left outer join 
+  right outer join 
+  full outer join
+3 self join 
+4 cross join / cartesian join
+5 non equi join 
+
+e  	 	e		e		d			d
+ename	comm	sal 		dname 		loc
+smith	1000	3000	accounting	new York
+..
+..
+============================
+--cross join 
+ mapping will be performed
+ each record from the first table will be mapped to all the rows in the second table
+eg : student , subject 
+eg : vaccine , citizen_names
+eg : books , students
+eg : groupA, groupB
+eg : movie_tickets , customer
+
+
+ rows : *
+cols : +
+row   : 2  col 2
+t1
+c1	c2
+10	x
+20    y
+
+t2
+row   : 3  col 3
+c3	c4		c5
+1	aa		11
+2	bb		22
+3	cc		33
+
+o/p
+row   : 2*3 = 6  		col 2 + 3 =  5
+c1	c2	c3	c4	c5	
+10	x	1	aa	11
+10 	x	2	bb	22
+10	x	3	cc	33
+20	y	1	aa	11
+20 	y	2	bb	22
+20	y	3	cc	33
+
+--eg
+emp  : cols 8   rows 14
+dept : cols 3   rows 4
+cols 8+3= 11    rows 14* 4=56
+--eg
+select * from emp
+cross join 
+dept;
+
+--eg 2
+select ename , job, sal, dname , loc, d.deptno
+ from emp e
+cross join 
+dept d
+where sal between 1000 and 2000
+
+--eg
+select * from emp,dept;
+
+===============
+--inner join 
+  common records will be present
+
+dept : 10, 20, 30, 40
+emp : 10, 20, 30
+common : 10 20, 30
+
+select ename , sal , job , dname, loc, d.deptno 
+from emp e, dept d
+where d.deptno = e.deptno;
+
+--use the inner join to display empno, job hiredate dname for emp from deptno 10 and 20
+and sal > 1000
+select  empno, job, hiredate, dname
+from emp e, dept d
+where d.deptno in (10, 20) and sal > 1000;
+
+--joining the 3 tables 
+
+-=-diff in inner join and (intersect --set operator)
+ inner join :  structure is not same 
+intersect : structure should be same
+
+-=-diff in  join and (set operator)
+  join :  structure is not same 
+set operator : structure should be same
+
+-joining 3 tables
+emp  : deptno			
+dept :  deptno ,loc
+location : loc, remark
+create table location (
+loc varchar(20),
+remark varchar(20));
+
+insert into location values('NEW YORK', 'remark1');
+insert into location values('DALLAS', 'remark2');
+insert into location values('CHICAGO', 'remark3');
+insert into location values('BOSTON', 'remark4');
+
+select ename , sal, dname , d.deptno, l.loc, remark
+from  emp e, dept d, location l
+where e.deptno = d.deptno and d.loc= l.loc
+
+--creating view using 2 tables
+create view v5
+as
+select ename , sal , job , dname, loc, d.deptno 
+from emp e, dept d
+where d.deptno = e.deptno;
+
+select * from v5;
+
+===============================
+--left outer join 
+            e           e       d		d
+select ename , sal , d.deptno, dname
+from emp e
+left join 
+dept d
+on (e.deptno= d. deptno);
+
+
+--right outer join 
+select ename , sal , d.deptno, dname
+from emp e
+right join 
+dept d
+on (e.deptno= d. deptno);
+
+--note 
+we can expect the null values in outer join
+--full outer join 
+not working in MySQL
+--oracle 
+select ename , sal , d.deptno, dname
+from emp e
+full outer join 
+dept d
+on (e.deptno= d. deptno);
+
+===================
+self join 
+  joining the table with itself
+  there has to be 2 cols related in the same table , then only the self join can be performed
+   self join can not be performed on all tables
+   self join takes more time to execute
+
+--eg display the name of emp and his manager name details
+select a.ename, b.ename  as mgr_name
+from  emp a, emp b 
+where a.mgr= b.empno;
+
+--eg display the name of emp, hiredate  and his manager name and   hiredate details
+select a.ename, a.hiredate , b.ename  as mgr_name, b.hiredate mgr_hiredate
+from  emp a, emp b 
+where a.mgr= b.empno;
+
+--non equi join 
+  we use  != > < >= <= operators
+
+--eg display the pair of employees doing the same job , working in different departments
+select a.ename, a. job, a.deptno,  b.ename, b. job, b.deptno
+from  emp a, emp b
+where  a.job= b.job and a.deptno != b.deptno;
+
+------------------------------------------------------------------
+   1							2
+retired_emp    common		active_emp
+50			  20		  	 500
+
+--eg display the name of emp dues are not cleared
+inner join  : 20
+
+--eg display the all names to call for the annual functions
+full outer join  : 500 + 50 + 20 = 570
+
+--eg display the name of emp  dues are not cleared and those are retried
+left outer join : 50		+	  20 = 70
+
+--eg display the name of emp  dues are not cleared and who are working
+right outer join : 520
+==================
+eg        passout_students		common		failedstudents
+		  100				40		   10
+============
+player_batting		common	player_bowling
+     8				    6			6
+===============
+PLSQL
+procedural language structured query language
+
+--features
+1 create variables
+2 create loops
+	while , repeat until, normal loop
+3 sub programs can be created
+	sub programs 
+	1. stored procedures
+	2. functions
+	3. triggers
+4 if conditions can be used
+5 cursors can be used
+6 blocks can be created
+7 the performance of the code can be increased using plsql
+
+========================
+what is block?
+  it a collection of dql, dml, ddl statement 
+lnt --> 30000 emp
+
+8 request --------------> 1 request
+
+begin
+select
+insert
+update
+delete
+insert
+update
+insert
+update
+end;
+
+---create variable
+set @a:=100;
+set @b:=200;
+select @a;
+select @b;
+
+--note
+@   :  local variable 
+
+-note
+all the variable created in plsql are called as bind variable 
+
+--create a variable name as name1 store your name, "add" store address , score store your marks
+set @name1:='kunal';
+set @add := 'nashik';
+set @score := 89.33;
+select @name1;
+select @add;
+select @score;
+
+---fetching the data from table 
+select @max:= max(sal), @min := min(sal) from emp;
+select @max;
+select @min;
+
+=======================
+--types of blocks
+1 anonymous block
+	has no name
+	used only once
+       eg bisleri water bottle 
+
+
+2 named block
+	has  name
+	created once and used multiple times
+	eg: copper water bottle 
+	eg : stored procedure , function , trigger 
+
+====
+set autocommit =0;
+
+
+--eg stored procedure
+delimiter $$
+create procedure proce1()
+begin
+select * from emp where deptno=10;
+select * from dept;
+select * from emp where ename='smith';
+end;
+$$
+
+--to exe
+delimiter ;
+call proce1();
+
+--to drop procedure
+drop procedure proce1;
+=====================
+--create a procedure proce2 to display the details of allen and ford , increase the sal for all the employees by 100, display the max salary
+
+delimiter $$
+create procedure proce2()
+begin
+select * from emp where ename in ('allen', 'ford');
+update emp set sal = sal + 100;
+select @max := max(sal) from emp;
+select @max;
+end;
+$$
+
+--to exe
+delimiter ;
+call proce2();
+
+
+set autocommit =0;
+
+==
+create a procedure "proce3" to update the the sal of all emp by 10%,
+ display the ename , hiredate and the sal
+delete the records for dept 30 and whoes sal > 2000
+show all the records after deletion , execute procedure
+
+delimiter $$
+create procedure proce3()
+begin
+update emp set sal = sal * 1.1;
+select ename , hiredate, sal  from emp ;
+delete from emp where deptno = 30 and sal > 2000;
+select * from emp;
+end;
+$$
+
+--to exe
+delimiter ;
+call  proce3();
+rollback;
+
+--to show all the procedures
+show procedure status where db='cdac';
+							|	
+							database
+--if condition
+--1
+if  cond then
+..
+..
+else
+...
+..
+end if;
+
+--2
+if  cond then
+..
+..
+elseif  cond2 then 
+...
+..
+end if;
+
+---- create a procedure to declare 2 variables and compare
+delimiter //
+create procedure if_proce()
+begin
+declare result varchar(20);
+set @a := 100;
+set @b := 200;
+if (@a > @b) then
+     set @result := 'a is greater';
+elseif (@a < @b) then
+     set @result := 'b is greater';
+else
+     set @result := 'both are same';
+end if;
+select @result;
+end;
+//
+
+--to exe
+delimiter ;
+call  if_proce();
+================================
+--types of parameters for procedures
+1 in				: input  			--> default
+2 out 			: output
+3 in out			: input and output
+
+
+--eg accept a number from the user and check whether the number is 
+1 digit , 2 digit, 3 digit, 4 digit 
+delimiter $$
+create procedure indemo1(in num int)
+begin
+declare result varchar(20);
+if (num >=0 && num <10) then
+    set @result := 'it is one digit number';
+elseif   (num >=10 && num <100) then
+    set @result := 'it is two digit number';
+end if;
+select @result;
+end;
+$$
+
+--to exe
+delimiter ;
+call indemo1(6);
+
+---create a procedure to accept a deptno and the job from the user , 
+display the details for the same deptno and job ;
+i/p : 10  manager
+
+drop procedure indemo2;
+
+delimiter $$
+create procedure indemo2(pdeptno int, pjob varchar(20) )
+begin
+  select * from emp where deptno= pdeptno and  job = pjob;
+end;
+$$
+
+--to exe
+delimiter ;
+call indemo2(10, 'manager');
+call indemo2(20, 'analyst');
+call indemo2(30, 'clerk');
+
+--eg out parameter
+---create a procedure to accept a empno  and if the salary is < 5000 then 
+the update the sal for the emp by 2000 and return the updated salary and commission
+i/p  7499					
+o/p 
+
+delimiter $$
+create procedure utdemo1(in pempno int, out psal int , out pcomm int)
+begin
+    declare vsal int;
+    select @vsal := sal from emp where empno= pempno;
+    if @vsal < 5000 then 
+        update emp set sal = sal + 2000 where empno= pempno; 
+        select sal, comm into psal, pcomm from emp where empno= pempno;
+    end if ;
+end;
+$$
+
+--to exe
+delimiter ;
+call utdemo1( 7499, @updatedsal, @pcomm);
+select @updatedsal, @pcomm;
+rollback;
+
+
+---assignment  procedure
+--eg accept a number from the user and check for +ve and -ve and 0 number
+--eg accept a number from the user check whether the number is odd or even
+--eg accept ename  from the user check the sal of the same, 
+if sal < 2000 , delete the record
+i/p empno, 
+
+
+sdfsdf
+
+
+---loops
+1 repeat
+2 simple
+3 while 
+
+
+
+
+
+
+
+
+
+

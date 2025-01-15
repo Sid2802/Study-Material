@@ -1,0 +1,388 @@
+NOSQL
+not only sql 
+
+						database
+						  |
+			-------------------------------------------------------
+			|								|
+		structured (desc)				non structured
+			|								|
+		RDBMS							NOSQL
+			|								|
+		   ACID							  CAP
+			|								|
+MySQL, sql server, oracle					mongodb, Cassandra, neo4j ...
+PostgreSQL, Sybase...
+
+--RDBMS
+A   automicity
+		either everything will be completed successfully or nothing will be completed
+		eg : board exam : pass / fail
+		eg : atm : successfully withdraw the amt / can not 
+		eg : toss   : head or tail
+
+C   consistency
+		correctness of the data
+		if you update in one table , auto the data will be updated inside the child table 
+		eg : bank --> accholderDetails
+			update mobile no --> new transaction details ---> will be given new mobile no
+			bank --> address updated 
+			gmail --> password --change 
+		eg :
+	
+		on delete cascade
+		on update cascade
+	
+		P			ch
+		dept			emp
+		12			12
+					12
+		  
+I    isolation
+		a transaction is executed in an isolation
+		eg : voting , online examination, 
+		eg :using the atm card	
+	       eg : otp
+
+D  durability
+	if you have committed the transaction it is permanently saved on the server
+	eg : board exam -- 81%   --> we can not rollback
+	eg :  once married ---> can not rollback
+
+
+insert
+insert
+update
+commit;
+ ----> 15 days
+   select * from emp;   --> we can view the rows 
+  
+========================
+
+--NOSQL
+C 	consistency
+A	availability
+P      partition tolerance 
+
+dept
+deptno  pk
+dname 
+loc
+
+emp
+empno		pk
+ename
+sal
+deptno		
+dname 
+loc
+
+
+
+NOSQL
+
+--features
+1 it is schemaless, it is not structured  : no desc command 
+no transaction (no commit, rollback , savepoint)
+2 does not have fk , so can not create a relationship between the two tables
+3 does have PK, Uk
+4 does not have joins
+5 does not support adhoc queries(complex query)
+	complex query : using in, between, like , not like, distinct, >all , <any , exists
+6 the data is repeated everywhere , data is denormalized
+7 the size of the database is bulky / huge
+8 we have commodity servers to save the data, the configuration of these commodity severs is low configuration
+the installation cost is low
+9 it supports the CAP theorem , does not support ACID
+10 adding a new sever / node is very easy in NOSQL
+11 there is no transaction / commit / rollback
+12 user can define his own PK 
+13 DML operations can be performed 
+14 use the horizontal scalability(scale out) : adding a new node 
+	easy for the setup to add new nodes , cheap to do so 
+15 easy replication support
+replication  factor : 6
+
+--replication factor 
+ default : 4
+
+
+--scalability
+1 horizontal scalability(scale out)
+   adding the new server  --NoSQL
+
+2 vertical scalability (scale in)
+   increase the size of cpu   ---> rdbms
+
+--sharding the data
+we divide the details of one row into 2 tables 
+t1				t2
+50 cols			50 cols 	-->of one row
+
+
+RDBMS		NOSQL
+row 			document
+table 		collection 
+
+collection  : emp
+1	Pratik	50000  --> 1 document  --> 3 values
+kunal   2  20000 10000   50000  --> 5 values
+rita  2  30000 10000   50000  photo singnature  video  --> 8 values
+sdfs  jj kk						--> 10 values
+ kk kk l l						--> 50 values
+
+there is no create command in NoSQL
+there is only dml commands in NoSQL
+
+--no sql 
+there is no fk, join , adhoc queries , normaliazation , transaction, truncate , 
+constraint : not null, check , default , group by , order by , having 
+
+pk , uk is present 
+
+--data is stored in json  format (javascript object notation)
+			data is stored in key  value pair
+{"colour" : "red" , "pcode" : "p001"}
+     |               |		  |                |
+  key		 value     key		value
+
+dept
+deptno	dname 	loc
+10		acct		mum
+20		fin		nashik
+
+--1
+{"deptno" : 10, "dname" : "acct", "loc" : "mum"}
+
+--
+XML extensible markup lang 
+<departments>		--> root element
+	<department>		--> child element 
+		<deptno>10</deptno>
+		<dname>acct</dname>
+		<loc>mum</loc>
+	</department>
+	<department>
+		<deptno>20</deptno>
+		<dname>fin</dname>
+		<loc>nashik</loc>
+	</department>
+</departments>
+
+--categories
+1. Document Oriented
+2. XML database
+3. graph database
+4. key value store
+
+--1 start the server 
+cmd 
+C:\Users\CDAC>cd C:\Program Files\MongoDB\Server\4.2\bin
+mongod   press enter
+
+--2 start the client 
+cmd 
+C:\Users\CDAC>cd C:\Program Files\MongoDB\Server\4.2\bin
+mongo   press enter
+
+--prompt
+>
+
+--to clear the screen 
+cls
+
+--see all the databases
+show dbs 
+
+--to see the current databse
+db
+
+--to create /to open database
+use jp
+
+--to exit
+exit
+
+--to see help of some commands
+help
+
+--to create a collection
+dept
+deptno	dname 	loc
+10		acct		mum
+20		fin		nashik
+30		adm		bang
+40		sales		pune
+
+db.dept.insert({ 
+deptno : 10, dname : 'acct', loc : 'mum' })
+
+db.dept.insert({ 
+deptno : 20, dname : 'fin', loc : 'nashik' })
+
+db.dept.insert({ 
+deptno : 30, dname : 'adm', loc : 'bang' })
+
+db.dept.insert({ 
+deptno : 40, dname : 'sales', loc : 'pune' })
+
+
+db.dept.insert({ 
+deptno : 50, dname : 'mkt', loc : 'pune' , address : 'karve road' , contact : 7878787})
+
+--- see all the collections
+show collections
+
+emp
+empno	ename 		sal
+1		priti			50000
+
+db.emp.insert({empno : 1, ename : 'priti', sal: 50000 })
+db.emp.insert({empno : 2, ename : 'dipali', sal: 52000 , email : 'dipali@gmail.com'})
+db.emp.insert({empno : 3, ename : 'bhushan', sal: 52000 , comm: 2000, basic: 3000,
+mobile: 34343})
+
+--to display details of dept
+db.dept.find()
+db.emp.find()
+
+--note
+_id 		: cols is a pk 
+
+--to display all documents
+db.persons.find()
+
+--to format the o/p
+db.persons.find().pretty()
+
+--to count 
+db.persons.count()
+
+--to display first documents
+db.persons.findOne()
+
+--to delete collection
+db.persons.drop()
+
+
+--to delete all the female documents
+db.persons.remove({  gender: 'F'  })
+
+--to delete all the male documents
+db.persons.remove({  gender: 'M'  })
+
+--to delete all who livesIn    'Montreal'  ...
+db.persons.remove({ livesIn  : 'Montreal'  })
+
+--to delete one the male documents  : 1 rec
+db.persons.remove({  gender: 'M' }, 1 )
+
+db.persons.remove({  gender: 'M' }, 2 )
+
+--to display all female
+db.persons.find({gender : 'F'})
+
+--to format
+db.persons.find({gender : 'F'}),pretty()
+
+--to count
+db.persons.find({gender : 'F'}).count()
+
+--count all the documents livesin Jaipur city
+db.persons.count({livesIn : 'Jaipur'})
+
+--find the all the document who Visited is  India
+db.persons.find({countriesVisited: 'India'}).pretty()
+
+---find all the male documents , display the name , gender , livesin 
+db.persons.find({gender : 'M'} , {name :1 , gender : 1 , livesIn : 1})  
+
+--to remove object id
+db.persons.find({gender : 'M'} , {name :1 , gender : 1 , livesIn : 1, _id: 0}) .pretty() 
+db.persons.find({gender : 'M'} , {name :1, _id : 0}) .pretty() 
+
+---find all the female documents and display the name , countriesVisited 
+
+--update command , update the married status : 
+db.persons.update({name: {first: 'Nancy', last: 'Karin'}} , {$set : {married: 'No'}})
+
+--display all the female --- name and married
+db.persons.find({gender : 'F'}, {name :1 , married : 1, _id : 0})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

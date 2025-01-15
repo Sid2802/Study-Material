@@ -1,0 +1,752 @@
+Database
+
+table
+it is collection of rows and columns
+it is collection of records
+
+dept
+deptno	dname 	loc
+10		acct		mum		--> tuple / row /record
+20		mkt		nashik
+30		fin		pune
+40		adm		bang
+
+deptno --> primary key
+deptno	dname 	loc --> attributes / fields
+
+what is primary key ?
+it is an identity of the row.
+it is unique and not null
+--eg
+emp -----> empno
+customer ----> custid
+student --> rollNo
+
+
+dept
+deptno	dname 	loc
+10		acct		mum		--> tuple / row /record
+20		mkt		nashik
+30		fin		pune
+40		adm		bang
+
+emp	
+empno	ename 	deptno	sal
+1		uma		10		40000
+2		yatin		20		50000
+3		noor		10		50000
+4		amit		30		30000
+
+what is null?
+empty value
+value is unknown
+missing value
+
+what is database ?
+it is a collection of tables
+it is a collection of related information
+it is a collection of structured data and non structured data
+
+SQL --> structured query language
+					database	
+					   |
+			----------------------------------------------
+			|							|
+	 structured data						non structured data
+			|							|
+		RDBMS						  NOSQL
+(relational database management 			(not only sql)
+system)
+			|							|
+MySQL, oracle, sql server					mongodb, Cassandra , neo4j
+PostgreSQL, ms access, ...
+			|							|
+60 tables								 10 table 
+
+
+lnt database
+personal_emp		30000 rows
+empno
+fname 
+lname 
+mname
+mobile
+address
+email
+pan
+dob 
+doj
+
+dept			30 rows
+deptno
+dname 
+loc
+
+project		12300 rows
+projid 
+project_name 
+tech
+stdate
+endate
+status
+no_member
+
+
+emp_project 		3245000 rows
+id
+projid 
+deptno
+empid
+stdate
+enddate
+status
+
+attendance		50000 ros
+empid
+month
+days_present
+days_absent
+comment
+
+salary	5460000	
+empid
+month 
+basic
+hra
+da
+comm
+bonus
+
+
+travel		40000 rows
+id
+empid
+busno
+startpoint 
+endpoint
+stdate
+enddate
+km 
+charges
+
+loan		67000
+id
+empid
+type 
+loanamt
+rate_of_interest
+time_period
+emi
+charges
+comment
+
+50 tables 
+
+--relationship
+1 one to one
+	eg : 1 student  goes to one college
+
+2 one to many
+	eg : dept ---> emp
+
+3 many to many
+		eg : emp -- project 
+		1 emp -----> will work on many project  --> one to many
+		e001 --> p1, p2, p3
+
+		1 project -----> will have many emp working--> one to many
+		p1 ---> e001, e002, e003
+
+		emp_project
+		
+	eg : hospital , patient
+	eg : subject , student
+
+	
+===
+DBMS
+	database management system 
+	eg : clipper, foxbase, FoxPro
+
+functions of DBMS 
+1  add the records faster
+2  updation of the data is faster
+3 fetching the data is faster
+4 deletion  data is faster
+
+--adv of DBMS 
+1 we had primary key , unique key
+2 DBA (database administrator) role is introduced
+
+--functions of DBA
+1 create the new user  
+2 drop the user
+3 change the password for users
+4 memory management 
+
+sagar		jay		vaibhav
+3mb		4mb 			5mb
+
+
+--disadv of DBMS 
+1 there is no foreign key
+2 there is lot of  repeatation of the data
+3 memory requirement is high
+4 speed is low
+
+dept
+deptno	--> pk
+dname 
+loc
+
+emp
+empno	--> pk
+ename 
+deptno  
+dname 
+loc
+sal
+
+==============================
+RDBMS
+relational database managements system 
+eg 
+ms sql server
+oracle
+MySQL
+DB2  
+ms access
+PostgreSQL
+ingress
+infomix
+Sybase
+....
+
+
+versions
+5.0
+5.7
+8.0
+..
+..
+--adv of RDBMS
+1 there is PK,  foreign key, UK
+2 there is no  lot of  repeatation of the data
+3 memory requirement is low
+4 speed is high
+5 DBA role is present 
+
+--diff in DBMS and RDBMS 
+DBMS  : 
+RDBMS
+
+==master table 
+ this table we do not insert or update or delete the records frequently
+eg : dept, airline_schedule_details --> airline project
+account_holder_details --> bank 
+syllabus table 
+
+dept
+deptno	dname 	loc
+10		acct		mum		
+20		mkt		nashik
+30		fin		pune
+40		adm		bang
+
+insert, up, dele
+
+--transaction table 
+ this table we do  insert or update or delete the records frequently
+eg : bank db --> transaction_table  --> atm  
+attendance_emp 
+airline_booking 
+
+--DBA role
+   has the highest privileges / rights  on the database
+ eg :  principle of the college / ceo of company
+
+--session
+  it is related to  client machine
+
+instance 
+  it is related to  server machine
+
+===================================
+--distributed architecture / client server architecture
+
+					server 
+					   |
+			----------------------------------------------
+			|			|			|
+		   client1			client2		client3
+		commit;
+
+eg : gmail server , amazon 
+
+--different keys
+1 primary key / super key / natural key
+2 unique key
+3 foreign key
+4 candidate key
+5 alternate key
+6 composite key
+
+--primary key 
+it is an identity of the row
+it is unique and not null
+eg : emp --> empid
+customer --> custid 
+
+===================
+--unique key
+it is unique and can be null
+there can be multiple columns given as uk 
+
+emp
+empno	--> pk
+ename 
+mobile	--> uk
+email	--> uk
+divno	--> uk
+pan		--> uk
+
+--diff in pk and uk
+pk :  can not be null
+uk : can be null
+
+pk : there will be only 1  column given as pk
+uk: there can be multiple columns given as uk 
+
+==================
+--foreign key / reference key
+  this is field inside a table which is a pk of another table 
+  can be repeated , can be null
+  it is used to create a relationship between the 2 tables 
+ or to relate the tables
+
+
+dept  --> deptno --> pk
+deptno	dname 	loc
+10		acct		mum		
+20		mkt		nashik
+30		fin		pune
+40		adm		bang
+
+emp  : empno--> pk  ,  deptno--> fk
+empno	ename 	sal 		deptno
+1		git		33000	10
+2		pushpa	55000	10
+3		riya		56000	10
+4		amit		44000	20
+
+================
+--candidate key
+  are the columns where the data is not repeated, 
+  these columns are eligible to go for pk
+  eg : deptno	, dname 	, loc  : 3
+  deptno: pk   : 1
+   dname 	, loc  :   ak   : 3-1 -2
+
+dept  
+deptno	dname 	loc
+10		acct		mum		
+20		mkt		nashik
+30		fin		pune
+40		adm		bang
+
+===
+composite key
+    it is primary key , which consist of 2 or more columns
+
+pk : empno + stdate
+
+empleave
+empno	stdate		enddate
+1		2024-9-1		2024-9-2
+2		2024-9-1		2024-9-2
+1		2024-10-10	2024-10-19
+1		2024-12-31	2024-12-31
+
+--alternate key
+ are the columns which are the candidate keys other than pk 
+
+		
+--different lang
+1 DDL : data definition language 
+    create , alter , drop, truncate
+
+2 DML : data manipulation language
+	insert , update, delete
+
+3 DQL :data query language
+	select
+
+4 DCL :data control language
+    	grant , revoke
+
+5 TCL : transaction control language
+	commit, rollback, savepoint
+===
+
+create : used to create table
+alter :  used to change the structure of table 
+   add  a col,  drop a col
+drop:  will drop the table along with the data
+truncate : will delete all the rows of table , but the structure will be preserved
+insert  : to insert a record
+update : to change the data inside the table 
+eg 
+delete : to delete the row /record
+select : to retrieve the rows
+grant : to give the privileges to other user
+revoke : to take back the privileges
+commit : to save the changes permanently to the server
+rollback : undo the changes
+savepoint : to create the bookmark
+
+===============
+--prompt   : mysq1
+
+--command terminator :   ;
+
+--to clear screen 
+system cls
+or
+\!  cls
+
+--to see version 
+select version();
+
+--to see the user
+select user();
+
+--note 
+root 	: it is dba /super user 
+
+--to see names of all the databases;
+show databases;
+
+--to drop the database 
+drop database cdac;
+drop database lnt;
+drop database mycdac;
+
+--to create database 
+create database cdac;
+
+--to open database
+use cdac;
+
+--to check the current database 
+select database();
+
+--
+create table dept(
+deptno int,
+dname varchar(20),  
+loc varchar(20));
+
+--to see the structure of table 
+desc  dept;
+or
+describe  dept;
+
+dept  
+deptno	dname 	loc
+10		acct		mum		
+20		mkt		nashik
+30		fin		pune
+40		adm		bang
+
+insert into dept values(10, 'acct', 'mum');
+insert into dept values(20, 'mkt', 'nashik');
+insert into dept values(30, 'fin', 'pune');
+insert into dept values(40, 'adm', 'bang');
+
+select * from dept;
+
+--display dname 
+select dname from dept;
+
+--display dname  and loc
+select dname , loc from dept;
+
+--change the dname as finance for deptno 30
+update dept
+set dname ='finance'
+where deptno=30;
+
+select * from dept;
+
+--to delete the row for deptno 30
+delete from dept
+where deptno=30;
+
+select * from dept;
+
+--to delete the row for mkt department 
+delete from dept
+where dname ='mkt' ; 
+
+--to drop the table 
+drop table dept;
+
+create a folder "database" in D:
+copy the file EMP_DEPT_Script.sql in d:
+
+--to run the file 
+source d:\priti\EMP_DEPT_Script.sql
+
+select * from dept;
+select * from emp;
+
+1234.55		number(6,2)  or decimal(6,2)
+				      p s
+p : precision
+s  : scale
+
+454567.888     number(9,3)
+
+====
+sal > 1000
+select * from emp where sal > 3000;
+
+--relation op
+>
+<
+>=
+= 
+!=		not equal to 
+<>		not equal to 
+
+--display all manager details
+select * from emp where job ='manager';
+
+--display all details who are not manager
+select * from emp where job  <> 'manager'
+select * from emp where job  !=  'manager'
+
+--display all details who are from deptno 10
+select * from emp where dseptno=10;
+
+--display all details for smith 
+select * from emp where ename ='smith';
+
+--display all details who are from deptno 10 and sal > 1000
+select * from emp where deptno=10 and sal > 1000;	
+			                --------------       ---------------	
+--display all details who are clerk and from deptno 10
+--display all details who hired after 2012-01-01 and who are analyst
+--display all details who hired after 2012-01-01 or whose sal > 2000
+--display all details who are clerk and analyst  and manager
+select ename from emp where job = 'clerk' or job= 'manager' or job ='analyst'
+
+
+--logical op
+and 
+or
+not
+
+=====================
+--tee command
+ it allows to record all the operations in the session till we end the session
+
+tee d:\priti\day1_comm.txt
+select version();
+select user();
+show tables;
+select * from dept;
+select * from emp;
+exit;
+
+open file --> day1_comm.txt
+
+create table customer(
+custid  numeric(3),
+cname varchar(20),
+address varchar(20),
+orderdate date,
+totalamt numeric(10,2));
+
+
+--insert 3 records 
+insert into customer values(1, 'priti', 'nashik', '2024-1-1', 3000);
+insert into customer values(2, 'priya', 'pune', '2024-2-1', 3000);
+insert into customer values(1, 'tia', 'bang', '2024-3-1', 3000);
+select * from customer;
+
+create table emp1(
+empno  varchar(4),
+ename   varchar(20),
+deptno numeric(2),
+doj date,
+sal decimal(10,2),
+comm  decimal(10,2));
+
+insert into emp1 values ('e001', 'uma', 10, '2023-2-10', 40000, 10000);
+e001
+e002
+e003
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+tee
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+
+
+
+================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,496 @@
+meta data 
+   data about the data 
+
+where : condition 
+
+update dept
+set dname ='finance';
+
+update emp
+set sal =5000;
+
+==
+NOTE:
+the data and the command is not case sensitive  : MySQL, ms sql server
+the data is case sensitive but the command is not case sensitive : oracle
+
+========================================
+Normalization
+it is a database design technique
+it is followed by database architecture or database designer
+Normalization is performed before the creating the table
+
+--what is the use of Normalization
+it is used to reduce the redundancy of the data
+
+in Normalization we divide one table into 2 or more tables.
+the data will be correct, stable , believable , normal using Normalization
+there are 3 Normal forms.
+
+1NF
+A relation is said to be in “first normal form” (1NF) if and only if all its attributes assume only atomic values. 
+
+2NF
+A relation is said to be in 2NF if and only if it is in 1NF and every non-key attribute is fully functionally dependent on the primary key.
+
+pk : order_no+item_no
+245 + i768
+
+order_no		item_no 		qty 	price	cust_code name	address	city
+			i768			y	y		n 		 n 		n 		n 
+			i768
+3NF
+	remove the Transitive dependency
+
+what is Transitive dependency?
+if values of c2 depends upon the values of c1 and 
+if values of c3depends upon the values of c2 then 
+    values of c3 depends upon the values of c1
+  
+t1
+---------------------------> 
+-------------> ----------->
+c1		c2		c3
+10		x		aa
+20		y		bb
+30		z		cc
+10		x		aa
+20		y		bb
+
+===
+note:
+suppose the normalization is not followed  data will be repeated and we will have 3 anomalies
+1 insert anomaly
+2 update anomaly
+3 delete anomaly
+
+--insert anomaly
+new customer details can not be stored without the order details 
+
+--update anomaly
+c1 has changed the address --> updated in only 1 table and not in 2nd table 
+
+t1
+custid 	name 	address 		city
+c1		steel co   Works bldg.	hyd
+..
+..
+
+t2
+orderId .... custid 	name 	address 		city
+1		 c1		steel co   Works bldg.	mum
+
+--delete anomaly
+if you delete record from order details , the details of customer is also deleted 
+
+order_no		item_no 		qty 	price	cust_code name		address	     city
+1			i768			1	350	      c1		 steel comp    Works bldg.   mum
+
+========
+BCNF
+Boyce Codd Normal form
+
+to apply BCNF , following conditions should be satisfied
+1 there should be multiple candidate keys
+  1st ck :  c1 + c2 
+  2nd ck : c2 + c3 
+
+2 each candidate key should be composite
+3 and it should be overlapping
+	common col :c2 
+
+=========
+--distinct
+   it is used to avoid the repeatation of the data
+   used to supress the duplication
+
+select distinct job from emp;
+select distinct deptno from emp;
+
+--changing the heading of columns
+select ename , sal as salary from emp;
+select ename , sal salary from emp;
+select ename , sal "salary is" from emp;
+
+--display ename , comm, change comm heading as commission and ename as name 
+select ename as name ,  comm as commission from emp;
+                           |                                 |
+			alias				alias 
+
+--limit   : display first 3 rows
+select * from emp limit 3;
+
+--skip 2 rows and display the next 3 rows
+select * from emp limit 2, 3;
+
+--display date and time
+select now();
+
+--relational op
+>
+<
+>=
+<=
+!=
+<>
+
+--logical op
+and		&& 
+or		||
+not		!
+
+--airth op
++
+-
+*
+/
+
+--display all manager whose sal > 2000
+select ename from emp
+where job = 'manager'  && sal > 2000;
+
+--display all manager or whose  sal > 2000
+select ename from emp
+where job = 'manager'  || sal > 2000;
+          --------------------     ---------------
+		c1				c2
+
+--expression
+c1  and  c2 or   c3 and c4 not c5
+					  --------
+   						1
+    -----------
+	2
+			       --------
+				 3
+---------------------------------------------
+			4
+--hierarchy of logical op
+1 not
+2 and
+3 or
+
+--display ename who are not the  manager 
+select ename from emp
+where job != 'manager' 
+
+--BODMAS rule 
+
+--display ename who are analyst from deptno 10 and clerk from deptno 20
+select ename from emp
+where (job = 'analyst' and deptno=10) or  (job = 'clerk' and deptno=20) 
+
+--display ename who have joined after 2012-02-02 
+select ename from emp
+where hiredate > '2012-02-02';
+
+--display ename who have joined in  2012 year
+select ename from emp
+where hiredate >= '2012-01-01' and  hiredate <= '2012-12-31' ;
+
+--display ename who have joined in  2012, 2013, 2014 year
+select ename from emp
+where hiredate >= '2012-01-01' and  hiredate <= '2014-12-31' ;
+
+--display all the ename who are not receiving the commission
+select ename , comm from emp
+where comm is null;
+
+--display all the ename who are receiving the commission
+select ename , comm from emp
+where comm is not  null and comm != 0;
+
+======================
+--predicates
+1 in		: exact match
+2 like	: used to search for the pattern
+3 between	: range
+
+--display all the ename whose salary is between 1000 and 3000
+-----------|--------------|----------
+	1000		3000
+select ename , sal from emp
+where sal >= 1000 and sal <=3000;
+
+select ename , sal from emp
+where sal between 1000 and  3000;
+
+--display all the ename whose salary is not between 1000 and 3000
+select ename , sal from emp
+where sal not between 1000 and  3000;
+
+--display all the ename who have joined in 2012 using between 
+select ename , sal from emp
+where hiredate between '2012-1-1' and '2012-12-31';
+
+--in  predicate : exact match
+-display all the ename from deptno 10 or 20 
+select ename , deptno from emp
+where deptno =10 or deptno =20;
+
+select ename , deptno from emp
+where deptno in (10, 20);
+
+--display all the details for smith , allen, ward
+select * from emp where ename in ('smith','allen', 'ward');
+
+--display all ename for manager, salesman, analyst
+select ename from emp where job in ('manager', 'salesman', 'analyst');
+
+-display all the ename who are not from deptno 10 or 20 
+select ename , deptno from emp
+where deptno not in (10, 20);
+
+--display all ename who are not manager or salesman
+select ename from emp where job not in ('manager', 'salesman');
+
+=====================================
+--like	: used to search for the pattern
+--wild characters
+%		: replacement of 0 or more ch
+_		: replacement of 1 ch
+
+--display the name of employees which start with A ch
+select ename from emp
+where ename like 'A%';
+
+--end with R
+select ename from emp
+where ename like '%R';
+
+--end with N
+
+
+--anywhere A ch
+select ename from emp
+where ename like '%A%';
+
+--exact 5 ch
+select ename from emp
+where ename like '_____'
+
+--3rd ch R followed by characters
+select ename from emp
+where ename like '__R%';
+
+--3rd ch R  and 6th ch R , followed by characters
+select ename from emp
+where ename like '__R__R%';
+			      123456
+--4 th ch  T
+
+
+--display the name of employees which do not start with A ch
+select ename from emp
+where ename not like 'A%';
+
+--not ending with A
+
+==========================
+--ifnull(1,2)  function 
+1 col name
+2 value
+    it replaces the null value with the given value
+
+select ename , sal, comm, sal + ifnull(comm,0) as totsal from emp;
+800 + null =null
+800 + 0    = 800
+
+--display ename , sal and the bonus , the bonus is 20% of sal , display the total salary
+select ename , sal, sal * 0.2 as bonus , sal  + (sal * 0.2) totsal
+from emp;
+
+--display ename  , sal, comm and the annual salary 
+select ename  , sal, comm, (sal + ifnull(comm,0)) * 12 as annsal
+from emp;
+
+=============================
+--aggregate functions
+1 sum()
+2 avg()
+3 min()
+4 max()
+5 count()
+
+ select sum(sal) as totsal , avg(sal) as avg , count(*) as totrows from emp;
+
+select count(*)  from emp;
+----------------------------------------------------
+select count(comm)  from emp;
+# will count the not null values
+==========
+clauses
+1 from 		:   table name   ..
+2 where		:   condition    ...
+3 group by	:  grouping 
+4 having		: condition
+5 order by 	: sorting
+
+-- order by 
+--display the ename , sal , sort on ename
+select ename , sal  from emp
+order by ename ;
+
+select ename , sal  from emp
+order by ename  desc;
+
+--display the ename , sal , sort on sal --> descending
+--1 column name 
+select ename , sal  from emp
+order by sal  desc;
+
+--2 using col number
+select ename , sal  from emp
+order by 1;
+
+--3 expression
+select ename , sal + 500  from emp
+order by sal + 500 ;
+
+--4 using alias
+select ename , sal + 500 newsal  from emp
+order by newsal ;
+
+===============
+group by : 
+	used to groups the rows
+        it is used for creating a summary report
+       we use aggr fun
+
+--display the sum of the salary department wise
+select deptno, sum(sal) as totsal, min(sal), max(sal) , avg(sal)
+from  emp
+group by deptno
+order by deptno;
+
+--display job and the job wise total number of emp
+select job ,  count(empno)  totemp
+from emp
+group by job ;
+
+
+--display deptno and the department wise total number of emp
+select deptno ,  count(empno)  totemp
+from emp
+group by deptno 
+order by deptno;
+
+--rule
+column other than aggr fun cols , should be there in the group by clause
+
+--err
+select deptno , comm , ename,  count(empno)  totemp
+from emp
+group by deptno , comm  ;
+
+--solution 
+select deptno , comm , ename,  count(empno)  totemp
+from emp
+group by deptno , comm  , ename;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+--airth op
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--logical op
+and 
+or
+not
+
+
+--airth op
+changing col heading
+distinct

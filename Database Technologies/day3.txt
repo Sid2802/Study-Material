@@ -1,0 +1,509 @@
+--grouping on multiple cols
+select deptno, job , count(empno) as totemp
+from emp
+group by deptno, job
+order by deptno;
+
+deptno	job 		totemp
+10		clerk	2
+10		manager  2
+10 		analyst	3
+10		salesman	 4
+20		clerk	3
+20		manager  1
+20 		analyst	2
+30		clerk	1
+30		manager  3
+30		salesman	 2
+
+============================
+--sorting on multiple cols
+select ename , deptno, sal 
+from emp
+order by deptno, sal, ename ;
+		1        2      3
+============================
+--having
+  used to give the condition using aggregate functions
+
+--note
+if having is used, we have to use the "group by" clause
+
+select deptno , sum(sal) as totsal
+from emp
+group by deptno
+having  sum(sal) > 10000;
+
+--diff in having and where
+having :   used to give the condition using aggregate functions
+where : used to give normal condition , using > < >= <= != , = in like between and or 
+not 
+
+--using all the clauses
+select deptno , sum(sal) as totsal
+from emp
+where deptno in (10, 20)  and sal > 800
+group by deptno
+having  sum(sal) > 10000 
+order by deptno;
+
+======================
+12 E F Codd Rules
+2. we have only values and not pointer
+
+3.  to access the data use  table name, primary key value and column name.
+select ename , sal , comm 
+from emp
+where empno= 7369;
+
+4 support null 
+
+5 every RDBMS should have the Catalog  facility
+    --> meta data : data about the data 
+	name of the cols, pk, fk, uk, not null, data types
+  desc emp;  --> support 
+
+6 support DDL, DML,DCL, TCL, DQL
+
+7 view : logical table   : v1
+table : physical
+update dept........  --> can be done
+update v1 ------------>   should be
+view should be updateable 
+
+8  insert multiple records 
+1. source d:\a.sql
+2. select into
+3. create -- select 
+4. merge ---> insert / update 
+
+ 9.	Physical Data Independence
+we do not know the address of the db server 
+select * from emp;
+eg : gmail ---------
+
+10.	Logical Data Independence
+alter --> Adding col: bonus, emp_leave , deleting col etc
+select * from emp;
+
+
+11.	Integrity Independence
+we can give the rules : pk , fk, check ...
+create ---------: done
+Integrity rules : pk , fk, check ---> alter command 
+
+12.	Distribution Independence
+server location is Independent  : india, bang, hyd, us 
+
+			server  : 100 tables 
+			 |
+	------------------------------------
+	|		|			 |
+	client1	client2		client3
+facebook : 
+gmail
+amazon
+
+ 13.	Nonsubversion Rule
+can not bypass the integrity rules or constraints 
+--integrity rules  : pk, fk, check 
+
+---
+ERD diagram 
+entity relationship diagram
+
+what is entity?
+it is a thing in real world
+eg : emp, dept , keyboard
+
+entity : rectangle
+Attributes : oval
+relationship : diamond
+
+--types of attributes
+1 Composite attribute : 
+	eg name : fname , lname, mname
+	eg : adreess : line1. line2, street, city, pincode
+	eg : hiredate : yr, month, date
+
+2 Single-valued attribute 
+	eg : sal , comm, rollNo , panno, 
+
+3 Multi valued attributes
+	eg qualification, phone numbers, Email
+
+4 derived attribute
+	eg dob : ----> age
+	eg : hiredate ------> experience : 4 yr
+
+--types of  relationship
+Unary relationship
+Binary relationship
+Ternary relationship
+
+
+dept				emp
+(1,1)				(1,*)
+
+--types of entities
+1.Strong entity  --> pk
+2.Weak entity
+  eg	emp, dependent
+  eg patient ---> policy_details
+ eg emp  ---> pf_nominees 
+
+3.Recursive entity
+4.Composite entity
+generalization : common attr of parent entity 
+specialization : uncommon attr of child entity 
+
+person  --> name ,age, address
+|
+student --> rollNo, score , college
+|
+emp --> empid, sal , comp, desg
+
+==============
+--types of models
+1  hierarchical model
+2  network model
+3  relational model
+
+--Data Models
+   it is a pictorial representation 
+   it is easy to understand 
+======================
+--hierarchical model
+tree structure.
+parent child relationship
+nodes : parent node / ancestor node
+text node / intermediate node
+repeating information can be present
+
+--adv hierarchical model
+easy to understand
+one to one , one to many
+
+--dis adv
+many to many is not possible 
+===================
+--network model
+links / pointer are present 
+
+--adv
+one to one , one to many, many to many are possible
+
+--dis adv
+if the number of records are more , the structure becomes complex
+
+=========
+relational model
+rows and cols are present
+
+--adv
+easy to  understand
+one to one , one to many, many to many is possible
+
+=====
+--types of constraints
+1 primary key  ..
+2 foreign key
+3 unique key
+4 not null  ..
+5 check
+=======
+default
+======
+create table dept1(
+deptno numeric(2) primary key,
+dname  varchar(20) not null,
+loc varchar(20) not null);
+
+insert into dept1 values(10, 'acct', 'mum');
+insert into dept1 values(20, 'fin', 'mum');
+select * from dept1;
+
+insert into dept1 values(30, 'sales', 'null');
+
+--err
+insert into dept1 values(30, 'fin', null);
+insert into dept1 values(40, null, null);
+
+drop table emp1;
+===================
+--eg 1
+create table emp1(
+empno numeric(4) primary key,
+ename  varchar(20) not null,
+sal  float(10,2) check(sal > 10000),
+deptno  numeric(2) ,
+city  varchar(20)  check (city in ('pune','mum','nashik')),
+pan char(10)  unique,
+foreign key (deptno) references dept1(deptno));
+
+insert into dept1 values(10, 'acct', 'nashik');
+insert into dept1 values(20, 'mkt', 'bang');
+
+insert into emp1 values(1, 'vaibhav', 15000, 10, 'nashik', 'p001' );
+insert into emp1 values(2, 'pratima', 25000, 20, 'nashik', 'p002' );
+
+
+--fk rule 
+1 both the cols should have the same data type and the size
+2 in the parent table , the col should be pk 
+
+---eg
+sal  float(10,2) check(sal between 10000 and 50000),
+city  varchar(20)  check (city like 'b%'),
+colour varchar(20) check(color in ('red','green', 'blue'))
+
+
+---check : like between , in , > < != = 
+P					ch
+dept1				emp1
+deptno	--	pk		empno  pk
+dname 	  |			ename
+loc		  |			sal
+		  |-------->		deptno  fk
+					city
+					pan
+
+--note
+references / relationship 		: fk
+
+empno : e001 , e002, e003 ----------
+--eg2
+create table emp1(
+empno varchar(4) check(empno like 'e%')  primary key,
+ename  varchar(20) not null,
+sal  float(10,2) not null
+check(sal > 10000),
+deptno  numeric(2) ,
+city  varchar(20)  default 'nashik'
+check (city in ('pune','mum','nashik')),
+pan char(10)  unique,
+foreign key (deptno) references dept1(deptno));
+
+insert into emp1 values('e001', 'vaibhav', 15000, 10,default,  'p001' );
+insert into emp1 values('e002', 'pratima', 25000, 20, 'pune', 'p002' );
+insert into emp1 (ename , empno, sal, deptno ) values ('pratik', 'e003', 34000, 10);
+
+
+
+---
+
+unique :   pan , adhar
+---------------------------------------------------
+--integrity constraints
+1 entity integrity  : pk
+2 referential integrity : fk
+3 domain integrity : check 
+
+--what is domain?
+	it is the set of permissible values 
+	eg : city : 'pune','mum','nashik
+        eg : sal  > 10000
+	eg : color : red, green , blue  
+
+city check (city in ('pune','mum','nashik')),
+
+====diff between char and varchar
+char : fixed length
+  eg : pan, adhar, divno, accno, mobile 
+  reading from char col will be faster  
+
+varchar : variable length
+	saves the memory
+	eg : address, fname , lname 
+
+c1  	char(10)				priti		10B
+c2   varchar(10)			priti		5B
+
+
+
+
+
+
+
+
+
+
+
+===
+
+
+=========================
+--to delete all the rows, the structure will be preserved
+truncate table dept1;
+
+--diff truncate and delete
+truncate : ddl
+delete : dml
+
+truncate :  to delete all the rows, the structure will be preserved
+delete : will deletes record , rows wise 
+
+truncate : faster
+delete :
+
+truncate : "where" clause can not be given
+delete : "where" clause can  be given
+
+truncate : trigger can not be based on "truncate" operation
+delete : trigger can be based on "delete" operation
+
+truncate : rollback can not be given
+delete : rollback can be given
+=======
+--diff truncate and drop
+truncate:   to delete all the rows, the structure will be preserved
+drop : will drop the entire table along with the structure
+===========
+--diff delete and drop
+drop : will drop the entire table along with the structure
+delete : will delete a row at a time 
+
+drop : ddl
+delete : dml 
+===========
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=========
+schema :  table 
+desc emp;    --> to see the schema of table
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--types of insert
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---constraints
+1
+2
+3
+4
+5
+
+
+
+--database objects
+
+
+
+
+
+============
+ifnull() 		: MySQL
+nvl()			: ora

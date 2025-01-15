@@ -1,0 +1,702 @@
+--interview
+joins
+subquery
+constraints : 5
+ranking
+clauses : 5
+database object : 5
+view
+index
+ddl
+dml
+dql
+dcl
+tcl  
+savepoint
+stored proce-- > types of parameters
+functions
+trigger
+cursor
+==========================
+---loops
+1 repeat ... until
+2 simple
+3 while 
+=======================
+--repeat loop
+--syntax
+repeat
+..
+..
+    until condition
+end repeat;
+
+----
+--eg create a procedure to accept a number "num" from the user display the
+numbers  1, 2, 3 ...... num
+i/p   : num
+
+delimiter $$
+create procedure proce1(in num int)
+begin
+     set @a := 1;
+repeat
+    select @a;
+    set @a := @a + 1;
+    until @a > num
+end repeat;
+end;
+$$
+
+--to exe
+delimiter ;
+call proce1(8);
+
+==========================
+--display the first 10 even numbers using repeat loop
+2, 4, 6------------20
+
+
+delimiter $$
+create procedure repeat_proce(in num int)
+begin
+     set @a := 2;
+repeat
+    if (mod(@a, 2) = 0) then 
+	    select @a;
+    end if;
+    set @a := @a + 1;
+    until @a > num
+end repeat;
+end;
+$$
+
+--to exe
+delimiter ;
+call repeat_proce(30);
+================================
+--simple loop
+--syntax
+myloop: loop
+..
+..
+leave condition;
+end loop myloop;
+
+============================
+--accept a number from the user num and display numbers: 1,2........num
+delimiter $$
+create procedure simple_proce1(in num int)
+begin
+     set @a := 1;
+myloop: loop
+     select @a;
+     set @a := @a + 1;
+     if @a > num then 
+             leave myloop;
+     end if;
+end loop myloop;
+end;
+$$
+
+--to exe
+delimiter ;
+call simple_proce1(10);
+
+==================
+--while loop
+--syntax
+while condition
+do
+..
+..
+end while;
+
+---display your name 10 times 
+delimiter $$
+create procedure while_demo()
+begin
+     set @a := 1;
+    while @a <=10
+    do
+         select 'Priti Dalvi';
+         set @a := @a + 1;
+    end while;
+end;
+$$
+
+--to run
+delimiter ;
+call while_demo();
+
+========
+use of procedure
+    it used for manipulation (insert , update, delete)  the rows, using the condition 
+
+
+=======================
+--functions
+   it is a sub program used to store the complex expression of complex formula
+   it will always have at least 1 input parameter
+   will always return a value
+  dml, dql statements can be given 
+
+i/p ---> empno  7566 ---------------->calculate the  tot sal 
+sal + bonus comm da  hra  - tax -pf  + basic - instalment : 20 cols 
+
+--deterministic
+    the parameter are not case sensitive using deterministic
+
+
+--eg create a function to accept a number from user and calculate the cube of a number
+
+delimiter $$
+create function cube_fun(num int)
+returns int
+deterministic
+    return num * num * num;
+$$
+
+--to exe
+delimiter ;
+select cube_fun(4) ;
+select cube_fun(5);
+select cube_fun(7);
+
+--to drop
+drop function  cube_fun;
+
+======================
+--create a function to accept a empno from the user and return the total annual salary for the same employee
+
+delimiter $$
+create function cal_annsal(pempno int)
+returns int
+deterministic
+begin
+   declare annsal int;
+   select (sal + ifnull(comm,0)) * 12  into annsal from emp where empno = pempno;
+   return annsal;
+end;
+$$
+
+--to exe
+delimiter ;
+select cal_annsal(7499)  as annsal;
+select cal_annsal(7521)  as annsal;
+select cal_annsal(7698)  as annsal;
+
+--eg accept a deptno from the user and return the total salary for the same department 
+i/p
+
+delimiter $$
+create function totsal_fun(pdeptno int)
+returns int
+deterministic
+begin
+   declare totsal int;
+   select sum(sal)  into totsal from emp where deptno= pdeptno;
+   return totsal;
+end;
+$$
+
+--to exe
+delimiter ;
+select totsal_fun(10) totsal;
+select totsal_fun(20) totsal;
+select totsal_fun(30) totsal;
+
+--eg
+
+--4 i/p s
+delimiter $$
+create function totsal_fun3(pdeptno int,  psal1 int,  psal2 int, pjob varchar(20))
+returns int
+deterministic
+begin
+   declare totsal int;
+   select sum(sal)  into totsal from emp where deptno= pdeptno
+and  sal between psal1 and psal2 and job= pjob;
+   return totsal;
+end;
+$$
+
+--to exe
+delimiter ;
+select totsal_fun3(10, 100, 5000, 'manager') totsal;
+
+--diff in procedure and functions
+procedure:  is executed by "call proce1" 
+function : is executed by "select fun1(10)" 
+
+procedure: procedure may or may not have the parameters
+function : function should have at least one i/p parameter
+
+procedure: used to manupulate the rows using conditions
+function : used to store the complex expression of complex formula
+
+procedure:  no use "deterministic"
+function : uses "deterministic"
+
+procedure: has input , output parameter
+function : has only i/p parameter can be given 
+
+
+--to display the names of all the functions
+select routine_name from information_schema.routines
+where routine_type='FUNCTION'
+and routine_schema='cdac';
+
+select routine_name from information_schema.routines
+where routine_type='PROCEDURE'
+and routine_schema='cdac';
+
+=================
+Trigger
+   it is a sub program which is executed automatically as and when the dml (insert, update, delete) operation occurs
+there is no command to execute the trigger
+
+eg : glass door opens automatically
+face lock --> mobile 
+auto driving  --> car 
+scanner bar code ---> product --auto price, availability
+
+--types of trigger
+1 insert trigger
+2 update trigger
+3 delete trigger
+4  row level trigger	: is execute for each row in table 
+1000 rows ---> 1000 times
+   "for each row "  if it is present then it is  row level trigger	
+5 statement trigger  :   --> default 
+	faster 
+6 before trigger
+7 after trigger
+
+---use of trigger
+1 it is used to check for the complex conditions 
+2 it is used to redirect the information
+3 used for security purpose
+4 used to create log file
+5 used for auditing purpose
+
+--1  insert into emp values(1 , 'pr', 30, 29000);  --> auto 
+deptno		sal 
+10			10000 - 100000
+20			20000 - 200000
+30			30000 - 300000
+40			40000 - 400000
+50			50000 - 500000
+60			60000 - 600000
+..
+...
+20 depart
+
+--2  redirect the information
+emp 			------------> sal_history
+update (sal)		-----> insert
+
+sal_history
+empno	oldsal 		newsal
+7369       1400.00		2400
+7499	4200		6200 
+
+emp 			
+
+--3 security purpose
+do not allow the user to delete record from emp4 table 
+emp ---------> delete X 
+
+--4 create log file / auditing purpose
+emp ---------> comm / sal 
+emp (insert /upd/ delete ) -------------->   log_table (ins-+ert)
+
+log_table 
+table_name 	 op_date		operation		user
+emp			2024-10-28     I			hr
+emp			2024-10-28     U			hr
+emp			2024-10-28     D			hr
+
+--eg
+create table emp5(
+empno int,
+ename  varchar(20),
+sal int);
+
+--eg   insert trigger on emp5
+set serveroutput on;
+
+-to display name , college name , address, stream 
+begin
+ dbms_output.put_line('hello');
+ dbms_output.put_line('hello');
+ dbms_output.put_line('hello');
+ dbms_output.put_line('hello');
+end;
+/
+
+create trigger tr_emp5_insert
+before insert on emp5
+begin
+    dbms_output.put_line('this is an insert trigger ..........');     
+end;
+/
+
+--to execute 
+insert into emp5 values(1, 'viraj', 50000); -------> insert trigger
+update emp5 ...                                           ---> update trigger
+delete from emp5 ..........				    --. delete trigger 
+
+--to drop a trigger 
+drop trigger tr_emp5_insert;
+
+
+--to clear 
+cl scr
+or
+clear screen
+
+
+--to display the message 
+--java : 			System.out.println();
+--c++			cout()
+--oracle 			 dbms_output.put_line()
+
+--eg security trigger 
+do not allow user to delete the record from emp5
+--eg
+create or replace trigger emp5_delete
+before delete on emp5
+begin
+    raise_application_error(-20201,'can not delete the record from emp5 table ');
+end;
+/
+--to exe
+delete from emp5;
+	---> will exe tr
+--note
+   raise_application_error(1,2);
+1  error no  --> user defined
+	range : -20001  to -20999
+2 error message
+
+drop trigger emp5_delete;
+
+--eg : block all the dml op , trigger dml_emp5
+create or replace trigger dml_emp5
+before delete or update or insert  on emp5
+begin
+    raise_application_error(-20201,'can not perform DML operations... ');
+end;
+/
+
+--to exe
+delete from emp5;
+insert into emp5 values(2, 'om', 40000);
+update emp5 
+set sal =sal + 3000 ;
+==============================
+drop trigger  dml_emp5
+
+
+--eg  redirect the information
+emp5 			------------> sal_history
+update (sal)		-----> insert
+
+sal_history
+empno	oldsal 		newsal
+7369       1400.00		2400
+7499	4200		6200 
+
+create table sal_history(
+empno int ,
+oldsal int,	
+newsal int);
+--predicates
+:new.sal		: will get new sal
+:old.sal		: will get old sal
+
+--update 
+update emp5 set sal =sal + 5000 where ename ='viraj';
+:old.sal		:new.sal		
+50000		55000
+
+--insert
+insert into emp5 values(2, 'purva', 51000);
+:old.sal		:new.sal		
+null			51000
+
+--delete 
+delete from emp5  where ename ='viraj';
+:old.sal		:new.sal		
+50000		null
+
+emp5 (sal)update  -----------> insert sal_history
+
+--predicates
+1 updating 
+2 inserting 
+3 deleting 
+
+emp5
+14row
+
+update emp5 
+set sal=sal+ 1000;
+
+
+--for each row: executed  for every row in the table
+--redirect the info.
+create or replace trigger sal_update_tremp5
+after update of sal on emp5
+for each row
+begin
+   if updating then 
+      insert into sal_history values(:new.empno, :old.sal, :new.sal);
+   end if;
+end;
+/
+insert into emp5 values(2, 'bhushan', 60000);
+insert into emp5 values(3,'hitesh', 62000);
+insert into emp5 values(4, 'hina', 63000);
+insert into emp5 values(5,'bina', 64000);
+commit;
+
+--to exe
+update emp5 
+set sal =sal + 2000;
+
+--
+select * from sal_history;
+
+=================
+---log trigger
+drop trigger sal_update_tremp5;
+
+ create log file / auditing purpose
+emp ---------> comm / sal 
+emp (insert /upd/ delete ) -------------->   log_table (ins-+ert)
+
+log_table 
+table_name 	 op_date		operation		user
+emp			2024-10-28     I			hr
+emp			2024-10-28     U			hr
+emp			2024-10-28     D			hr
+
+drop table log_table;
+create table log_table(
+table_name varchar(20), 
+operation_date date,
+operation char(1),
+username varchar(20));
+
+emp5  ----------->   log_table
+dml  ----------------> insert
+i. u, d
+create or replace trigger tr_dml_emp5
+after insert or update or delete
+on emp5 for each row
+begin
+   if inserting then 
+      insert into log_table values('emp5', sysdate, 'I', user);
+   elsif updating then 
+      insert into log_table values('emp5', sysdate, 'U', user);
+   elsif deleting then 
+      insert into log_table values('emp5', sysdate, 'D', user);
+   end if;    
+end;
+/
+--to exe
+insert into emp5 values(6 , 'sam', 40000);
+update emp5 set sal =sal +100 where ename ='sam';
+delete from emp5 where ename= 'sam';
+
+select * from log_table;
+===================
+--see all the trigger names
+select  trigger_name
+from ALL_TRIGGERS;
+
+select  trigger_name
+from user_TRIGGERS;
+
+============================
+
+declare
+vrec emp%rowtype;
+begin
+   select * into vrec from emp where ename ='KING';
+   dbms_output.put_line('salary is ' || vrec.sal);
+   dbms_output.put_line('job is ' || vrec.job);
+end;
+
+--note 
+vrec emp%rowtype;
+    to store entire row of emp table 
+
+vname varchar(20);
+  |             |
+V         datatype
+a int;
+
+vrec.ename ----------> king
+vrec.sal ---------->  5000
+vrec.job ----------> pre
+
+
+vrec
+     EMPNO ENAME      JOB              MGR HIREDATE         SAL       COMM     DEPTNO
+---------- ---------- --------- ---------- --------- ---------- ---------- ----------
+     7839 KING       PRESIDENT            17-NOV-81       5000                
+
+==============
+cursor
+  it is dynamic allocation of the memory
+  it is used to manipulate the multiple records.
+===
+--err  : 140 rows
+declare
+vrec emp%rowtype;
+begin
+   select * into vrec from emp;
+   dbms_output.put_line('salary is ' || vrec.sal);
+   dbms_output.put_line('job is ' || vrec.job);
+end;
+
+--note
+plsql block fails if  it is fetching multiple rows 
+
+deptno	sal
+10		10%  update
+20		20%  update
+30		30%  update
+..
+...
+--steps
+1 declare
+2 open 
+3 fetch
+4 close
+============================
+declare
+vrec emp%rowtype;
+cursor c1 is select * from emp;   --1
+begin
+  open c1;  --2
+  loop
+       fetch c1 into vrec;   --3  row will be copied to vrec
+       exit when c1%notfound;
+       if vrec.deptno=10 then 
+           --delete / insert  t2
+            update emp set sal = sal * 1.1 where empno=vrec.empno;
+      elsif vrec.deptno=20 then 
+            update emp set sal = sal * 1.2 where empno=vrec.empno;
+     elsif vrec.deptno=30 then 
+            update emp set sal = sal * 1.3 where empno=vrec.empno;
+     end if;
+      -- dbms_output.put_line(vrec.ename || ' earns : ' || vrec.sal);
+  end loop;
+  close c1;  --4
+end;
+/
+
+--
+   EMPNO ENAME      JOB              MGR HIREDATE         SAL       COMM     DEPTNO
+---------- ---------- --------- ---------- --------- ---------- ---------- ----------
+      7839 KING       PRESIDENT            17-NOV-81       5000                    10
+      7782 CLARK      MANAGER         7839 09-JUN-81       2450                    10
+      7934 MILLER     CLERK           7782 23-JAN-82       1300                    10
+
+
+     EMPNO ENAME      JOB              MGR HIREDATE         SAL       COMM     DEPTNO
+---------- ---------- --------- ---------- --------- ---------- ---------- ----------
+      7839 KING       PRESIDENT            17-NOV-81       5500                    10
+      7782 CLARK      MANAGER         7839 09-JUN-81       2695                    10
+      7934 MILLER     CLERK           7782 23-JAN-82       1430                    10
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--eg 
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--assignment :
+--calculate the total of first 20 number using simple loop
+--display your name 10 times using the simple loop
+--display table of 5 using the simple loop
+
+--using while loop
+--display the first 10 even numbers
+--display the first 10 odd numbers
+
+
+
+================
+4 cursor
+5 NOSQL
+
+
+
+

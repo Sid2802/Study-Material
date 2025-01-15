@@ -1,0 +1,445 @@
+emp1
+
+drop table emp1;
+
+site : https://codeshare.io/NKO16V
+P					ch
+dept1				emp1
+deptno	--	pk		empno  pk
+dname 	  |			ename
+loc		  |			sal
+		  |-------->		dno  fk
+					city
+					pan
+note : the name of the fk col can be different 
+
+TIMESTAMP  202311101023
+datetime	2023-1-1 10:10:23
+
+
+create table dept1(
+deptno numeric(2) primary key,
+dname  varchar(20) not null,
+loc varchar(20) not null);
+
+insert into dept1 values(10, 'acct', 'mum');
+insert into dept1 values(20, 'fin', 'mum');
+select * from dept1;
+
+create table emp1(
+empno numeric(4) primary key,
+ename  varchar(20) not null,
+sal  float(10,2) check(sal > 10000),
+deptno  numeric(2) ,
+city  varchar(20)  check (city in ('pune','mum','nashik')),
+pan char(10)  unique,
+foreign key (deptno) references dept1(deptno)
+on delete  cascade
+on update cascade );
+
+insert into emp1 values(1, 'vaibhav', 15000, 20, 'nashik', 'p001' );
+insert into emp1 values(2, 'pratima', 25000, 20, 'nashik', 'p002' );
+
+insert into dept1 values(10, 'acct', 'nashik');
+insert into dept1 values(20, 'mkt', 'bang');
+
+dept1		emp1
+24			24
+			24
+
+			24
+=================================
+foreign key (deptno) references dept1(deptno)
+on delete  cascade
+on update cascade );
+--clauses with fk
+1 on delete restrict 	--> default 
+	you can not delete the record from the parent table , if there is record in the child table 
+2  on delete cascade 
+     if you delete from the parent table , will automatically deletes the record from the child table 
+3 on delete set null 
+     if you delete from the parent table , will automatically sets the deptno as null for the record from the child table 
+4 on update cascade 
+     if you update from the parent table , will automatically updates all the record from the child table 
+site : https://codeshare.io/NKO16V
+
+--1
+insert into emp1 values(1, 'vaibhav', 15000, 20, 'nashik', 'p001' );
+insert into emp1 values(3, 'amit', 15000, 20, null, null );
+insert into emp1 values(4, 'pradeep', 15000, 20, null, null );
+
+--2nd method
+insert into emp1(ename , empno, sal , deptno) values('adil', 5, 35000, 10);
+			 ---------------------------------------
+					cols 
+
+--data types in MySQL
+char
+varchar
+date
+tinyint	: 1b
+smallint : 2b
+mediumint : 3b
+int : 4b
+bigint : 8b
+float			: 4b
+decimal
+numeric
+double		: 8b
+TIMESTAMP
+daetime
+date
+time
+year
+text
+BLOB 	binary large object  : 4gb
+: stores images or other types of files : .doc, .ppt. .xls, .pdf , .jpg
+TINYBLOB 
+TINYtext
+mediumblob
+mediumtext
+longblob
+longtext
+enum  --. 
+
+==================
+
+name varchar(20)
+resume  blob
+
+====================================
+--alter command 
+it is used to change the structure of the table
+
+1 add a new column
+2 drop a col
+3 modify a col
+4 rename a col
+5 rename a table
+6 add a constraint
+7 drop a constraint
+..
+..
+
+--
+create table emp2(
+empno int ,
+ename varchar(20),  
+sal int);
+
+--add a col
+alter table emp2
+add comm numeric(10,2);
+
+--drop col
+alter table emp2
+drop comm ;
+
+--to modify a col
+alter table emp2
+modify ename varchar(40);
+
+--add a pk
+alter table emp2
+add primary key(empno);
+--rename a col		sal ----------> salary
+alter table emp2
+change  sal  salary int ;
+
+--rename table
+alter table emp2
+rename to newemp2;
+
+--adding a col to first
+alter table newemp2
+add pan char(10) first;
+
+--adding a col in between 
+alter table newemp2
+add divno char(10) after ename;
+desc newemp2;
+
+--add col email varchar(20)
+
+--add a check const  sal > 10000
+alter table newemp2
+add check(salary > 10000);
+
+--database objects
+1 table 			: physical
+2 view			: logical table
+3 index			: sorting the rows
+4 sequence		: used to generate sequence nos 	--> does not work in mysql
+		1, 2, ------100  : rollNo, id, 
+		auto_increment  --> MySQL
+		identity, 	sequence --> ms sql server
+
+5 synonym		: secondary name of table / view  -->  does not work in mysql
+				: short name  
+
+----------------------------
+--view
+it is logical or virtual table 
+does not store any data
+it is based on main table 
+can be based on 1 or more table
+eg : virtual reality game, 3d movies 
+
+--why view?
+it is used for security purpose
+
+root				hr
+emp	 ------------------> 
+1000rows
+
+grant all on emp to hr;
+			|	|
+			T	user
+grant all on v1 to hr;
+grant select  on v1 to hr;
+grant select , insert  on v1 to hr;
+
+
+			
+					emp  50 cols, 40000 rows
+					 |
+		-------------------------------------------
+		|			|			 |
+		hr		     mkt			adm 			user
+		7cols		10 cols		 5 cols
+		v1			v2 			v3 	
+
+--eg
+create view v1
+as
+select * from emp;
+
+--to display
+select  * from v1;
+
+--eg
+create view v2
+as
+select empno, ename, hiredate from emp
+where deptno =10;
+
+select  * from v2;
+
+--create a view v4 with cols : empno, hiredate, job, deptno for
+sal between 1000 and 2000 and from deptno 10
+
+create view v4
+as
+select empno, hiredate, job, deptno , sal
+from emp
+where (sal between 1000 and 2000)
+and deptno = 10;
+
+select * from v4;
+
+insert into v4 values(1, '2024-2-2', 'manager', 10, 1200);
+select * from v4;
+select * from emp;
+
+update ---v4
+delete --> v4
+
+delete from v4 where empno=1;
+select * from v4;
+select * from emp;
+
+============================
+==index
+it's sorts the records
+searching is faster using indexing
+"where" clause use the index
+if the col is pk , uk , index is auto created 
+no need to create an index on  pk , uk 
+
+eg : dictionary : word , 
+contact list --> mobile 
+pg no.s : novel 
+
+--when to create an index
+1.if the number of rows are more 6000000
+2. if the query is fired multiple times in a day  
+
+--types of index
+1 ascending 
+2 descending  : desc
+
+--1
+emp   :
+empno	ename 	sal 		hiredate
+100	..		..		...
+20		..		..		..
+33		..		..		..
+40		..		..		..
+4		..		..		..
+6
+1
+..	
+..
+20000 rows
+select * from emp
+where empno = 6;
+no. of searches  :   20000 rows
+===============================
+emp   : pk : empno
+empno	ename 	sal 		hiredate
+1		..		..		..
+4		..		..		..
+6
+20
+33
+40
+100
+.
+..
+
+select * from emp
+where empno = 6;
+
+no. of searches  :   3 
+
+--eg
+create index sal_id on emp(sal);
+                       |			|    |
+		  name of		T   col
+		  index
+
+select * from emp
+where sal> 2000;
+--
+create index comm_id on emp(comm desc);
+
+select * from emp
+where comm> 2000;
+
+--drop the index 
+drop index comm_id on emp;
+
+--create a descending index on job col and then give condition on job 
+create index job_id on emp(job desc);
+
+select * from emp
+where job in ('manager', 'salesman');
+
+--drop the index
+
+--composite index
+	index using 2 or more cols
+
+create  index jobsal_id on emp(job , sal  );
+
+select * from emp
+where job in ('manager', 'salesman') and 
+sal > 1000;
+
+--unique index
+create unique index ename_id on emp(ename);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--topics
+insert
+alter
+db obj
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+auto_increment 
