@@ -1,0 +1,3348 @@
+Web Based Java
+	JDBC
+	Servlet and JSP
+	Java Frameworks - Hibernate, Spring
+	REST APIs using Spring Boot
+	
+	JDBC:
+		JDBC stands for Java to Database Connectivity.
+		It is an API (Application Programming Interface) which allows Java
+		applications to interact with DB
+		
+		Like Java, every DB Vendor also provides its own API which is known
+		as Vendor Specific API.
+		
+		It simplifies access for all the clients who want to interact with DB.
+		
+		Since both APIs are written as per their own standard, there are 
+		conflicts. These conflicts can be resolved using a mediator known as
+		JDBC Driver.
+		
+		Driver is a program which converts JDBC calls into some format which
+		is understood by Vendor Specific API.
+		
+		Typically, JDBC drivers are of 4 types:
+			Type 1
+			Type 2
+			Type 3
+			Type 4
+			
+		Type 1:	
+			It is called as JDBC - ODBC Bridge
+			It uses a 3rd party library, ODBC (Open Database Connectivity)
+			which is provided by MicroSoft.
+			It converts JDBC call into some format which is understood by
+			ODBC.
+			It is not much recommended in large scale applications or even
+			production environment because of following limitations:
+				a) It is the slowest
+				b) It is Platform Dependent - (Specific to Windows)
+				c) Every client machine needs ODBC configuration setup.
+				
+		Type 2:
+			It is called as Native API, Partly Java Driver
+			It is a combination of Java and DB Vendor specific implementation.
+			It does not use any 3rd party library.
+			
+			Benefits over Type 1:
+				a) It is faster
+				b) It is Platform Independent
+				
+			Limitation:
+				Since it uses DB specific native API for communication, every
+				client machine must have this API installed.
+				
+		Type 3:
+			It is called as Intermediate DB Access Server.
+			It is completely different from other drivers.
+			It is used especially when a client program wants to interact with
+			multiple database servers.
+			It uses a middleware known as Intermediate DB Access Server which
+			acts as a router.
+			
+		Type 4:
+			It is called Vendor Specific, Pure Java Driver.
+			Every DB Vendor provides its own driver for its Database.
+			It uses TCP socket connection for communication.
+			
+			Benefits:
+				It is the fastest.
+				It is Platform Independent
+				It does not require any configuration setup on client machine.
+				
+			It is highly recommended for Production Environment and even for
+			large scale applications.
+			
+	Getting Started:
+		In order to write any JDBC program, there are certain steps to be
+		followed.
+		
+		1) Load the Driver
+		2) Establish Connection with DB.
+		3) Obtain some Statement
+		4) Execute SQL Query
+		5) In case of SELECT query, obtain ResultSet (Record Set) and 
+			perform navigation
+			
+	Exploring JDBC API:
+		Java language provides JDBC API through java.sql package.
+		It mainly provides following:
+			1. Driver
+			2. DriverManager (Class)
+			3. Connection
+			4. Statement
+			5. PreparedStatement
+			6. CallableStatement
+			7. ResultSet
+			
+	Implementing JDBC Steps:
+		1. Load the Driver:
+			Every JDBC specific driver is implemented using a Java class.
+			Therefore, loading the driver means loading the driver specific
+			Java class.
+			
+			This is done using 'forName()' method of 'Class' class.
+			
+			In case of Type 4 Driver, the driver specific class must be added
+			into Project's build path because it is not provided by JDK; rather
+			it is provided by DB vendor.
+			
+		2. Establish Connection:
+			In order to establish Connection, 3 properties are used:
+				a) Connection String (URL)
+				b) User ID
+				c) Password
+				
+			Based upon these properties a Connection can be established using
+			'getConnection()' method of 'DriverManager' class.
+			
+		3. Obtain some Statement:
+			In order to execute SQL query, some type of Statement is 
+			required.
+			
+			The type of Statement depends upon the type of SQL query.
+			The SQL query is mainly of 2 types:
+				1. Simple Query (Query without Parameter)
+				2. Parameterized Query
+			
+			In case of simple query, 'Statement' is used.
+			It is obtained using 'createStatement()' method of 'Connection'
+			interface.
+			
+		4. Execute SQL Query:
+			Once 'Statement' is obtained, it can be used to execute SQL 
+			query.
+			If the query to be fired is a SELECT query, it is done using
+			'executeQuery()' method of 'Statement'.
+			
+		5. Obtain ResultSet and Perform Navigation:
+			The 'executeQuery()' method of 'Statement' returns a reference
+			of type 'ResultSet'.
+			
+			ResultSet is the representation of the data populated from database
+			on client side.
+			Just like DB table, it contains rows and columns.
+			Every row has record position and every column has column index.
+			Both of them start from 1.
+			
+			Apart from actual record positions, there are 2 additional positions
+			available: Before First and After Last.
+			
+			By default, the ResultSet cursor points to Before First.
+			In order to perform navigation, it is necessary to shift the cursor
+			in the forward direction. This is done using 'next()' method of
+			'ResultSet'.
+			
+			To read the actual value, 'ResultSet' provides several getter methods.
+			E.g.
+				To read String, getString() and to read 'int', getInt()
+				
+			These methods accept column index as a parameter.
+			
+			The column index depends upon the SQL query fired and not upon the
+			original table design.
+		
+		JDBC URL:
+			The JDBC URL is mainly divided into 5 parts:
+				1. Main Protocol
+					It is the main protocol and for all JDBC URLs, it is always
+					'jdbc'.
+				2. Sub Protocol
+					It is the protocol which differs from DB to DB.	
+				3. IP Address
+					It is the IP Address of the machine on which DB server is
+					running.
+					If the same machine is used for client and server, then it is
+					to be mentioned as 'localhost'.
+				4. Port No
+					It is the unique identifier on which the server gets started.
+					E.g.
+						In case of MySQL it is 3306 whereas for Oracle, it is 1521
+				5. Schema / Service Name
+					It is the name of the DB Schema (MySQL) or Service (Oracle)
+					
+		Standard Practices:
+			While writing JDBC code, it is always better to follow standard
+			programming practices.
+			
+			1. Auto-Loading of JDBC Driver
+				It is a feature introduced by Java version 6 which allows to
+				automatic loading of driver implementation class once it is 
+				found in the build path.
+			
+			2. Decoupling the code for establishing Connection
+				Since Connection is required to perform any operation with DB,
+				it is always better to decouple (separate) the code for obtaining
+				Connection using a separate class.
+				
+			3. Auto-Closing of resources
+				Since all JDBC resources are extension to java.lang.AutoCloseable,
+				they can be opened using try-with-resources construct so that
+				they can be closed of their own.
+				
+			4. Implementing DAO Pattern
+				DAO stands for Data Access Object. It is a commonly used design
+				pattern for performing CRUD operations.
+				
+				It starts with a generic interface and the implementation class
+				specifies the actual type.
+				
+	Parameterized Query:
+		A query may have one or many parameters. In order to work with
+		parameterized query, 'PreparedStatement' is to be used.
+		
+		Even though a query is a parameterized query, still it can be fired
+		using a 'Statement' but when the same query is fired repeatedly with
+		different set of values, a new query is formed and compiled.
+		
+		This leads to performance implications. 
+		Therefore 'PreparedStatement' is preferred because it caches 
+		the query and the	query gets compiled only once.
+		
+		The reference of 'PreparedStatement' is obtained using
+		'prepareStatement()' method of 'Connection' interface.
+		
+		Once the query is created, it is necessary to substitute values for
+		its unknown parameters.
+		
+		Every unknown parameter has an index which starts from 1 and
+		increments by 1; moving from left to right.
+		
+		To substitute value, 'PreparedStatement' provides setter methods.
+		
+	Performing DML Operations:
+		DML operations involve INSERT, UPDATE and DELETE SQL queries.
+		These operations do not return any data; rather change the state
+		of the data.
+		Therefore, in case of DML operations, 'ResultSet' is not required.
+		However, in order to perform the operation, it is necessary to make
+		a JDBC call.
+		
+		In case of DML queries, it is done using 'executeUpdate()' method.
+		
+		The method returns 'int' which indicates the number of records
+		affected due to that query.
+		
+	Performing DML UPDATE:
+		In order to perform DML UPDATE, first it is necessary to load the
+		data on which UPDATE is required.
+		Typically this is done against Identity.
+	
+		Once the object is loaded, any time its state can be changed using
+		setter methods.
+		
+		Once the state is changed, it needs to be reflected back to DB for
+		completing the DML UPDATE.
+		
+	Types of Statements:
+		In order to make a JDBC call towards database, some type of 
+		Statement is required.
+		
+		Statements in JDBC are of 3 types:
+			1. Statement
+			2. PreparedStatement
+			3. CallableStatement
+			
+		Statement:
+			It is used to execute simple queries. (Query without parameters)
+			E.g.
+				stmt.executeQuery("select * from restaurant_master");
+				stmt.executeUpdate("delete from restaurant_master");
+		
+		PreparedStatement:
+			It is a sub-interface of 'Statement'.
+			It is used to execute parameterized queries.
+			It creates the query only once and caches the same.
+			This allows to execute same query repeatedly with different set
+			of parameter values without hampering the performance.
+			
+		CallableStatement:
+			It is a sub-interface of 'PreparedStatement'.
+			It is used to invoke stored procedures available on DB side.
+	
+	Transaction Management:
+		In any business application, Transaction Management is an important
+		activity.
+		
+		What is Transaction?
+		Transaction is a set of operations that must execute in a single unit.
+		
+		Transactions must be atomic (Execute ALL or NONE) otherwise the
+		data is left in inconsistent state.
+		
+		Whenever, any DML operation is performed from Java towards DB,
+		by default it gets committed. Therefore, it is not possible to rollback
+		the transaction even if it is required.
+		
+		This causes the problem of data inconsistency.
+		
+		Therefore, it is necessary to disable 'auto-commit'.
+		
+		'Connection' interface provides relevant methods for Transaction
+		Management.
+			1) setAutoCommit(boolean)
+			2) commit()
+			3) rollback()
+			
+		To disable 'auto-commit', invoke setAutoCommit(false).
+		Once it is disabled, changes can be committed by using 'commit()' and
+		rolled back by using 'rollback()'.
+=================================================================		
+Jakarta EE (Java EE (J2EE)):
+	Java language is designed for building various types of business
+	applications.
+	
+	E.g.
+		Desktop Applications
+		Simple N/W Based Applications
+		Web Based Applications
+		Mobile Based Applications
+	
+	However, to develop different types of applications, Java provides its
+	variants (platforms):
+		1. Java SE (Java Standard Edition)
+		2. Java EE (Java Enterprise Edition) => Jakarta Enterprise Edition
+		3. Java ME (Java Micro Edition) (Outdated because of Android)
+		
+	Java SE platform can be used for developing Desktop or Simple N/W
+	based applications.
+	
+	For developing web applications, Java EE (Jakarta EE) platform has to 
+	be used.
+	
+	What is Jakarta EE?
+		It is a platform meant for developing web as well as enterprise level
+		applications.
+		
+		What is Web Application?
+			Any application that is accessed via web browser is a web application.
+		
+		What is Enterprise Application?
+			Any web application that is integrated with enterprise services is
+			called as Enterprise Application.
+			
+		Enterprise services are the higher end services required to be 
+		integrated with the application.
+		
+		Higher End Services:
+			1. Scalability
+			2. Availability
+			3. Persistency
+			4. Transaction Management
+			5. Security
+			6. Asynchronous Messaging
+			
+	Jakarta EE Architecture:
+		Jakarta EE is based upon Component Driven Architecture.
+		
+		What is Component?
+		A component is an application level reusable piece of code.
+		A component is of 2 types:
+			1. Unmanaged
+			2. Managed
+		
+		Unmanaged Components:
+			When the components are required to be instantiated explicitly
+			using 'new' keyword, then they are called as Unmanaged Components.
+			Generally, Java SE platform involves Unmanaged Components.
+			
+		Managed Components:
+			When the components are not required to be instantiated explicitly;
+			rather they get instantiated implicitly, then they are called as
+			Managed Components.
+			Generally, Jakarta EE platform involves Managed Components.
+			
+	Types of Managed Components:
+		Managed Components are of 2 types:
+			1. Web Component
+			2. Business Component
+			
+			Web Component:
+				When a component is responsible for accepting Web Request
+				and generating Web Response, then that component is called
+				as Web Component.
+				
+				There are 2 types of web components: Servlet and JSP
+				
+			Business Component:
+				When a component is responsible for handling business logic
+				(domain specific logic), then that component is called as 
+				Business Component.
+				
+				It is taken care by EJB => Enterprise Java Beans
+	
+	How components are managed?
+		Components are managed using a runtime environment known as
+		Container.
+		
+		Since there are 2 types of Managed Components, there are 2 types
+		of containers:
+			1. Web Container
+			2. EJB Container
+		
+		Web Container:
+			It is a runtime environment responsible for managing web 
+			components like Servlet and JSP.
+			
+		EJB Container:
+			It is a runtime environment responsible for managing business 
+			component like EJB.
+	
+	How containers are made available:
+		These containers are made available using 3rd party softwares known
+		as servers.
+		
+		Since containers are of 2 types, servers are also of 2 types:
+			1. Web Server
+			2. Application Server
+		
+		Web Server:
+			It provides a web container which can manage web components
+			like Servlet and JSP.
+			
+			There are several web servers available in market but the most
+			commonly used is Tomcat by Apache Software Foundation.
+			
+		Application Server:
+			It is an extension to Web Server.
+			It provides Web Container as well as EJB Container.
+			There are several application servers available in market.
+			E.g.
+				WebLogic by Oracle Corporation
+				WebSphere by IBM
+				JBoss by RedHat
+				GlassFish by Oracle Corporation
+				WildFly by RedHat
+				
+	Servlet:
+		What is Servlet:
+			Servlet is a web component used to extend the functionality of
+			a web server.
+			It runs on server side and therefore can be used to handle server
+			side processing.
+			It can be used to generate dynamic web contents.
+			
+		Why Servlets became popular?
+			There are several technologies available which handle same task as
+			that of servlet however servlets got wide acceptance.
+			
+			Servlets are written in Java and therefore they inherit all the
+			features of Java.
+			
+			E.g.
+				Platform Independent
+				Robust
+				Secured
+				Multithreaded
+				Portable
+				Architecture Neutral
+		
+		Servlets are light-weight. Every request is processed in a separate
+		thread.
+	
+	Implementing Servlets:
+		Servlets are implemented using a Java class which is called as a 
+		Servlet Implementation Class.
+		
+		This class must make use of some API known as Servlet API.
+		
+		The Servlet API mainly consists of 2 packages:
+			1. jakarta.servlet
+			2. jakarta.servlet.http
+		
+		The 'jakarta.servlet' package mainly provides following:
+			1. Servlet (Interface)
+			2. GenericServlet (Class)
+			3. ServletRequest (Interface)
+			4. ServletResponse (Interface)
+		
+		The 'jakarta.servlet.http' package mainly provides following:	
+			1. HttpServlet (Class)
+			2. HttpServletRequest (Interface)
+			3. HttpServletResponse (Interface)
+	
+	HTTP Basics:
+		HTTP stands for Hyper Text Transfer Protocol.
+		It is the most commonly used protocol in web application.
+	
+	A protocol is of 2 types:
+		1. Stateless
+		2. Stateful
+	
+	Stateless:
+		When a protocol cannot maintain conversational state between the
+		2 requests, then it is called as Stateless Protocol.
+		E.g. HTTP
+		
+	Stateful:
+		When a protocol can maintain a conversational state between the
+		2 requests, then it is called as Stateful Protocol.
+		E.g. FTP
+		
+	Servlet Implementation Class:
+		There are 3 options to create a Servlet Implementation Class:
+			1. Implement 'Servlet' interface
+			2. Extend 'GenericServlet' class
+			3. Extend 'HttpServlet' class
+		
+		Implement 'Servlet' interface:
+			This option is not much recommended because it enforces to 
+			override all the methods of the interface irrespective of whether
+			they are in use of not.
+		
+		Extend 'GenericServlet' class:
+			This option is used for creating servlets that accept any type of
+			request that means protocol independent.
+			
+		Extend 'HttpServlet' class:
+			This option is used for creating servlets those are specifically meant 
+			for accepting HTTP request and generating HTTP response.
+		
+	Jakarta EE - A Specification:
+		Jakarta EE is a specification (Set of rules) and not an implementation.
+		Implementation is provided by 3rd party softwares: 
+			Web Server and Application Server
+			
+	Servlet - First Example:
+		1. Create Dynamic Web Project
+			a) Setup the Target Runtime
+			b) Change the Context Root if required
+			
+		2. Create a new Servlet
+			a) Create a servlet class
+			b) Change the Servlet Name, URL Mapping if required
+			c) Provide the logic for response generation in 'doGet()' method.
+			
+		3. Deploy the application on Tomcat
+				Typically, this is done by creating a WAR (Web Archive) file
+				and adding to the server.
+				
+				It can be simplified by integrating the server with IDE.
+				
+	URL Constituents:
+		The servlet URL has following constituents:
+			1) Protocol	 - It is always HTTP
+			2) IP Address - It is used to target the machine.
+								If same machine used for client and server, then
+								it is 'localhost'
+			3) Port No - It is used to target the server (service)
+			4) Context Root - It is used to target the application deployed
+										on the server
+			5) Resource URL - It is used to target the actual resource of
+										the application
+										
+	Servlet Life Cycle:
+			The life cycle of servlet consists of 3 stages:
+				1. Instantiation and Initialization
+				2. Service
+				3. Destroy
+			
+			These stages are taken care by relevant methods which are known
+			as life cycle methods.
+			
+			Since there are 3 stages, there are 3 life cycle methods:
+				1. init()
+				2. service()
+				3. destroy()
+				
+			Instantiation and Initialization:
+				When the servlet is requested for the very 1st time, it gets 
+				loaded by Web Container and once the loading is finished, it
+				gets instantiated (object created) by Web Container.
+				After instantiation, web container invokes 'init()' method.
+				This method can be used to perform initialization if any.
+				After 'init()' is finished, web container invokes 'service()' method.
+				This method is actually used to serve the client.
+			
+			Service:
+				When the client makes request to servlet, for every request, web
+				container invokes 'service()' method.
+			
+			Destroy:
+				When the web server is stopped or the application is undeployed 
+				from the server, web container decides to remove the instance
+				from memory. During this, it invokes 'destroy()' method.
+				Like init(), this method also gets called only once.
+				
+	How 'service()' and 'doGet()' are inter-linked?
+		All the 3 life cycle methods are already implemented in the super
+		classes : HttpServlet (service()) and GenericServlet 
+		(init() and destroy())
+		(** GenericServlet is a super class of HttpServlet)
+		
+		When the servlet is requested, every time service() method gets
+		invoked.
+		
+		The service() method available in HttpServlet class identifies the
+		type of incoming HTTP request.
+		
+		HTTP request is of several types:
+			1. GET
+			2. POST
+			3. PUT
+			4. DELETE
+			5. HEAD
+			6. OPTIONS
+			7. TRACE
+		
+		Once the type is identified, it invokes respective 'doXXX()' method
+		from 'HttpServlet' class.
+		
+		E.g.
+			GET	   =>			doGet()
+			POST  =>			doPost()
+			
+		In order to customize the implementation, these methods need to be
+		overridden in the sub class.
+		
+		When a servlet is requested by typing its URL in browser's address
+		bar, always HTTP GET request is made.
+		
+	Requesting a Servlet:
+		A servlet can be requested using several options.
+			1. Using browser's address bar
+			2. Using HTML anchor tag: '<a>'
+			3. Using HTML Form
+			4. Using an Applet (Outdated)
+			5. Using another Servlet
+			6. Using JSP
+			
+	HTML Form Processing:
+		In web applications, accepting data from end user using HTML form
+		is a very common requirement.
+		
+		Whatever data is entered by user needs to be processed on server
+		side and generate the response accordingly.
+		
+		This technique is known as HTML form processing.
+		
+		(
+			Servlets can be configured by 2 ways:
+				1. web.xml	  
+					(Mandatory till version 2.5. Version 3.0 onwards optional)
+				2. @WebServlet annotation
+		)
+		
+		When client makes a request by providing some input, that data is
+		sent towards server via HTTP request.
+		
+		That data is known as Request Parameter. It is in the form of
+		name-value pair.
+		
+		In order to capture this data, 'HttpServletRequest' object is used.
+		It provides a method: String getParameter(String)
+										  <<value>>					  <<name>>
+										
+	HTML Form and GET Request:
+		When data is sent towards servlet via HTML form, by default always
+		HTTP GET request is made.
+		
+		In case of GET request, parameters are appended to the URL using
+		'?' notation. They are separated using '&' notation.
+		
+		Since they are directly exposed, it leads to security concerns.
+		
+		Therefore, in order to avoid such things, HTTP POST request is
+		used.
+		
+		To make POST request, use "method = 'post'" setting for HTML
+		<form> element.
+		
+		HTTP GET			Vs				HTTP POST
+			1. In case of GET request, parameters are appended to the URL 
+			   whereas in case of POST, they are sent along with page body.
+		    2. There is a limitation on URL length in case of GET request
+		    	(255 Characters) whereas there is no limitation in case of POST. 
+		    3. There is a limitation on data transfer in case of GET request
+		    	 (8 KB) whereas there is no limitation in case of POST. 
+		    	 
+	Collaboration:
+		When 2 components of same web application are interacting with
+		each other, then that process is known as Collaboration.
+		
+		This brings 2 benefits:
+			1. Modularity
+			2. Re-usability
+			
+		In order to handle collaboration, servlet API provides an interface:
+			jakarta.servet.RequestDispatcher
+		
+		'RequestDispatcher' provides 2 methods:
+			forward()
+			include()
+			
+			forward():	
+				Forwards the control to the next resource and that next 
+				resource generates the response.
+			
+			include():
+				Forwards the control to the next resource, takes the response from
+				that resource, comes back to the previous resource and the previous
+				resource generates the response.
+				
+			In order to invoke these methods, it is necessary to obtain the 
+			reference of 'RequestDispatcher'.
+			
+			It is done using 'jakarta.servlet.ServletRequest' interface.
+			It provides 'getRequestDispatcher()' method.
+			
+			When a request is forwarded from one servlet to another, the
+			original request parameters are also propagated to the next
+			servlet. They can be captured using 'getParameter()' method.
+			
+			In addition to original request parameter, intermediate servlet 
+			may attach additional parameters in the current request.
+			
+			This is done using 'setAttribute()' method.
+			
+			In the next servlet, this additional parameter must be obtained
+			using 'getAttribute()' method.
+			
+	Other Resources in Web Application:
+		Apart from HttpServletRequest and HttpServletResponse, there are
+		other resources available in web application.
+			1. jakarta.servlet.ServletConfig
+			2. jakarta.servlet.ServletContext
+			3. jakarta.servlet.http.HttpSession
+		
+		jakarta.servlet.ServletConfig:
+			It is used to maintain servlet's configuration specific information.
+			It mainly contains initialization parameters if any.
+			Its object is created for every servlet.
+				
+		jakarta.servlet.ServletContext
+			It is used to maintain application level information.
+			Its object is created for the whole application. 
+			
+		jakarta.servlet.http.HttpSession
+			It is used to maintain session level (user level) information.
+			It is used for Session Management.
+			Its object is created for every user.
+	
+	Session Management:
+		HTTP is a stateless protocol. It does not maintain any conversational
+		state along with the client.
+		
+		In a web application, to perform some transaction e.g. Ticket Booking,
+		Food Order Booking, client has to make multiple requests towards
+		server. Server has to maintain state for every client.
+		
+		Maintaining the state for every client is known as Session Management
+		or Session Tracking.
+		
+		For every client, a session must be available. It is used to maintain
+		client specific information.
+		
+		There are 4 options available for Session Management:
+			1. URL Encoding
+			2. Hidden Form Fields
+			3. Cookies
+			4. Servlet API - jakarta.servlet.http.HttpSession
+			
+		Using HttpSession:
+			The object of type 'HttpSession' is used to maintain client specific
+			information (state).
+			
+			It is obtained using 'getSession()' method from:
+				HttpServletRequest
+				
+			This method checks whether the session for the corresponding user is 
+			available or not.
+			If not available, creates a new one and returns that.
+			If available, returns the existing one.
+			
+			The HttpSession interface provides 'isNew()' method to check
+			whether the session is newly created or not.
+			
+		How HttpSession works?
+			When a call is given to 'getSession()' method, it checks whether
+			there is any cookie coming from client side or not.
+			If there is no cookie available, it decides to create a new session.
+			That means, it creates an object of type 'HttpSession'.
+						(Web Container)
+			Web Container also assigns a unique identity for the session which
+			is called as Session ID.
+			
+			Further, container stores the Session object along with its ID in
+			some 'Map' based collection.
+			
+			It also creates a cookie and stores Session ID into that cookie.
+			Once response is sent back to client, server sends that cookie 
+			as well.
+			
+			When the same client makes 2nd request, whatever cookie was
+			received in the previous response, is sent back to server.
+			
+			This time, a call to 'getSession()' understands that there is a 
+			cookie which contains a Session ID. Therefore it does not create
+			a new Session.
+			
+		HttpSession methods:
+			isNew()								=> Checks whether Session is new or not
+			setAttribute()					=> Sets the attribute at Session level
+			getAttribute()					=> Gets the attribute from Session level
+			setMaxInactiveInterval()	=> 
+				Specifies the time limit in terms of seconds during which a 
+				client is supposed to make the request in order to retain the
+				session; otherwise session expires.
+			invalidate()						=> Forcefully terminates the Session.
+			
+	JSP:
+		JSP stands for Jakarta Server Pages (Java Server Pages)
+		JSP is a web component used to extend the functionality of 	a web 
+		server.
+		It runs on server side and therefore can be used to handle server
+		side processing.
+		It can be used to generate dynamic web contents.											
+		
+		Why JSP?
+			In a web application, mainly there are 2 roles:
+				Web Developer
+				Web Designer
+				
+			Web Developer needs to be expert in logic whereas Web Designer
+			needs to expert in presentation.
+			
+			JSP allows to emphasize upon presentation using Java capabilities
+			but without writing a Java code.
+			
+			It looks more like HTML and less like Java.
+			
+	Life Cycle of JSP:
+		Like servlet, JSP life cycle also has 3 stages and these stages are
+		taken care by 3 life cycle methods.
+			1. jspInit()
+			2. _jspService()
+			3. jspDestroy()
+			
+		When the JSP is requested for the very 1st time, it is loaded by
+		web container.
+		Once loading is finished, it is compiled and translated into servlet.
+		The Java class for this servlet is also generated by web container.
+		Web container instantiates this Java class and invokes 'jspInit()'.
+		Then it invokes _jspService().
+		
+		When the JSP is requested, every time _jspSerive() gets invoked.
+		
+		When the server stops or the application is undeployed, web container
+		invokes jspDestroy().
+		
+	JSP File Structure:
+		A JSP file may contain following code:
+			1. HTML Tags
+			2. Any valid Java code
+			3. JSP Tags
+	
+	JSP Tags:
+		JSP tags are divided into 3 categories:
+			1. Directives
+			2. Scripting Elements
+			3. Standard Actions
+			
+		Directives:
+			They are denoted by '<%@ ......... %> delimiters.
+			They of 3 types:
+				a) page
+				b) include
+				c) taglib
+			
+			page:
+				It is used to configure JSP page with the help of several 
+				attributes.
+				E.g.
+					language	=> Used to specify scripting language
+										Default Value: java, Possible Value: java
+					session		=> Used to indicate whether page participates in
+										a session or not.
+										Default Value: true, Possible Value: true / false
+					import		=> Used to import libraries from packages other
+										than java.lang.
+					errorPage => Used to divert control to this page if the current
+									 	page contains some Java code which fires an
+									 	exception.
+									 	
+			include:
+				It is used to include resources in the existing JSP.
+				It provides a 'file' attribute to include the resource.
+				
+			taglib:
+				It is used in the context of creating custom tags (user defined
+				tags).
+				
+		Scripting Elements:
+			These are associated with a Java code.
+			They are of 3 types:
+				a) Declaration
+				b) Scriptlet
+				c) Expression
+			
+			Declaration:
+				It is denoted by '<%! ........ %>' delimiters.
+				It is used to declare variables or define methods.
+			
+			Scriptlet:
+				It is denoted by '<% ........ %>' delimiters.
+				It is used to write any valid Java code.
+			
+			Expression:
+				It is denoted by '<%=<<Expr>>%>' delimiters.
+				It can be used for fetching variable's value, invoking methods
+				and so on.
+	
+	Scripting Elements concepts:
+		1. Whatever declarations are made using 'Declaration' section get
+			processed directly at the class level of the servlet specific class
+			generated by web container.
+					
+		2. Whatever code is written inside a 'Scriptlet' gets processed 
+			within the _jspService() method of the servlet specific class.
+			If a variable is declared inside a 'Scriptlet', it becomes a local 
+			variable to that method.
+			It is not possible to define a method inside a scriptlet.
+		
+		3. It is possible to invoke a method using 'Expression' only when its
+			return type is other than 'void'.
+	
+	Implicit Objects:
+		In JSP, web container creates resource oriented objects and makes
+		them available to page authors.
+		These objects are called as Implicit Objects.
+		
+		1. request						=>	jakarta.servlet.http.HttpServletRequest
+		2. response					=>	jakarta.servlet.http.HttpServletResponse
+		3. out							=> jakarta.servlet.jsp.JspWriter
+		4. session						=> jakarta.servlet.http.HttpSession
+												(Not available if 
+													<%@ page session="false"%>
+		5. config						=> jakarta.servlet.ServletConfig	
+		6. application					=> jakarta.servlet.ServletContext
+	
+	Standard Actions:
+		JSP specification provides wide range of tags meant for handling
+		standard operations; therefore these tags are also called as
+		Standard Actions.
+		
+		All JSP standard actions follow a specific format:
+			<prefix:suffix>	
+		
+		All JSP standard actions have same prefix: 'jsp'.
+		The 'suffix' is the actual tag name.
+		
+		1. <jsp:useBean>
+			Allows to instantiate a Java bean.
+			It provides several attributes:
+				a) id 			: Assigns a identity for the bean
+				b) class		: Specifies fully qualified name of the bean class
+				c) type		: Specifies fully qualified name of the super class
+				 		          or an interface
+				d) scope	: Specifies the scope of the bean
+								  Possible Values: page, request, session, application
+								  Default: page
+								  
+		2. <jsp:setProperty>
+				Allows to set values for the properties of the bean using setter
+				methods.
+				
+		3. <jsp:getProperty>
+				Allows to get values of the properties of the bean using getter
+				methods.
+				
+	When <jsp:setProperty> standard action is used with setting: 
+		property = "*", web container retrieves request parameter names
+		and tries to match them with property names of the bean class.
+		
+	Once the match is found, container tries to find setter methods in
+	the bean class following Java's naming convention.
+	Once the methods are found, container invokes them.
+	
+	Whatever type conversion is required, that is also managed by web
+	container.
+	
+	When '<jsp:getProperty>' standard action is used, web container 
+	retrieves the property name and tries to find getter methods 
+	following Java's naming convention.
+	Once found, it invokes them.
+	
+	Setting property values:
+		While setting values for the properties using '<jsp:setProperty>',
+		there are several options available.
+			1. property = "*"
+		 		Used to set all the property values.
+		 		In order to use this option, request parameter names must
+		 		match with property names.
+		 	
+		 	2. property = "<<property-name>>"
+				Used to set a specific property value.		
+				In order to use this option, request parameter names must
+		 		match with property names.		
+		 		
+		 	3. property = "<<property-name>>" param = "<<param-name>>"
+		 		Allows to map property name with request parameter name.
+		 		E.g.
+		 		property = "age" param = "t_age"
+		 		
+		 	4. property = "<<property-name>>" value = "<<value>>"
+		 		Allows to assign a value directly.
+		 		The value can be either a hard-coded value or derived using
+		 		expression.
+		 		E.g.
+		 		property = "age" value = "45"			
+		 		OR
+		 		<%
+		 			int myAge = 45;
+		 		%>
+				property = "age" value = "<%=myAge%>"
+				
+	** Standard actions: setProperty and getProperty must be used 
+		always in conjunction with useBean.
+		
+	Other Standard Actions:
+		1. <jsp:forward>
+		2. <jsp:include>
+		3. <jsp:param>
+		
+	<jsp:forward>
+		Used to forward the request to the next resource.
+		The next resource generates the response.
+		E.g.
+		<jsp:forward page = "next.jsp"/>
+	
+	<jsp:include>
+		Used to include the response of the next resource.
+		The current resource generates the final response.
+		E.g.
+		<jsp:include page = "next.jsp"/>
+		
+	<%@ include ... %>			Vs				<jsp:include>
+		The 'include' directive includes the resource at translation time
+		where the 'include' action includes the resource at request time.
+		
+		Generally, 'include' directive is used to include static pages 
+		e.g. HTML whereas 'include' action is used to include dynamic
+		pages e.g. JSP.
+	
+	<jsp:param>
+		Used in conjunction with either 'forward' or 'include' to send
+		additional parameters.
+		E.g.
+			<jsp:forward page = "next.jsp">
+				<jsp:param name = ".." value = ".."/>
+				<jsp:param name = ".." value = ".."/>
+			</jsp:forward>
+=========================================================
+	Java Frameworks:
+		In the context of Java programming model, technologies are mainly
+		divided into 2 types:
+			1. Specification
+			2. Framework
+		
+		Specification:
+			It provides a set of rules but not the implementation.
+			The actual implementation is provided by 3rd party softwares
+			known as Web Server and Application Server.
+			
+			E.g.
+				Jakarta EE is a specification which is implemented by Web
+				Server and Application Server.
+				
+		Framework:
+			It is a partial solution or an implementation used to address
+			common problems.
+			It provides its own library and a workflow.
+			
+			There are so many frameworks based upon Java technology 
+			available.
+			
+			Every framework has its own significance.
+			
+			E.g.
+				JUnit is a framework meant for Unit Testing.
+				EasyMock is meant for mocking.
+		
+		There are 2 frameworks which are very popular and used frequently
+		in Java based projects:
+			1. Hibernate
+			2. Spring		
+		
+		Hibernate:
+			What is Hibernate?
+				Hibernate is an open source Java based framework meant for
+				building Persistence Layer of an application.
+		
+		Why Hibernate?
+			Although JDBC can resolve the problem of data persistency, 
+			it involves certain challenges:
+				1. A lot of boiler-plate code.
+				2. Must make use of SQL always
+				3. For performance optimization, extra efforts are required
+					because it is not built-in available.
+				4. A lot of code required for handling CRUD operations.
+			
+			These challenges can be overcome using Hibernate.
+	
+	What Hibernate is all about?
+		1. It is an abstraction on the top of JDBC.
+		2. It is based upon ORM.
+	
+	What is ORM?
+		ORM stands for Object to Relational Mapping.
+		It is a set of principles meant for mapping of domain specific 
+		objects to relational database tables with the help of mapping
+		metadata.
+	
+	Principles of ORM:
+		1. Automated Persistence
+				Very less code for CRUD operations
+		2. Full support for Object Modeling
+				Provides support for Containment and Inheritance
+		3. Full support for Performance Optimization
+				Provides performance optimization techniques like fetching,
+				caching etc.
+		4. Full support for Query Language:
+				Provides a Query Language that is tailored to work upon
+				classes and their properties rather than tables and columns.
+				
+	Any framework which follows all these principles, is called as an ORM
+	framework.
+	
+	E.g.
+		Hibernate		
+		Toplink	
+		EclipseLink
+		IBatis
+		
+	Hibernate Core API:
+		The core API of Hibernate mainly consists of following:
+			1. Session
+			2. SessionFactory
+			3. Configuration
+			4. Transaction
+			5. Query
+		
+		Session:
+			It is an interface from 'org.hibernate' package.
+			It is a short-lived light-weight object meant for handling data
+			persistency (CRUD operations).
+			It is an abstraction on the top of JDBC Connection.
+		
+		SessionFactory:
+			It is an interface from 'org.hibernate' package.
+			It is a long-lived heavy-weight object meant for obtaining a
+			Session.
+			It is recommended to have only one per application.
+			
+		Configuration:
+			It is a class from 'org.hibernate.cfg' package.
+			It is used to configure Hibernate based upon metadata.
+			The metadata is of 2 types:
+				1. Mapping Metadata
+				2. Configuration Metadata
+			
+			Mapping Metadata:
+				It is a metadata used to provide mapping between class and
+				table, field and column and so on.
+				
+				There are 2 ways to provide mapping metadata:
+					1. Using XML file
+					2. Using Annotations
+				
+				If it is done using XML file, that XML file is termed as HBM
+				file.
+			
+			Configuration Metadata:
+				It is a metadata used to provide JDBC configuration properties
+				for connecting to database.
+				Hibernate uses these properties for establishing connection
+				with database.
+				
+				There are 3 ways to provide configuration metadata:
+					1. Properties File (.properties  (name=value pairs))
+					2. XML File
+					3. Java Code (Programmatically)
+				
+				If it is done using XML file, that XML file is termed as CFG
+				file.
+			
+		Transaction:
+			It is an interface from 'org.hibernate' package.
+			It is used to manage the transactions by maintaining atomicity.
+			It is especially required for DML operations.
+			
+		Query:
+			It is an interface from 'org.hibernate.query' package.
+			It is used to perform query operations using some query language
+			that makes use of classes and their properties and not tables
+			and their columns.
+	
+	Getting Started:
+		Step 1:
+			Install Hibernate specific library:
+				In order to get started with Hibernate, it is necessary to
+				install Hibernate specific library.
+				
+				This library is a collection of several classes, interfaces, 
+				annotations and so on, that is bundled together using several
+				JAR files. 
+				
+				These JAR files must be downloaded from internet.
+				
+				This can be done by 2 ways:
+					1. Download them manually
+					2. Download them using some build tools like Maven or
+						Gradle.
+						
+				Using Maven:
+				Create a Maven based simple Java project.
+				Setup the environment for version 17+
+					a) JRE
+					b) Java Compiler
+					c) Project Facets for Java
+				Add Hibernate specific dependency
+				
+		Step 2:
+			Provide an Entity class.
+			In the context of Hibernate, the class of which object's data
+			persisted in database table as a record, is referred as an Entity
+			class.
+		
+		Step 3:
+			Provide a HBM file (Mapping file)
+			The entity class needs to be mapped with database table.
+			Its fields need to be mapped with columns.
+			This can be done using a mapping file which is HBM file.
+			It is an XML file and can have any name; but by convention it is
+			as per the following format:
+				[Entity-Class-Name].hbm.xml
+			This file must be kept under 'src/main/resources' folder.
+			
+		Step 4:
+			Provide a CFG file (Configuration file)
+			In order to establish connection with database, Hibernate needs
+			configuration setup.
+			This can be done using a configuration file which is a CFG file.
+			This is an XML file and by default, Hibernate searches for this
+			file with name: hibernate.cfg.xml
+			This file must be kept under 'src/main/resources' folder.
+		
+		Step 5:
+			Write a main program.
+				Configure Hibernate using 'Configuration' class.
+				Obtain a SessionFactory using 'Configuration' class.
+				Obtain a Session using SessionFactory.
+				Create an entity class object.
+				Obtain a Transaction and start the same.
+				Store the entity class object using Session.
+				Commit the Transaction.
+				Close the Session.
+				Close the SessionFactory
+				
+	Hibernate Application Workflow:
+		When the object of 'Configuration' class is created, Hibernate
+		starts searching for a configuration file: hibernate.properties.
+		If found, loads the entries from that file.
+		
+		Many times, XML file is preferred instead of .properties file.
+		Therefore to intimate about XML file, 'configure()' method is
+		used.
+		
+		When this method is called, Hibernate searches for the file:
+			hibernate.cfg.xml
+		
+		If the name of the XML file is other than hibernate.cfg.xml, an
+		overloaded 'configure()' method is to be used.
+		
+		Once Hibernate is configured based upon configuration and mapping
+		metadata, a SessionFactory is to be obtained.
+	
+	Implementing Standard Practices:
+		It is always better to follow standard practices.
+		1. Auto-Loading of JDBC Driver
+		2. Open SessionFactory and Session using try-with-resources so 
+			that they get closed automatically.
+		3. Decouple the code of obtaining SessionFactory using a separate
+			class.
+	
+	Working with Metadata without XML:
+		Although XML is used to provide metadata, some developers find it
+		difficult to manage because it leads to error-prone situations.
+		
+		It has following drawbacks:
+			1. It is too lengthy
+			2. It must adhere to basic rules of XML standards
+			3. A small typo may cause application failure
+		
+		To address these problems, Hibernate provides an alternative for
+		providing the metadata without XML.
+		
+		Mapping Metadata:
+			In case of mapping metadata, Hibernate supports annotations.
+			There are 2 types of annotations:
+				1. Hibernate Annotations
+				2. JPA Annotations
+			
+			Hibernate Annotations:
+				These are the annotations explicitly provided by Hibernate for
+				handling mapping metadata.
+			
+			JPA Annotations:
+				JPA stands for Jakarta Persistence API (Java Persistence API)
+				It is a specification which is implemented by any ORM 
+				framework e.g. Hibernate, Toplink, EclipseLink, IBatis etc.
+				
+				JPA provides its own set of annotations known as JPA
+				annotations.
+		
+		Configuration Metadata:
+			In case of configuration metadata, Hibernate supports 
+			programmatic approach using 'Configuration' class.
+			
+			It provides relevant methods to add the properties:
+				setProperty(String, String)
+				setProperties(java.util.Properties)
+	
+	Developing Hibernate Application without XML:
+		Assumption:
+			A maven based project is already ready with Hibernate and MySQL
+			dependencies.
+			
+		Step 1:
+			Create an entity class:
+			In the context annotation based metadata, in order to mark the
+			class as an Entity class, JPA provides @Entity annotation.
+			The entity class needs to be mapped with some table.
+			JPA provides @Table annotation to handle this.
+			The entity class must declare at least one field as an identity.
+			JPA provides @Id annotation to handle this.
+			The properties of entity class need to be mapped with column of
+			database table.
+			JPA provides @Column annotation to handle this.
+		
+		Step 2:
+			Create a configuration metadata specific class
+			The 'Configuration' class provides relevant methods to handle
+			configuration information.
+			E.g.
+				setProperties(): Accepts a list of properties in the form of
+				'java.util.Properties' class object.
+			
+				addAnnotatedClass: Accepts a reference of type -
+					java.lang.Class for the entity class type.
+		
+		Step 3:
+			Write a main class
+			
+	Performing Data Retrieval:
+		An application may want to retrieve the data from the database
+		table.
+		Hibernate's Session interface provides 'find()' method to find the
+		data in the database table.
+		This method works upon identity and the entity class type.
+		Since the operation is not a DML operation, it does not require
+		Transaction.
+		
+	Performing DML UPDATE:
+		In order to perform DML UPDATE, first it is necessary to load the
+		data on which update is required.
+		
+		Since, it is a DML operation, a Transaction is required.
+		Within the transactional scope, the state of the object can be
+		modified using setter methods.
+		
+		This modified state needs to be reflected back to database to 
+		complete the UPDATE operation.
+		
+		This is done by committing the transaction.
+			
+	Performing DML DELETE:
+		In order to perform DML DELETE, first it is necessary to load the
+		data which is to be deleted.
+		
+		Since, it is a DML operation, a Transaction is required.
+		
+		Within the transactional scope, the data is deleted and to reflect
+		the change on database side, the transaction is committed.
+		
+	Entity Life Cycle:
+		The life cycle of an entity class object consists of several states.
+		These states are associated with a single object which is solely
+		responsible for handling persistence related operations (CRUD).
+		
+		This object is referred as Persistence Context.
+		
+		E.g.
+			In JDBC, it is Connection whereas in Hibernate it is Session.
+			
+		There are 4 states involved in the life cycle:
+			1. Transient
+			2. Persistent
+			3. Detached
+			4. Removed
+		
+		Transient:
+			When the entity instance is not yet associated with any persistence
+			context (Session), then that is said to be in 'Transient' state.
+			The entity does not have its identity.
+			
+		Persistent:
+			When the entity instance is associated with the persistence context
+			(Session), then it is said to be in 'Persistent' state.
+			This time, the entity has its own identity.
+			
+		Detached:
+			The persistence context with which the entity was associated,
+			if that context is closed, the entity goes into 'Detached' state.
+			
+		Removed:
+			When the entity is explicitly removed using 'remove()' method,
+			it results into deletion of the record from the database table.
+			In this case, the entity is said to be in 'Removed' state.
+	
+	Working with Session:
+		The object of type 'Session' is always required for handling CRUD
+		operations. Therefore it is the persistence context of the 
+		application.
+		
+		It provides relevant methods:
+			persist()	=> Used for DML INSERT
+			find() 		=> Used for SELECT
+			remove()	=> Used for DML DELETE
+			(** No separate method for DML UPDATE because it is handled
+			 using setter methods and Transaction's commit() )
+		
+		Sometimes, there are long running transactions and therefore it
+		is better to close the session if the transaction is taking some 
+		time.
+		When the session is closed, the loaded entity object which was
+		in the Persistent state, goes into Detached state.
+		
+		End user can make changes into this object by calling setter 
+		methods.
+		
+		This changes the state of the entity object but not database.
+		In order to change the database state, it is necessary to reflect
+		the entity state back to database.
+		
+		This is possible only if the entity object is in Persistent state.
+		Therefore it is necessary to bring the Detached entity back into
+		Persistent state.
+		
+		This is possible using 'merge()' method of 'Session' interface.
+		
+		E.g.
+			Session s1 = ......
+			Movie m1 = s1.find(.....); //m1 goes into Persistent state
+			s1.close(); //m1 goes into Detached state
+			
+			//Making changes into detached entity
+			m1.setTitle(...);
+			//Bringing m1 back into Persistent state
+			Session s2 = .......
+			s2.merge(m1);//m1 comes back into Persistent state
+			
+	Association Mapping:
+		In business application, one entity can be associated with another
+		entity or several entities.
+		When this happens so, the relevant mapping is known as Association
+		Mapping.
+		Associations are also known as Relationships.
+		
+		There are 4 types of relationships:
+			1. One to One
+			2. One to Many
+			3. Many to One
+			4. Many to Many
+		
+		Every type of relationship has 2 further types:
+			1. Unidirectional
+			2. Bidirectional
+		
+		Based upon this, it seems that there are 8 relationships but in 
+		reality, there are 7 because One to Many Bidirectional is same as
+		that of Many to One Bidirectional.
+		
+		One to One:
+			In this, an entity holds a single reference of another entity.
+			E.g.
+			Relationship between Employee and Passport
+			In database, any table may contain a Foreign Key column.
+		
+		One to Many or Many to One
+			In this an entity holds references of another entity.
+			E.g.
+			Relationship between Department and Employee
+			In database, the table which represents MANY side, contains
+			a Foreign Key column.
+		
+		Many to Many
+			In this an entity holds references of another entity.
+			E.g.
+			Relationship between Employee and Certification
+			In database, a 3rd table (Junction Table or Join Table) is
+			required.
+			It contains Foreign Key columns referring to both the entity
+			specific tables.
+		
+		Unidirectional Associations:
+			In this case one entity holds reference or references of another
+			entity; but the 2nd entity does not hold any reference back to
+			the 1st.
+		
+		Bidirectional Associations:
+			In this case, both the entities hold reference or references of
+			each other.
+	
+	Querying the Database:
+		In business applications, retrieving multiple records from database
+		table is a very frequent requirement.
+		
+		Hibernate's Session interface provides a find() method to retrieve
+		the data from database table.
+		However, find() method has 1 limitation:
+			It can retrieve only 1 record that is based upon identity.
+			
+		Therefore, in order to retrieve multiple records, Hibernate provides
+		a query language known as HQL.
+		
+		HQL stands for Hibernate Query Language.
+		It is a query language that works with classes and their properties
+		rather than tables and their columns.
+		
+		Eventually, HQL queries are converted into SQL queries because
+		RDBMS understands only SQL syntax.
+		
+		In order to use HQL, Hibernate provides an interface: Query.
+		
+		Working with HQL:
+			HQL consists of several functionalities just similar to SQL but
+			the most frequently used is HQL clauses.
+			
+			There are mainly 2 clauses available:
+				1. FROM
+				2. SELECT
+			
+			FROM:
+				It is the simplest form of HQL.
+				It returns a collection holding objects of entity class.
+				It is especially used if the entire data of the entity is to be
+				loaded and used.
+				If the entire loaded data is not in use, it results into memory
+				implications.
+				To address this problem, Hibernate provides SELECT clause.
+			
+			SELECT:
+				It is used to load the selected data.
+				It reduces the memory overheads.
+				It returns a collection holding elements of type 'array' of type
+				'Object'.
+				
+		Using Constructor Expression:
+			It is a mechanism that allows to instantiate a Java bean using
+			a constructor through the query string.
+			It simplifies the working of SELECT clause.
+============================================================
+	Spring:
+		What is Spring?
+			Spring is a Java based framework used to handle various aspects
+			of the application.
+			It is not intended for doing only 1 thing, rather it can handle
+			several things.
+			
+			Spring can be used to handle different types of requirements.
+			E.g.
+				Integrating enterprise services (Higher End Services)
+		
+		Why Spring is popular?
+			Prior to Spring, it was still possible to handle various aspects of
+			the application e.g. integration of enterprise services was possible
+			with the help of EJBs.
+			
+			Even though EJBs were capable of serving these requirements,
+			they had a lot of coding complexities.
+			
+			In 2003, Spring Framework was introduced and intended for
+			resolving these problems.
+			
+			Due to lightweight environment and simple code format, it got
+			wide acceptance and now-a-days it is used heavily in Java based
+			projects.
+		
+		Spring Modules:
+			Spring can handle different types of requirements of the application
+			through several modules.
+			
+			There are so many modules involved in Spring:
+				1. Spring Core
+				2. Spring AOP
+				3. Spring Data Access
+				4. Spring MVC
+				5. Spring REST
+				6. Spring Security
+				7. Spring Cloud
+			
+			Spring Core:
+				This is the module present at the bottom level.
+				It is meant for handling core functionalities of Spring.
+				It is the base for all the other modules.
+			
+			Spring AOP:
+				AOP stands for Aspect Oriented Programming.
+				It is a module which allows applications to separate secondary
+				concerns from primary concerns.
+				
+			Spring Data Access:
+				Spring does not attempt to provide its own implementation
+				for accessing the data from database; rather it provides hooks
+				(adapters / connectors) for integrating with other persistence
+				oriented technologies like JDBC, Hibernate, JPA etc.			
+			
+			Spring MVC:
+				MVC stands for Model-View-Controller.
+				It is a commonly used architecture or design pattern for
+				building web applications.
+				This module is used to build web based applications.
+			
+			Spring REST:
+				REST stands for Representational State Transfer.
+				It is a type of web service for building APIs.
+				Spring provides awesome support for building Restful APIs
+				as back-end services using this module.		
+			
+			Spring Security:
+				This module allows to secure the applications.
+				Typically this is done at 2 levels: 
+					Authentication and Authorization
+			
+			Spring Cloud:
+				Spring provides support for deploying the back-end services
+				in the cloud using this module.
+				It provides a large eco-system to manage cloud specific
+				functionalities. 
+		
+		Spring Core:
+			It is the module present at the base.
+			It handles core functionalities of Spring.
+			It mainly provides 2 functionalities:
+				1. Bean Management
+				2. Dependency Injection
+			
+			Bean Management:
+				Like Jakarta EE, Spring is also based upon Component Driven
+				Architecture.
+				
+				Typically, in Java SE, components are unmanaged but they are
+				independent (POJOs) whereas in Jakarta EE, components are
+				managed but they need to be dependent (Non-POJOs).
+				
+				Spring offers a dual service. It can manage the life cycle of
+				the components even though they are simple POJOs i.e.
+				independent.
+				
+				The component that is to be managed by Spring, must be
+				registered with the environment of Spring.
+				
+				Any component that is registered with the Spring's environment
+				is called as a Spring Bean.
+				
+			Getting Started:
+				Step 1:
+					Install Spring specific library:
+						Like Hibernate, Spring is also a framework and therefore its
+						library is distributed in the form of JAR files.
+						To get started with Spring, it is necessary to download these
+						JAR files.
+						
+						This can be done by 2 ways:
+							1. Download them manually from internet
+							2. Resolve them using some build tools like Maven or Gradle.
+						
+						Create Maven based simple Java project	
+						Setup the environment for Java 17+
+							JRE
+							Java Compiler
+							Project Facets for Java
+							
+				Step 2:
+					Create an interface.
+				
+				Step 3:
+					Create an implementation class of this interface.
+				
+				Step 4:
+					Register or declare the bean of this class type with Spring's
+					environment:
+						In order to register any component as a bean with Spring's
+						environment, Spring provides a configuration unit.
+						
+						A configuration unit is a place where beans are registered
+						or declared.				
+						
+						There are 2 ways to provide this configuration unit:
+							1. Using XML
+							2. Without using XML	
+							
+						In case of XML option, the file can have any name but by
+						convention it is spring-config.xml.
+						
+						This file can be placed anywhere, may be inside the project
+						or even outside the project as well.
+						
+						However, as per the standard practice, it has to be placed 
+						under: src/main/resources.
+						
+				Step 5:
+					Write a main program:
+						Once the bean is registered in the Spring's environment
+						i.e. configuration unit, at any time a client program may
+						request for the same.
+						
+						In order to request Spring about the bean, Spring 
+						framework provides one service:
+							ApplicationContext (Interface)
+						
+						It is an interface and needs to be used through one of its
+						several implementations.
+						
+						The most commonly used implementation class is:
+							FileSystemXmlApplicationContext
+						
+						It works upon file path to resolve the file.
+						The path can be of 2 types:
+							1. Absolute Path
+							2. Relative Path
+						
+						If the file is present outside the project, absolute path is
+						required whereas if it is present inside the project, relative
+						path is sufficient.
+						
+				Working with ApplicationContext:
+					'ApplicationContext' is a service provided by Spring that allows
+					to load the context i.e. configuration unit.
+					
+					This service is made available by Spring through several 
+					implementation classes.
+					
+					E.g.
+						FileSystemXmlApplicationContext:
+							It allows to load the context from an XML file located
+							on the file system.
+							It needs the file path either absolute or relative 
+							depending upon the location.
+						
+						ClassPathXmlApplicationContext:
+							It allows to load the context from an XML file located
+							in the project's CLASSPATH.
+							
+							If the file is located under 'src/main/resources', it
+							automatically gets added into project's classpath.
+			
+			Dependency Injection:
+				A bean registered in Spring's environment may have some
+				dependencies in the form of properties.
+				
+				When a client program makes a request to Spring for getting
+				that particular bean which has dependencies, Spring has to
+				inject values for those dependencies and return that bean
+				back to the client program.
+				
+				This process of injecting values for dependencies is known as
+				Dependency Injection.
+				
+				Dependency Injection (DI) is also known as Inversion of 
+				Control (IOC) because the control is shifted from client
+				program to the Spring's environment i.e. container.
+				
+				Spring can inject the dependencies by 2 ways:
+					1. When the client program makes a request to Spring for
+						the bean, Spring injects values into the properties of the
+						bean using setter methods.
+						
+						This is known as Setter Injection.
+					
+					2. When the client program makes a request to Spring for
+						the bean, Spring injects values into the properties of the
+						bean using parameterized constructor.
+						
+						This is known as Constructor Injection.
+						
+						In case of Constructor Injection, by default, the order
+						of the arguments is taken from top to bottom in XML and
+						left to right in Java.
+						
+						This order can be customized using 'index' attribute.
+			
+			Bean Wiring:
+				Sometimes, a bean is dependent upon another bean and that
+				another bean may further depend upon some other bean and
+				so on.
+				
+				When a client program makes a request to Spring for the main
+				bean, Spring has to wire all its dependent beans and then return
+				the main bean back to the client.
+				
+				In this case, Spring has to build the inner-most bean first and
+				keep gradually building outer beans and finally building the
+				outer-most bean and return it back to the client program.		
+				
+				This entire process is known as Bean Wiring.
+				
+				In order to perform Bean Wiring at XML level, there are 2 
+				options:
+					1. Using 'ref' attribute
+					2. Using '<ref>' element			
+	
+	Bean Loading:
+		Whatever bean is registered in Spring's configuration unit, gets
+		instantiated by Spring.
+		The process of instantiating the bean is known as Bean Loading.
+		In Spring, bean loading takes place by 2 ways:
+			1. EAGER
+			2. LAZY
+		
+		EAGER:
+			This is the behavior Spring follows by default.
+			When the context is loaded, Spring starts instantiating the
+			beans available in the configuration unit even though they have
+			not been requested by the client program.
+			This is known as EAGER loading. 		
+			
+		LAZY:
+			In this case, Spring creates an object of the bean class only
+			when a client program makes a request for the bean of that type.
+			This is known as LAZY loading.
+			It is enabled using [lazy-init = "true"] setting for '<bean>' element.
+			
+		Both these strategies are to be used based upon the requirement.
+		If the bean is light-weight, it is fine if it gets instantiated on 
+		startup whereas if it is heavy-weight, ideally, it must be 
+		instantiated only when the client program makes a request for it; 
+		otherwise it consumes the heap memory unnecessarily.
+	
+	Bean Scope:
+		Every bean registered in Spring's configuration unit has some scope.
+		There are 5 possible scopes available.
+			1. singleton
+			2. prototype
+			3. request
+			4. session
+			5. global-session
+		
+		singleton:
+			It is the default scope of the bean.
+			If the same bean is requested multiple times, Spring returns
+			the same object. It does not create a new object every time.
+		
+		prototype:
+			It is exactly opposite to 'singleton'.
+			If the same bean is requested multiple times, Spring returns
+			a new object every time.
+			To specify the scope, use 'scope' attribute of '<bean>' element.
+			
+			The scope that is to be used is requirement specific.
+			Especially, if the bean contains some configuration specific data,
+			ideally its scope will be 'singleton' whereas if it contains some
+			domain specific data, then 'prototype' will be appropriate.
+		
+		request:
+			It is applicable in Spring MVC environment only.		
+			In this case, the bean is associated with an object of type:
+				jakarta.servlet.http.HttpServletRequest	
+				
+		session:
+			It is applicable in Spring MVC environment only.
+			In this case, the bean is associated with an object of type:
+				jakarta.servlet.http.HttpSession			
+		
+		global-session:
+			It is applicable in Spring Portlet environment.	
+	
+	Task:
+		Create a class EducationInfo with following attributes:
+			highestDegree (String)
+			grade (String)		
+		Create a class ContactInfo with following attributes:
+			mobileNo (String)
+			emailAddress (String)		
+		Create a class Profile with following attributes:
+			candidateId (int)
+			name (String)
+			contactDetails (ContactInfo)
+			educationDetails (EducationInfo)
+		Implement Dependency Injection and test the functionality.
+		
+	Bean Configuration without XML:
+		The component that is registered with Spring's environment is 
+		 a Spring Bean.
+		 This registration can be done by 2 ways:
+		 	1. With XML
+		 	2. Without XML
+		 
+		 Although XML option brings flexibility and loose coupling, still many
+		 developer prefer to avoid it because it is too lengthy, time consuming
+		 and may lead to error-prone situations.
+		 
+		 To address this problem, Spring comes up with an alternative:
+		 	Bean Configuration without XML.
+		 
+		 Bean configuration without XML can be implemented by 2 ways:
+		 	1. Java Based Configuration
+		 	2. Pure Annotation Based Configuration
+		 
+		 Java Based Configuration:
+		 	In this case, the configuration unit is provided by defining a Java 
+		 	class.
+		 	This class can have any name but as per the convention, it is 
+		 	'SpringConfig'.
+		 	Once the class is defined, it is necessary to intimate Spring that
+		 	the class is a configuration specific class rather than just an
+		 	ordinary Java class.
+		 	This is done by using '@Configuration' annotation.
+		 	It is to be applied at the class level.
+		 	
+		 	Once the configuration specific class is defined, it can be used to
+		 	declare or register components as Spring Beans.
+		 	
+		 	In order to register component as Spring Bean, it is necessary to
+		 	define a method in the configuration class which returns an object
+		 	of that particular class of which the bean is to be configured.
+		 	
+		 	Once the method is defined, it is necessary to intimate Spring that
+		 	this method is a bean configuration specific method rather than
+		 	just an ordinary Java method.
+		 	
+		 	This is done by using '@Bean' annotation.
+		 	It is to be applied at the method level.
+		 	
+		 	Once the bean is registered using '@Bean', by default, Spring
+		 	assigns an ID to this bean which is equal to the method name.
+		 	
+		 	Once the configuration is done, a client program can make a request
+		 	to Spring for obtaining the bean.
+		 	
+		 	Since the configuration takes place using some annotations and not
+		 	XML file, Spring provides a relevant class for obtaining the beans:
+		 		AnnotationConfigApplicationContext
+		 		
+		 	In order to load the beans from configuration unit, it is necessary
+		 	to register that configuration unit with 
+		 	AnnotationConfigApplicationContext.
+		 	
+		 	This is done using 'register()' method of AnnotationConfigApplicationContext
+		 	Once the registration is done, it is necessary to refresh the
+		 	context to apply the changes.
+		 	This is done using 'refresh()' method.
+		 
+		 Simplifying AnnotationConfigApplicationContext:
+		 	When the configuration specific class is associated with
+		 	AnnotationConfigApplicationContext using 'register()' method,
+		 	it is necessary to refresh the context using 'refresh()' method;
+		 	otherwise 'IllegalStateException' is raised.
+		 	
+		 	This can be simplified in such a way that registration and context
+		 	refreshment happens implicitly.
+		 	
+		 	This is done using overloaded constructor of:
+		 		AnnotationConfigApplicationContext
+		 		
+		 Configuring Predefined Beans:
+		 	Spring is not limited to configure beans of user defined types;
+		 	it is also capable of configuring beans of predefined types.
+	
+	Working with Lazy Loading:
+		If the bean is heavy-weight, ideally it is to be loaded lazily.
+		It must be instantiated only when client makes a request.
+		This behavior is called as Lazy Loading.
+		
+		This is done by adding @Lazy annotation at bean creation method
+		level.
+	
+	Working with Scope:
+		All beans declared in configuration unit have some scope.
+		The default scope is 'singleton'.
+		In order to change the scope, Spring provides @Scope annotation.
+		It is applied at the bean creation method level.
+		
+	Pure Annotation Based Configuration:
+		In case of Java Based Configuration, the configuration unit is taken
+		care by a Java class annotated with @Configuration annotation.
+		
+		The bean creation or configuration is taken care by a method from
+		that class annotated with @Bean annotation.  
+		
+		In this method, the class of which a bean is to be configured, an
+		object of that class is returned back.
+		
+		This is done using traditional semantics of Java language: 
+			The 'new' keyword.
+		
+		Therefore, this option is called as Java Based Configuration.
+		
+		In the 2nd option, Pure Annotation Based Configuration, the bean
+		creation does not take place using traditional Java semantics.
+		It is completely based upon annotations and object creation takes
+		place via Java's reflection mechanism.
+		
+		Therefore this option is known as Pure Annotation Based 
+		Configuration.
+		
+		In this, the beans are configured using a stereo-type annotation
+		known as @Component.
+		It is to be applied at the class level of the class of which a bean is
+		to be configured.
+		
+		Once the class is declared as a 'Component', Spring can manage its
+		bean and the same can be requested by a client program.
+		
+		However, this time the request is made not by using the ID; rather
+		by using the Class type.
+		
+		This is done using the overloaded 'getBean()' method.
+		
+		Even though the class is annotated with '@Component' annotation,
+		it does not get picked up by Spring.
+		
+		In order to get it picked up by Spring, it is necessary to perform
+		scanning of a package which contains the class annotated with
+		@Component annotation.
+		
+		In order to perform scanning, Spring provides @ComponentScan
+		annotation.
+		It is to be applied at the class level of the configuration specific
+		class.
+		
+		If the configuration specific class (@Configuration) and the 
+		component specific class (@Component) are defined in same package,
+		then only the entry of '@ComponentScan' is sufficient.
+		
+		This is the default behavior Spring follows.
+		
+		If the component specific class is available in sub package or 
+		sub-sub package, still only the name of base package is sufficient.
+		
+		This is because, @ComponentScan not only scans the package of 
+		which name is mentioned, it scans the whole branch.
+		
+		When the @ComponentScan annotation is used without the
+		attribute 'basePackages', by default it picks up the @Component
+		specific classes available in the same package as that of the 
+		configuration specific class.
+		
+		If the attribute 'basePackages' is used, the default behavior gets
+		vanished.
+		
+		In this case, the base package name must be mentioned explicitly.
+		
+		Obtaining the component bean against ID:
+			The beans which are declared to Spring's environment using
+			@Component annotation are called as component beans.
+			
+			Typically these beans are accessed using the 'Class' type of the
+			component specific class.
+			
+			However, it is possible to access them against ID if they are
+			configured with some ID.
+			
+	Java Based Configuration		Vs		Pure Annotation Based Configuration
+		While configuring beans without XML, both the approaches have
+		their own significance.
+		
+		Both the approaches are in use and it depends upon the application's
+		requirements.
+		
+		The 1st option is applicable in following circumstances:
+			1. The bean specific class is a legacy class.
+			2. Multiple beans of that same type are to be configured		
+		
+		The 2nd option is applicable in following circumstances:
+			1. The bean specific class is not a legacy class; rather it is 
+				created by ourselves.
+			2. Single bean instance of that type is sufficient
+			
+	Bean Wiring Revisited:
+		When beans have dependencies on other beans, Spring has to resolve
+		them and return the main bean back to the client.
+		Injecting the inner bean into the outer bean is known as Bean
+		Wiring.
+		
+		There are 2 types of Bean Wiring:
+			1. Explicit
+			2. Implicit
+		
+		Explicit Wiring:
+			In this case, which bean is to be wired is explicitly mentioned 
+			in the configuration unit of the application.
+			Therefore this type of bean wiring is called as Explicit Wiring.
+			
+		Implicit Wiring:
+			In this case, instead of explicitly wiring the inner bean with outer
+			bean, Spring automatically figures it out and wires it.
+			Therefore this type of bean wiring is called as Implicit Wiring.
+			Since the wiring activity is taken care by Spring, from the
+			developer's perspective, it is automatic.
+			Therefore this type of wiring is also known as Auto Wiring. 
+			
+			In order to implement auto wiring, Spring provides @Autowired
+			annotation.
+			It can be applied either at the field level or the setter method
+			level of the field which is to be auto wired.
+			
+			How auto wiring works?
+				When the @Autowired annotation is applied at the field level,
+				Spring identifies the type of the field.
+				Once the type is identified, it checks for the bean of that
+				type in the configuration unit.
+				Once the bean is found, it gets wired.
+			
+			What if the bean is not found?
+				If the bean is not found, UnsatisfiedDependencyException is
+				thrown.
+				This problem can be resolved using 'OPTIONAL' behavior by
+				setting 'required = false' for @Autowired annotation.
+			
+			What if multiple beans of same type are found?
+				If multiple beans of same type are found then it results into
+				an ambiguity and UnsatisfiedDependencyException is thrown.
+		
+				There are 2 options to resolve this ambiguity:
+					1. @Primary 		- Used in the configuration specific class
+					2. @Qualifier 	- Used in the bean specific class
+					
+				If both are used, @Qualifier takes priority.
+	
+	Spring AOP:	
+		 AOP stands for Aspect Orient Programming.
+		 It is a module which allows to separate secondary concerns from
+		 primary concerns.
+		 
+		 These secondary concerns are the functionalities which cut across
+		 several points in the application and therefore they are also called
+		 as cross-cutting concerns.
+		 
+		 AOP is a programming model which is used for code separation.
+		 It brings 2 benefits:
+		 	1. Flexibility - The system becomes easy to re-factor.
+		 	2. Re-Usability - The secondary concerns or cross cutting 
+		 							  concerns can be reused for different types of
+		 							  primary concerns.
+		 
+		Application developers can focus upon the core business functionality.
+		 
+	AOP Terminologies:
+		In Spring AOP, there are 5 terminologies used:
+			1. Advice
+			2. JoinPoint
+			3. PointCut
+			4. Aspect
+			5. Proxy
+		
+		Advice:
+			It defines WHAT and WHEN of an aspect.
+			
+		JoinPoint:
+			It is the probable location where an aspect CAN BE plugged in.
+		
+		PointCut:
+			It is the exact location where an aspect IS TO BE plugged in.
+			If advice defines WHAT and WHEN, then point cut defines
+			WHERE.
+			
+		Aspect:
+			It is the merger of Advice and PointCut.
+			It defines WHAT, WHEN and WHERE.
+		
+		Proxy:
+			It is the mediator between a client program and the target bean.
+			When a client program makes a request, proxy comes in between
+			and intercepts that request.
+			Similarly, when the target bean method execution is over, proxy
+			comes in between and intercepts that call as well.
+			
+			Spring has a special container to manage all these things.
+			It is called as AOP container.
+			It is responsible for handling all the activities relevant to AOP.
+			It is also responsible for proxy generation.
+			
+			The process of proxy generation is known as Weaving.
+			
+			In general, weaving is of 3 types:
+				1. Compile Time
+				2. Class Load Time
+				3. Runtime
+				
+			Compile Time:
+				Proxy gets generated when the target class is compiled.
+			Class Load Time:
+				Proxy gets generated when the target class is loaded.
+			Runtime:
+				Proxy gets generated during the execution i.e. at runtime.
+				
+			In case of Spring AOP, weaving always happens at runtime.
+			
+		Types of Advice:
+			In Spring AOP, there are 5 types of Advice:
+				1. Before Advice
+				2. After Returning Advice
+				3. After Throwing Advice
+				4. After Advice
+				5. Around Advice
+			
+			Before Advice:
+				It is used to handle the functionality before the execution of
+				the target bean method.
+			
+			After Returning Advice:
+				It is used to handle the functionality after the successful
+				execution of the target bean method.
+				
+			After Throwing Advice:
+				It is used to handle the functionality when the target bean 
+				method throws some exception.
+			
+			After Advice:
+				It is used to handle the functionality irrespective of whether
+				the target bean method executes successfully or not.
+			
+			Around Advice:
+				It is not meant for handling any separate functionality; rather
+				it is a combination of all the above 4 mentioned advices.
+				
+		AOP support in Spring:
+			In Spring Framework, AOP is supported by a 3rd party library 
+			known as AspectJ.
+			
+			It is a library that is associated with Spring right from the 1st
+			version.
+			
+			It provides several annotations for implementing AOP:
+				1. @Aspect
+				2. @Before
+				3. @AfterReturning
+				4. @AfterThrowing
+				5. @After
+				6. @Around
+				7. @Pointcut
+			
+			@Aspect:
+				It is to be applied at the class level to indicate that the class
+				is an aspect.
+			
+			@Before:
+				It is to be applied at the method level.
+				Causes the method to be invoked before the execution of the
+				target bean method.
+			
+			@AfterReturning:	
+				It is to be applied at the method level.
+				Causes the method to be invoked after successful execution of 
+				the target bean method.
+			
+			@AfterThrowing:
+				It is to be applied at the method level.
+				Causes the method to be invoked when the target bean method
+				throws an exception.
+				
+			@After:
+				 It is to be applied at the method level.
+				 Causes the method to be invoked irrespective of whether the
+				 target method executes successfully or not.
+			
+			@Around:
+		 		It is to be applied at the method level.
+		 		It is used to configure the method as an Around Advice.
+		 		
+		 	@Pointcut:
+		 		It is to be applied at the method level.
+				It is used to declare the point-cut expression.
+				The corresponding method is just used as a marker method
+				and it is meant for forward referencing.
+	
+		Enabling Proxy Generation:
+			While working with AOP, there is always a mediator that intercepts
+			the request and handles the aspect specific logic i.e. a secondary
+			concern or a cross cutting concern.
+			
+			This mediator is known as a proxy and Spring AOP container is
+			responsible for generating it.
+			
+			However, this proxy generation takes place only when the relevant
+			support is enabled.
+			
+			This is done by using an annotation: @EnableAspectJAutoProxy
+			
+			It is to be applied at the class level of the configuration specific
+			class.
+		
+		Getting Started:
+			Step 1:
+				Install the 3rd party library i.e. AspectJ specific JAR files:
+					This is done by adding 2 dependencies:
+						1. aspectjweaver
+						2. aspectjrt
+			
+			Step 2:
+				Create target bean class and declare it as a managed component:
+				This is the class which defines primary concerns.
+				
+			Step 3:
+				Create an aspect specific class:
+				This is the class which defines secondary concerns.
+				In order to intimate Spring that the class is an aspect specific
+				class, it must be annotated with @Aspect annotation.
+				Define the secondary concerns using relevant methods.
+				Configure these methods as advices using relevant annotations.
+				Once it is done, it specifies WHAT and WHEN but not WHERE.
+				This is done using a point-cut expression.
+				The point-cut expression provides several designators.
+				E.g.
+					execution
+					within
+					args
+					
+				The point-cut expression can be mentioned directly as a String
+				parameter for the advice specific annotations.
+				
+				However, this option is not recommended because if any change
+				is required e.g. if the package name is changed, the changes must
+				be done at all places where the expression is used.
+				
+				Therefore the better option is to define a method and mark that
+				method as a point-cut.
+				This method just acts as a marker method and it does not
+				participate in any execution; rather it is just used for forward
+				referencing.
+				
+				Since the method specifies a point-cut expression, it must be
+				annotated with @Pointcut annotation.
+			
+			Step 4:
+				Provide a configuration specific class.
+				This is the class which must enable proxy generation support.
+				Therefore, it must be annotated with @EnableAspectJAutoProxy
+				
+			Step 5:
+				Write a main program.
+				
+	Working with Around Advice:
+		Spring AOP provides an Around Advice which is a combination of
+		all the other 4 advices.
+		
+		Since it is a combination of all 4 advices, it is handled using a single
+		method which is exposed to the outer world.
+		
+		Since there is only 1 'public' method which is handling all the 4
+		advices, there has to be a clear cut separation of method invocations.
+		
+		E.g.
+			In between Before and After Returning stages, it is necessary to
+			send the control towards the target bean method.
+			
+		These things are handled using an interface:
+			ProceedingJoinPoint
+		
+		It provides a relevant method: proceed()
+		
+		Once all the call separations are done, this 'public' method must be
+		configured as 'Around Advice'.
+		
+		This is done by annotating it using @Around annotation.
+		
+	Spring MVC:				
+		Spring Framework provides a separate module known as Spring MVC.					
+		It is used for building web based applications.	
+		
+		What is MVC?
+			MVC stands for Model-View-Controller.
+			It is a commonly used architecture or a design pattern for 
+			building web based applications.		
+			
+			Model:
+				It is responsible for handling the business logic of the 
+				application.
+				It is also responsible for storing application specific data.	
+				Generally it is implemented using a simple Java class 
+				(Java Bean) or an EJB (Enterprise Java Bean).
+			
+			View:
+				It is responsible for handling the presentation logic of the 
+				application. 	
+				It either accepts the data from the end user or presents the
+				data to the user.
+				Generally it is implemented using HTML and JSPs.	
+				
+			Controller:
+				It is responsible for handling the navigation and the workflow
+				of the application.
+				It is used to bridge the gap between Model and View.
+				Generally it is implemented using Servlets.	
+				
+			This is why Jakarta EE has 3 components keeping MVC in mind:
+				Servlet (Controller), JSP (View) and EJB (Model)
+				
+		MVC architecture has 2 variants:
+			1. MVC 1
+			2. MVC 2
+		
+		MVC 1:
+			In this case, all the 3 aspects: Model, View and Controller are
+			taken care of using JSPs.
+			Since everything is managed using JSP, this architecture is 
+			called as Page Centric Architecture.
+			Since all the 3 codes are mixed in JSP, it leads to tight coupling.
+			Therefore this type of architecture is not recommended.
+		
+		MVC 2:
+			In this case, all the 3 aspects: Model, View and Controller are
+			decoupled from each other.
+			Model is taken care by Java class (Java Bean) or EJB, view is
+			by JSP and controller is by Servlet.
+			Since the entire navigation and workflow is handled using servlet,
+			this architecture is called as Servlet Centric Architecture.
+			Since it follows code separation, it is highly recommended.
+			
+	Getting started with Spring MVC:
+		Spring MVC is completely based upon MVC 2 variant.	
+		Therefore applications built using Spring MVC are enforced to
+		follow standard practices.	
+		
+		Apart from MVC 2, Spring MVC is based upon one more design
+		pattern: 	Front Controller
+		
+		It is the single controller (servlet) in the application that handles
+		the entire navigation and workflow.	
+		
+		All the incoming requests first hit this controller and then the
+		further delegation takes place.
+		
+	Spring MVC Components:
+		Spring MVC mainly consists of 5 components:
+			1. Front Controller
+			2. Controller
+			3. Model
+			4. View
+			5. View Resolver		
+		
+		Front Controller:
+			It is the single servlet which accepts all the incoming requests
+			for the application.
+			It handles the entire navigation and workflow.
+			Further, it delegates the call to the controller.
+			In Spring MVC it is predefined and it is named as:
+				DispatcherServlet
+				
+		Controller:
+			It is responsible for handling the request.
+			It handles the request either of its own or delegates the call
+			to Model.
+			It is user defined and implemented using a simple Java class.
+			It returns a view name back to the Front Controller.
+		
+		Model:
+			It is responsible for handling the business logic of the application.
+			It is also responsible for storing application specific data.			
+			It is user defined and implemented using a simple Java class.
+		
+		View:
+			It is responsible for handling the presentation logic of the 
+			application.			
+			It is user defined and implemented using JSPs.
+		
+		View Resolver:	
+			It is responsible for resolving the view based upon some specific
+			properties.
+			Front Controller uses view name returned from Controller and
+			View Resolver to render the actual view.
+			It is predefined in Spring MVC.
+			There are several view resolvers available but the most commonly
+			used is InternalResourceViewResolver.
+			
+	Getting started with Spring MVC Example:
+		Step 1:
+			Create a Maven based web project.
+		
+		Step 2:
+			Setup the environment
+				a) JDK 17+ (JRE Version)
+				b) Java Compiler (Same Version)
+				c) Project Facets:
+						Java 17
+						Dynamic Web Module (6)
+				d) Target Runtime - Tomcat 10.1
+		
+		Step 3:
+			Add Spring MVC Maven Dependency
+			
+		Step 4:
+			Configure Front Controller:
+			In Spring MVC, Front Controller is handled using 
+			DispatcherServket and it is to be configured in such a way that
+			it accepts all the incoming requests.
+			
+			Ideally, it should get configured within the application when the
+			application starts.
+			
+			In order to handle these things, Spring MVC provides an 
+			interface:
+				WebApplicationInitializer
+			
+			It provides a single method: onStartup()
+			
+			Therefore the configuration of the DispatcherServlet is taken
+			care by an implementation class of WebApplicationInitializer.
+			
+			In this implementation, the DispatcherServlet is instantiated
+			based upon WebApplicationContext which sets up the 
+			environment of the application e.g. base package name to be
+			scanned.
+			
+			Once the DispatcherServlet is instantiated, it must be registered
+			and configured in such a way that it will handle all the incoming
+			requests.
+			
+			This is done using 'ServletRegistration.Dynamic'
+							 [Outer Interface] . [Inner Interface]
+	
+		Step 5:
+			Define a Controller:
+				In Spring MVC, controller is the component responsible for
+				handling a request.
+				It is created using a simple Java class.
+				
+				Once the class is defined, it is necessary to intimate Spring 
+				that this class is not an ordinary class; rather it is a Controller
+				class.
+				
+				This is done by annotating it using @Controller annotation.
+				
+				Once the controller class is defined, it can be used to configure
+				end points (URLs) for handling the request.
+				
+				This is done by defining a method and typically this method
+				returns a view name.
+				
+				Once the method is defined, it needs to be mapped with some
+				end point (URL).
+				
+				This is done using @RequestMapping annotation.
+				It is to be applied at the method level.
+		
+		Step 6:
+			Define a view:
+				Typically, in Spring MVC, view is handled using JSPs.		
+				
+		Step 7:
+			Configure a View Resolver:
+				The value returned from Controller is a view name and Front
+				Controller needs to resolve the actual view.
+				
+				Front Controller makes use of View Resolver to resolve the view.
+				
+				Spring MVC provides several view resolvers but the most 
+				commonly used is InternalResourceViewResolver.
+				
+				It is configured using a simple Java class but to acquire Spring
+				MVC specific capabilities, it has to implement an interface:
+					WebMvcConfigurer
+				
+				It is a marker interface (does not have any method) but marks
+				the class as MVC configuration specific class.
+				
+				Once it is marked as MVC configuration specific class, to enable
+				Spring MVC specific capabilities, the class has to be annotated
+				with @EnableWebMvc annotation.
+				
+				The InternalResourceViewResolver resolves the view based upon
+				2 properties:
+					prefix and suffix
+		
+		Step 8:
+			Deploy the application on Web Server - Tomcat
+			
+		Step 9:
+			Start the Tomcat Server
+		
+		Step 10:
+			Open the client (Web Browser) and hit the URL	
+			
+	Spring MVC Application Workflow:
+		When the application is deployed on web server and the server is
+		started, the 'onStartup()' method from WebApplicationInitializer
+		implementation class gets called.
+		
+		This method is used to configure following things:
+			1. The base package for component scanning
+			2. The front controller DispatcherServlet
+			
+		Due to the base package for component scanning activity, all the
+		classes annotated with Spring's stereo type annotations e.g.
+		@Component, @Controller and so on, falling under that package get
+		scanned.
+		Since the controller implementation class contains a request handling
+		method annotated with @RequestMapping annotation, that also gets
+		scanned.
+		
+		When the application is requested for the very 1st time, the 
+		implementation class of WebMvcConfigurer gets triggered and
+		the view resolver gets configured, precisely it is :
+			InternalResourceViewResolver based upon prefix and suffix.
+			
+		Since every URL starts with a '/' and the front controller that is
+		DispatcherServlet is already configured with that particular URL
+		mapping, every time, first the request hits this front controller.
+		
+		After this, based upon the actual URL (/doGreet), the front 
+		controller delegates the call to the controller by invoking the
+		request handling method (getIndexPage()).
+		
+		This method is actually used to handle the request. 
+		This method either handles the request of its own or delegates 
+		the call to the Model.
+		Eventually, it returns a view name back to the Front Controller.
+		
+		Front Controller receives the view name returned from Controller
+		and resolves the actual view with the help of some view resolver
+		known as InternalResourceViewResolver.
+		
+		It resolves the view based upon 2 properties: prefix and suffix.
+		
+		Eventually, it renders the actual view back to the client. 
+	
+	HTML Form Processing:
+		A web application accepts data from end user using some HTML
+		form and that data needs to be processed further.
+		
+		This is called as HTML Form Processing.	
+		
+		In order to receive request specific parameters, it is necessary to
+		define a parameterized request handling method.	 
+		
+		In order to store the values of request specific parameters into the
+		receiving variables, it is necessary to bind them.
+		
+		This is done using @RequestParam annotation.
+		
+		It is to be applied at the receiving parameter level.
+		
+		In case of form processing, ideally HTTP POST request is sent as
+		GET request has security implications.
+		
+		Therefore, the request handling method must be configured in 
+		such a way that it handles the POST request.
+		This is done by specifying 'method' attribute for @RequestMapping
+		annotation.	
+		
+	Rendering application specific data:
+		When the request is processed and the response is generated in
+		the form of some view, it might be required to render application
+		specific data in the resultant page.
+		
+		In order to render the data in the resultant page, first the data
+		must be stored somewhere.
+		
+		The container where this data gets stored, is called as Model object.
+		In order to work with this Model object, Spring MVC provides an
+		interface: Model.
+		
+		In order to use 'Model' interface, it is necessary to declare a 
+		receiving parameter of that type in request handling method.
+		
+		In order to store data in the Model object, 'Model' interface provides
+		relevant methods e.g.
+			addAttribute()
+			
+		Once the attribute is added in the Model object, by default, it is
+		in the REQUEST scope.
+		
+		Sometimes, this data needs to be used across multiple requests made
+		within a session and therefore, ideally, it must be kept in a SESSION
+		scope.
+		
+		This is possible using @SessionAttributes annotation.
+		It is to be applied at the class level.
+		
+	Simplifying Request Mapping:
+		In order to configure method for handling the request, Spring
+		MVC provides @RequestMapping annotation.
+		
+		It is the single annotation that is used to handle various types of
+		HTTP requests.
+		
+		As long as GET request is to be configured, it is simple as it is the
+		default type taken into consideration.
+		
+		In case of other requests, a special 'method' attribute needs to be
+		mentioned.
+		
+		This can be simplified using relevant HTTP method oriented 
+		annotations.		
+		E.g.
+			GET		=>			@GetMapping
+			POST	=>			@PostMapping
+			PUT		=>			@PutMapping
+			DELETE =>		@DeleteMapping
+			
+	Task:
+		Build a web application that allows end user to manage Cricket Team
+		data as per the following:
+			Cricket Team
+				teamId (String)
+				teamName (String)
+				testRanking (int)
+				odiRanking (int)
+				t20Ranking (int)
+				
+			The data about Cricket Team is maintained using some in-memory
+			collection with the the help of some Java class.
+			
+			The application starts with a home page that is accessed using
+			/home end point.
+			
+			The home page must show 2 hyper links
+				Add Cricket Team
+				View Cricket Team
+			
+			When the first link is clicked, a page must be rendered showing
+			HTML form for accepting user input about the team along with
+			submit button.
+			
+			When submit button is clicked, the application must store team
+			data into in-memory collection and render the home page back to
+			the client
+			
+			When the second link is clicked, a page must be rendered which
+			shows HTML form asking for team ID along with submit button.
+			
+			When the button is clicked, the application must search for the
+			team against ID in In-Memory collection and render the details
+			of that team in the result page.
+			The result page must display appropriate message if the team ID
+			is invalid.
+			The result page must also provide a hyper link so that user can
+			click the same and come back on home page.
+			
+	Spring REST:
+		Spring Framework provides a module Spring REST that is used for
+		building REST APIs.		
+		
+		REST stands for Representational State Transfer.
+		
+		It is one kind of a Web Service and hence it is also called as:
+			Restful Web Service
+			
+		What is Web Service?
+			Web service is a software system designed to have machine-to-
+			machine inter-operable communication over the network.
+				1. Machine-to-Machine
+					Applications hosted on different machines can communicate
+					with each other.
+				
+				2. Inter-Operable Communication
+					Applications developed using different technologies, running
+					on different platforms can communicate with each other.
+					
+				3. Over the Network
+					Since applications are hosted on different machines, they
+					communicate using some network protocol.
+			
+			Communication in Web Service:
+				The communication in Web Service standards takes place via
+				some network protocol which is also referred as a remote
+				protocol.
+				
+				Since the communication may happen between 2 applications
+				developed using 2 different technologies, running on 2 different
+				operating systems, the data must be exchanged using some
+				common format which is understood by both the applications.
+				
+				It is the text format.
+				Even though text format brings inter-operability, it has one
+				drawback:	It is unstructured.
+				
+				This can be resolved using XML.
+				It stores a data in text format and it is structured.
+				Therefore it is used as a medium for data exchange.
+				
+			Types of Web Services:
+				Web Services are mainly of 2 types:
+					1. SOAP Based
+					2. Restful
+				
+				SOAP Based:
+					SOAP stands for Simple Object Access Protocol.
+					It is a standard used to have cross platform applications
+					interaction.
+					It uses XML as a medium for data exchange and HTTP for
+					data transfer.
+					Therefore it is a combination of XML and HTTP.
+					E.g.
+						SOAP = XML + HTTP
+					
+					SOAP based web services are in use for the last 2 decades or
+					even more than that.
+				
+				Restful:
+					In the last 7 to 8 years, one more type of web service is in
+					use and it got wide acceptance due to its simplicity.
+					
+					It is called as Restful Web Service.					
+					It emphasizes upon information-centric architecture.
+					It is completely based upon plain HTTP protocol.
+					
+					The resource which contains an information is referred as
+					REST resource.
+					
+					The URL that is used to work with REST resources is called
+					as REST End Point.
+					
+			Understanding REST:
+				REST stands for Representational State Transfer.
+				Representational:
+					It emphasizes upon representing the state of the resource.	
+					When a client makes a request for some data, server accepts 
+					the request and populates a data from some data store.
+					
+					Assuming the technology used for building REST API is Java,
+					the populated data is stored inside a Java object.
+					
+					That data is sent back to the client along with HTTP response.
+					The client consumes that data in any format which is suitable
+					to the client itself.	
+					
+					There are several formats in which data can be consumed but
+					the most commonly used format is JSON.
+					
+					JSON stands for Java Script Object Notation.
+					
+					It is a format which can be easily processed using Java 
+					Script oriented technologies.
+					E.g.
+						Plain Java Script (Vanilla JS)
+						Angular
+						React
+						Vue JS
+						
+				State:
+					It encapsulates current values available in the resource.
+					The state of the resource is populated on one side and made
+					available on another side.
+					
+				Transfer:
+					The state populated on one side is to be made available on
+					another side. This is done by using Transfer operation.
+					
+					If it is populated on server, it is transferred towards client
+					via HTTP response.
+					
+					If it is populated on client, it is transferred towards server
+					via HTTP request.
+		
+		Implementing REST API:
+			Since REST APIs are completely based upon HTTP protocol and
+			like SOAP based web services they are inter-operable, they can
+			be implemented using any technology like Java, Dot Net, Python 
+			and even Node JS.
+			
+		REST API using Java:
+			Java is one of the popular programming languages meant for
+			developing real time business applications.
+			It also provides support for developing REST APIs.
+			
+			There are several options for developing REST API using Java.
+				1. Jersey Framework
+				2. Spring MVC Framework
+				3. Spring Boot Framework
+			
+			Jersey Framework:
+				It is an open source Java based framework used to build REST
+				API.
+				It is an implementation of JAX-RS specification.
+				JAX-RS (Java API extension for Restful Services)
+			
+			Spring MVC Framework:
+				It is a module or a framework provided by Spring team that is
+				meant for developing web applications.
+				Apart from web applications, it can be used to build REST APIs
+				as well.
+				This approach is especially used when REST resources are to
+				be combined with existing web application.
+			
+			Spring Boot Framework:
+				It is an extension to Spring Framework.
+				It provides awesome support for implementing REST API.
+				It is especially used when the focus in only upon building REST
+				APIs.
+				
+		REST API using Spring Boot:
+			There are several options available for building REST API using
+			Spring Boot.
+				1. Spring Boot Starters
+				2. Spring Boot CLI
+				3. Spring Initializer
+			
+			Spring Boot Starters:
+				There are some built-in starter projects meant for developing
+				REST API.
+				Some IDEs provide built-in plug-ins for these starters.
+				E.g. STS (Spring Tools Suite)
+			
+			Spring Boot CLI:
+				It is a Command Line Interface used for building Spring Boot
+				projects for the implementation of REST API.
+				
+			Spring Initializer
+				It is a web interface used to configure Spring Boot project
+				online and then it allows to download the same and further
+				that project can be used to implement REST API.	
+				
+	Getting Started with Spring Boot:
+		Step 1:
+			Open web browser and access Spring Initializer using the URL:
+				start.spring.io		
+		
+		Step 2:
+			Enter all the project specific details e.g. Type, Language,
+			Spring Boot Version, Metadata (Group ID, Artifact ID).
+			Select the dependencies (Web, Devtools) and click "Generate"
+			to download the project specific ZIP file.
+		
+		Step 3:
+			Unzip the file to get the project specific folder.
+			
+		Step 4:
+			Import this project into an existing Eclipse Workspace
+		
+	Understanding Spring Boot API:
+		The Spring Boot API mainly provides following:
+			1. SpringBootApplication
+			2. SpringApplication
+		
+		SpringBootApplication:
+			It is an annotation that is to be applied at the class level.	
+			It is a single annotation which is a combination of 3 annotations:
+				1. @Configuration
+				2. @ComponentScan
+				3. @EnableAutoConfiguration
+			
+			This means:
+			@SpringBootApplication =
+			 @Configuration + @ComponentScan + @EnableAutoConfiguration
+			 
+		SpringApplication:
+			It is a class that is used to bootstrap the application.
+			It is used to launch an embedded Tomcat on a default port no:
+				8080
+			It is done using its 'static' method: run()
+			
+			It is possible that the class which is annotated with
+			@SpringBootApplication annotation and the class which contains
+			main() method for bootstrapping, are different.
+			
+			E.g.
+			@SpringBootApplication
+			public class AppConfig { ... }
+			
+			public class AppMain {
+				public static void main(....){
+					SpringApplication.run(AppConfig.class, args);
+				}
+			}
+			
+	Spring Boot Benefits:
+		1. Spring Boot implies a very simple design
+		2. It eliminates the complexities involved about configuration
+		3. It provides awesome support for dependency management.
+		
+	Getting started with REST Implementation:
+		Step 1:
+			Change the default port:
+				The Tomcat that is embedded in Spring Boot project by default
+				gets started on port 8080.
+				
+				It is a very commonly used port number and therefore it is
+				preferred to change it.
+				
+				This is done by making an entry in the configuration file:
+					application.properties
+				
+				It is located under 'src/main/resources' folder.
+				
+		Step 2:
+			Create a REST End Point:
+			REST resources are made accessible to REST clients using URLs
+			which are also called as End Points.
+			
+			These end points are configured with the help of methods defined
+			in a simple Java class.	
+			
+			However, since REST emphasizes upon data of the resource rather
+			than view name, it is necessary to intimate Spring Boot that the data
+			is being returned back and not the view name.
+			
+			This is done using @ResponseBody annotation.
+			It is to be applied at the return parameter level.
+			
+			E.g.
+				@Controller
+				public class SpringRestController {
+					@GetMapping("/doGreet")					
+					public String getData(){
+					@ResponseBody	return "Hello World";
+					}	
+			
+			Even though @ResponseBody makes it possible to configure the
+			resource as a REST resource, there is an alternative provided 
+			since Spring version 4.
+			
+			It provides an annotation: @RestController
+			It is a single annotation that combines 2 annotations:
+				@Controller + @ResponseBody
+			
+			It is to be applied at the class level.
+			
+	URLs in Spring REST:
+		URLs in Spring REST do not contain Context Root which is present
+		in a typical Spring MVC based application.
+		
+		This is because, in Spring REST, instead of deploying the application
+		on the web server, the web server itself gets embedded into the
+		application. 
+		
+		This allows applications to follow Micro-Service architecture.
+	
+	Conversion between Java Object and JSON:
+		In REST implementations, when server sends a data towards client,
+		a Java object gets converted into JSON.
+		
+		When a client sends a data towards server, a JSON gets converted
+		into a Java object.
+		
+		This is taken care by a 3rd party library known as Jackson.
+		
+	Implementing Layered Architecture:
+		The state of the resource used in REST implementation is always
+		maintained in some data store.
+		E.g.
+			File System
+			RDBMS
+			No SQL Database
+			LDAP (Lightweight Directory Access Protocol)
+			
+		When a REST client makes a request towards REST API, it is 
+		necessary to interact with data store for handling various 
+		operations.
+		
+		In order to have a code separation, ideally it should take place using
+		a layered architecture.
+		
+		The layered architecture consists of 3 layers:
+			1. Controller Layer
+			2. Service Layer
+			3. Repository Layer	
+		
+		Controller Layer:
+			It is the layer responsible for interacting with REST client.	
+			It accepts the request from REST client and generates the
+			response.
+			It acts as a client of Service Layer.
+		
+		Service Layer:
+			It is the layer responsible for handling business logic if any.
+			It acts as a client of Repository Layer.
+			It also acts as a bridge between Controller and Repository layers.
+		
+		Repository Layer:
+			It is the layer responsible for interaction with data store.
+			It performs all the required data persistency related operations.
+			
+		In order to configure these layers, Spring provides relevant
+		annotations:
+			1. @RestController
+			2. @Service
+			3. @Repository
+			
+	Working with Parameterized URLs:
+		In REST API, the URLs may accept one or many parameters.
+		These parameters are configured using '{ }' notation.
+		E.g.
+		/employees-api/{empId} - Retrieve employee against ID
+		/employees-api/{minSal}/{maxSal} - 	
+			Retrieve employees having salaries between minSal and maxSal
+		
+		Once the URLs are configured with parameters, whenever a client
+		makes a request by sending some parameter, it gets bound with
+		the place holder mentioned in the URL denoted with '{ }' notation.
+		
+		In order to proceed, it is necessary to fetch the value from the
+		place holder and bind it with the actual local variable name declared
+		as a receiving parameter in the request handling method. 
+		
+		This is done using @PathVariable annotation.
+		It is to be applied at the receiving parameter level.
+		
+	Sending data towards server:
+		Sometimes, instead of retrieving data from server, client may want
+		to send data towards server for further processing.
+		
+		E.g.
+			Creating a new resource on server.
+		
+		In this case, client sends the data in the form of JSON and when
+		it arrives on server side, it gets converted into a Java object.
+		This is done by making a POST request.
+		
+		When a client sends a data in the form JSON along with HTTP
+		Request, server needs to capture that data available in the request
+		and bind it with the actual Java object used as a receiving parameter
+		in the request handling method.
+		
+		This is done using @RequestBody annotation.
+		It is to be applied at the receiving parameter level.
+		
+		Making a POST Request:
+			When the REST end point is configured to accept a POST request
+			it is necessary to monitor whether it works properly or not.
+			
+			In real project scenario, the client which is making this POST
+			request might be any Java Script enabled application like
+			Angular, React, Vue and so on.
+			
+			In development environment, this needs to be done in more
+			simplified manner.		
+			
+			This is made possible using dummy or fake REST clients.
+			
+			There are several such REST clients available out of which 2 are
+			frequently used:
+				1. POSTMAN		
+				2. Google's Talend API Tester
+	
+	Interacting with Database:
+		Many business applications prefer database as a permanent
+		persistent store and hence REST API can also interact with 
+		the same.
+		
+		If the REST API is developed using Java, there are several options
+		available for interacting with Database.
+		
+		E.g.
+			JDBC
+			Hibernate
+			JPA
+		
+		If any of these options is used, developer has to write some amount
+		of code for handling persistency.
+		Even though the functionalities are different, the overall code
+		pattern remains same.
+		Only the things get changed are:
+			Entity Type
+			ID Type (May or May Not)
+		Since the code pattern remains same, Spring provides a separate
+		module to handle the code for data persistency implicitly.
+		It is called as Spring Data JPA.
+		
+		It is a module which takes away the entire persistence related code
+		from the developer.
+		The only thing that it needs to know is the type of Entity and the
+		type of ID.
+		
+		It provides an interface named as 'JpaRepository'.
+		It is a generic interface and the actual implementation class is
+		generated based upon the entity type and the ID type provided
+		by the developer.
+		
+		Like Hibernate or JPA, Spring Data JPA also requires database
+		configuration setup.
+		E.g.
+			Driver Class
+			URL
+			Username
+			Password
+		This is done by making entries into application.properties file.
+		
+		Once all the settings are done, it is necessary to scan the package
+		which contains all the required artifacts if they belong to some
+		different package from that of the configuration specific class.
+		
+		Using 'scanBasePackages' attribute, classes annotated with 
+		@RestController and @Service get scanned.
+		
+		The sub interface of JpaRepository and the entity class annotated
+		with @Entity need to be scanned separately.
+		
+		This is done by using 2 relevant annotations:
+			1. @EnableJpaRepositories
+			2. @EntityScan
+	
+	Updating the resource:
+		Any time, an application may want to modify the state of the
+		resource.
+		In REST API, update can be done by 2 ways:
+			1. Full Update
+			2. Partial Update
+		
+		Full Update:
+			In this case all the field values except ID are updated.
+			This is implemented by making HTTP PUT request.
+		Partial Update:
+			In this case some of field values except ID are updated.
+			This is implemented by making HTTP PATCH request.
+			
+		In case of Spring Data JPA, irrespective of whether it is POST,
+		PUT or even PATCH, the JpaRepository provides a common method:
+			save()
+		Actually, this method is meant for performing UPSERT operation.
+		
+	Working with HTTP Response:
+		In case of REST, the API must be implemented keeping the 
+		consumer in mind.
+		
+		When a client makes a request, server accepts the same and
+		generates the response. Ideally server must generate a proper
+		response back to the client based upon which a client can take
+		necessary action.
+		
+		This is done by sending the appropriate response status.
+		
+		Spring provides a relevant annotation to configure the response
+		status: @ResponseStatus
+		
+	Spring Security:
+		In any enterprise application, security plays an important role.
+		Different types of technologies have their own security model.
+		However up to certain extent, all the technologies implement
+		security model using basic standards.
+		
+		Typically the security is handled at 2 levels:
+			1. Authentication
+			2. Authorization
+		
+		Authentication:
+			It is the 1st step of security.
+			It decides whether a user is allowed to enter into the application
+			or not.
+			Typically, it is handled using credentials like username and
+			password.
+			
+		Authorization: 
+			Once a user is authenticated, depending upon the requirements,
+			certain privileges are granted to the users.
+			This is called as authorization.
+			
+		In order to handle authentication and authorization, mainly 2
+		entities are used:
+			1. Users
+			2. Roles
+			
+		Users:
+			These are the actual users of the application.
+			There might be several users within the application i.e. the
+			user count is not fixed.
+		
+		Roles:
+			These indicate the authority given to the specific user.
+			A single user may have multiple roles similarly a single role can
+			be played by multiple users.
+			The actual role varies from application to application.
+			In a specific application, the role count is fixed.
+			
+	When the Spring Boot project with Web and Security dependencies
+	is created, by default Spring Security model implies authentication
+	on all URLs.
+	
+	It implies authentication not only for existing URLs but also for
+	non existing URLs.
+	
+	By default, Spring Security is configured with a single user where
+	the user name is 'user' and the password is randomly generated
+	password which is available in the server logs.
+	
+	By default, Spring Security provides 4 things:
+		1. /login URL
+		2. /logout URL
+		3. Login Form
+		4. Logout Form
+	
+	Customizing Spring Security:
+		The default credentials (username and password) provided by
+		Spring Security are just meant for development purpose.
+		They are not recommended in production environment.	
+		
+		Therefore, applications need to configure security model as per 
+		the requirement.
+		
+		E.g.
+			By default, Spring Security secures every URL and in actual
+			application it may not be required.
+			
+		In order to customize Spring Security, there is a predefined API
+		available:
+			SecurityFilterChain
+		
+		Spring Security provides number of filters which are meant for
+		intercepting the requests. These filters execute in a specific
+		manner which is known as a filter chain.
+		
+		Therefore, in order to customize Spring Security, it is necessary 
+		to configure a bean of type SecurityFilterChain.
+		
+		Once the SecurityFilterChain is configured for customization, it
+		is necessary to enable that configuration.
+		
+		This is done by using @EnableWebSecurity annotation.
+		
+		In order to customize Spring Security, there are relevant APIs
+		available:
+			HttpSecurity
+			Customizer
+			
+		In Security customization, once the roles are configured for URLs,
+		it is necessary to configure users and assign roles to them.
+		
+		These users are available in some repository.
+			E.g.
+				In-Memory
+				Database
+				LDAP 
+	
+		To configure users, there is a separate API which consists:
+			UserDetails
+			User
+			UserDetailsService
+			
+		In Spring Security, the security model enforces to encode the
+		passwords.
+		This can be done by different encoding algorithms.
+		E.g.
+			BCryptPasswordEncoder
+		
+		To use password encoding, it is necessary to configure the bean
+		of that type.
+		
+------------------------------------THE END--------------------------------------
+	
+	
+	
+	
+	
+	
+	
+	
+	
