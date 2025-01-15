@@ -1,0 +1,277 @@
+--ds videos--to give
+https://www.youtube.com/watch?v=oAja8-Ulz6o
+https://www.youtube.com/watch?v=rHn9af16O_E
+data structures codehelp by babber
+
+--abstract  class
+
+							BankAccount
+							   |   id, balance		--. mv
+							   | calculateInterest()     -- abstract method
+							   |  const
+			-----------------------------------------------------------------
+			|				|					|
+  CurrentAccount			LoanAccount			SavingsAccount
+const					const				  const
+
+TestBankAccount  
+
+--properties
+1 association..
+2 aggregation..
+3 composition
+
+--association
+     it show how the objects are associated with each other 
+    it show the relationships
+
+--types of association
+1 one to one
+	one student goes to one college
+	one student enroll Stream
+
+2 one to many
+	one college has many students
+        one department  will have multiple emps
+	one college has multiple streams ----------
+3 many to many
+	many colleges has many students
+        many departments  will have multiple emps
+
+--aggregation
+       it is strong form of association
+	has a relationship
+        one object is dependent on the other object
+	high dependency is not present
+       object can exist without the 2nd object 
+	
+	eg : Emp 	--> Address
+	eg: Student --> Desktop 
+	eg : College --> Stream
+        Person --> Mobile 
+
+--composition
+	high dependency is  present
+        object can not exist without the 2nd object 
+
+        "consist of " 
+	eg : motor , fan
+	car , engine 
+	mobile , battery
+	laptop , cpu
+	library , book 
+
+=========================================
+==interfaces
+Interface is  a contract between the class and the outside world
+all the methods are abstract, public by default
+Interfaces specify what a class must do and not how. 
+all fields / mv are public, static and final by default.
+To implement interface use "implements" keyword.
+represents the IS-A relationship.
+It cannot be instantiated 
+A Java class can implement multiple Java Interfaces
+multiple inheritance is possible using interface
+
+--multiple inheritance
+      we can have multiple interface for 1 class
+public class Circle implements Graphic, I1, I2{//multiple inh
+
+===
+				fun1()			fun1()
+				Interface1		Interface2
+				 |                                   |
+				-------------------------------
+						|
+					  Myclass
+					fun1(){...}
+
+---> we have only 1 definition for the fun1() method
+
+-- why interfaces
+  if we have  common mf, mv between unrelated classes
+
+
+Graphic				interface
+  |  float PI = 3.14f;
+  |  float area ();		<--- abs method
+  |  float perimeter ();	<--- abs method
+--------------------------
+|   				|
+Circle  		   Rectangle
+float radius;        private float width, height;
+cost  		   costructor
+			   override area() , perimeter()
+
+eg2
+bird  : interface			spiderman : interface	
+         |    mf:fly(), eat()			   | 	mf:fly(), jump()
+         |					           |
+   -------------------------------------------------
+   			   |
+                        Class1 : fly(){.............}, eat(){..}, jump(){..}
+
+eg3
+			Calculator			TV   		< --interface
+			 | add(int a , int b)		|  playYoutube(), listenMusic()
+			---------------------------------
+					|
+				Mobile		
+
+			Bird					MotorVehicle
+			| fly()					|  drive()
+			----------------------------------------
+					|
+				Airplain
+
+=========
+--diff in Abstract class and interface
+ Abstract class  : relation between the related classes
+ interface : relation between the un related things
+
+ Abstract class : "extends" keyword is used
+ interface :  "implements" keyword is used
+
+ Abstract class  : abstraction is achieved from 0 to 100%
+ interface : abstraction is achieved from  100%
+
+ Abstract class : has abstract and non abstract methods
+ interface:  all methods are  abstract by default
+
+ Abstract class  : multiple inheritance is not possible
+ interface :  multiple inheritance is possible
+	
+=====================
+--Static import in Java
+is introduced in 1.5 version.
+With the help of static import, we can access the static members of a class directly without class name or any object.
+better readability and enhance coding 
+
+import static java.lang.Math.*; 
+
+==
+===
+String class
+	it is immutable (not updated) class in java\
+	it is from java.lang package 
+
+String str=new String("priti");
+str="uma";
+str="pranav";
+
+--methods
+length()	
+st.concat("Priti");	: to combine strings
+charAt(i)	: Returns the character at the specified index.
+int compareTo(str2) : Compares this String to another Object.
+concat(str2) 	: Concatenates the specified string to the end of this string.
+equals()
+hashCode()
+indexOF("@")	:Returns the index within this string of the first occurrence 
+lastIndexOf()	: index within this string of the last occurrence
+replace
+split			: splits a string into an array of substrings
+substring			: returns the part of the string
+toUpperCase
+trim()
+..
+
+
+
+
+===============
+Java StringBuffer class
+Java StringBuffer class is used to create mutable (modifiable) string. The StringBuffer class in java is same as String class except it is mutable i.e. it can be changed.
+
+--methods:
+1. append()
+2. insert()
+3. replace()
+4. delete()
+5. reverse()
+6. length()
+7. charAt()
+8. substring()
+indexOf()
+lastIndexOf()
+..
+..
+..
+
+
+
+
+-------------------------------------
+
+Java StringBuilder class
+Java StringBuilder class is used to create mutable (modifiable) string. The Java StringBuilder class is same as StringBuffer class except that it is non-synchronized. It is available since JDK 1.5.
+
+methods:
+1. insert()
+2. append()	:  to append the specified string with this string.
+3. replace()	:  to replace the string from specified startIndex and endIndex.
+4. delete()	: to delete the string from specified startIndex and endIndex.
+5. reverse()	: is used to reverse the string.
+6. length()	: to return the length 
+7. charAt(int index) : o return the character at the specified position.
+8. substring(int beginIndex) : the substring from the specified beginIndex.
+9. lastIndexOf()
+10. indexOf()
+..
+--diff in StringBuilder  and StringBuffer class
+StringBuilder  : faster
+StringBuffer
+
+StringBuilder  : non synchronized, multi threading is possible 
+StringBuffer : synchronized   (1 task at a time)
+
+
+===
+--static nested classes 
+Outer  class
+     normal inner class 1		--> fun1()  : 2 obj
+     static inner class  2		--> fun2()  : 1 obj
+
+1, outer class can not be static
+   only inner class can be static
+2. to call the method of static inner class, we need to create only 1 obj
+   of the class
+3.  to call the method of normal inner class, we need to create 2 objs
+   
+OuterClass
+	private static String msg //mv
+	public static class NestedStaticClass
+			printMessage() //can 
+
+	public class InnerClass
+			public void display() //can access static and non static mv
+
+
+
+A static class cannot access non-static members of the Outer class. It can access only static members of Outer class.
+
+Java allows us to define a class within another class. Such a class is called a nested class. 
+The class which enclosed nested class is known as Outer class
+Only nested classes can be static.
+
+ Inner class( non-static class) can access both static and non-static members of Outer class.
+
+
+==
+ex
+try
+catch
+finally{
+}
+
+
+
+
+
+
+
+
+
+
+
+

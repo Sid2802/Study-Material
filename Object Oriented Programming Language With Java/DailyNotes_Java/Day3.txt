@@ -1,0 +1,347 @@
+--interview rounds
+1 appitude round  : 780
+	RS Agarwal   
+	app 	: 1hr
+	vol1 vol2
+		1. logical reasoning
+		2. quatitative
+		3. eng
+		4. maths
+		5 verbal 
+
+2 tech  round
+3 tech round
+4 group dis
+5 hr
+
+--time sheet
+1 appti 	: 1hr
+2 eng comm  : 30 min
+3 data structure : 1hr
+4 revision : 30 min
+
+*
+**
+***
+****
+==================
+1. 780   --> appti
+
+2. 40 -->
+
+3. 15 --> 
+    10
+
+
+
+
+--types of polymorphism
+1 static polymorphism / compile time 
+	function overloadding
+		same function with different parameters
+ 		the function signature is different for each function
+		function overloading is nothing to do with return type
+
+eg : add(int a, int b)
+       add(int a, int b, int c)
+       add(int a, double b)
+       add(double  a, int b)
+       add(double a, double b)
+
+eg not fun overloading
+void add(int a, int b){..}
+int add(int a, int b){..}
+
+--function signature 
+1 number of parameters
+2 datatype of parameters
+3 sequence of parameters
+
+2 dynamic polymorphism / runtime polymorphism
+    function overriding 
+    the same function is present in parent class and child class with the same signature of the function
+    
+		parent   --> fun1(int a, int b)
+		|
+		child --> fun1(int a, int b)
+
+===================
+--types of inheritance
+1 single level inheritance
+2 multi  level inheritance
+3 multiple inheritance
+4 hierarchical inheritance
+5 hybrid inheritance
+
+===
+-- single level inheritance  : supported
+Class1
+^
+|
+Class2
+
+--multi  level inheritance : supported
+Class1
+^
+|
+Class2
+^
+|
+Class3
+
+--multiple inheritance	: not supported
+   but it can be implemented using "interfaces"
+
+		Class1			Class2
+		|				 |
+		---------------------------
+			  |
+			Class3
+
+---hierarchical inheritance		: supported
+			Class1
+			 |
+	-------------------------------------------
+	|			|			|
+	Class2		Class3		Class4
+
+--hybrid inheritance		: not supported
+  it is combination of multiple inheritance and hierarchical inheritance	
+
+		Class1
+	          |
+	--------------------
+	|			|			
+	Class2		Class3
+	|   			|
+	--------------------
+		|
+		Class4
+
+=======
+--rule 
+class which has the main method should have the higher accessibility than other classes 
+==========================
+windows --- show view-- 	console
+						Project Explorer
+
+=====
+--to change the perspective
+     windows--perspective -- open perspective -- java 
+
+-----------------------
+keywords  : 
+	reserved keywords 52, which we can not use for mv, mf, class
+eg : private, public, extends ----
+
+============
+Circle 
+	radius------------> int  mv
+	area1------------> double  mv
+	peri --------------> double  mv
+	accept()  --> accept the radius
+	display()
+	calArea()-------------> 3.14* r* r
+	calPeri()---------------> 2*3.14 *r
+TestCircle-----------------> main
+	create an object and call the methods
+
+=============
+upwardCasting
+		int a=100;
+		double d=a;			//upward casting  : automatically
+		System.out.println(d);
+		
+		double d1=66.99;
+		int i=(int)d1;		//downward casting  : explicit 
+		System.out.println(i);
+		
+==
+function overloading
+eg : add(int a, int b)
+       add(int a, int b, int c)
+       add(int a, double b)
+       add(double  a, int b)
+       add(double a, double b)
+
+==============
+overloading the main() method
+public void main() {
+		System.out.println("main method without parameters");
+	}
+	public void main(int a, int b) {
+		System.out.println("main method wit 2 parameters");
+	}
+	public void main(int a) {
+		System.out.println("main method with 1 parameter");
+	}
+	public static void main(String[] args) {
+		OverloadMain obj=new OverloadMain();
+		obj.main();   //1
+		obj.main(10);  //3
+		obj.main(10, 33);  //2
+	}
+
+============
+hashCode()		: returns the integer representation of the memory address
+
+
+
+====
+Object class
+Object class is present java.lang package
+every class in java is derived from object class
+it is parent of all the classes in java by default
+
+Object
+^
+|
+Emp
+
+Object
+^
+|
+Circle
+--methods of object class				
+1 toString()   		: to convert the object to string
+2 equals(object obj)	: to compare the objects
+3 notify()		:  Wakes up a single thread that is waiting 
+4 wait(2000)		:   current thread to wait for 2 sec
+5 notifyAll()		: Wakes up all threads that are waiting
+6 clone() 		: it returns a new object that is exactly same as the current object
+7 hashCode()		: returns the memory address
+8 getClass()		: returns the object of the current class(this)
+	
+==
+Comparing the 2 Strings
+	String str3=new String("chinmay");
+		String str4=new String("chinmay");
+		
+		if (str3.equals(str4))
+			System.out.println("same");
+		else
+			System.out.println("not same");
+	
+===
+
+--for loop break
+for(int i=1; i<=10; i++) {
+			
+			if(i==5)
+				//break;
+				continue;
+			System.out.println(i);
+		}
+===
+--while and the menu
+
+1. Accept Details
+2. Display Details
+3. Withdraw Amount 
+4. Deposit Amount 
+5. Transfer Amount 
+6. Check Balance
+7. Update Balance
+8. Exit 
+
+yes
+6
+============
+types of memory:
+1. stack
+   Emp emp2;		//reference --> stack memory
+   emp2=new Emp();     // heap memory
+	int a=199;  //stack
+		int b =10;  //stack
+	
+2. heap  
+	used when the "new" keyword is used
+
+3. code  : all mf are stored 
+ public void attendClass() {
+    	 System.out.println("attending the class");
+     }
+     public void apperExam() {
+    	 System.out.println("apparing for the exams..");
+     }
+	
+4. data
+   static variables are stored  
+   static variable one copy per class 
+
+Emp emp=new Emp();
+------------   ---------------
+   stack		heap
+
+
+
+
+
+
+
+
+=============
+Array 
+constructor
+getter
+setter
+toString
+charAt()
+
+
+
+
+
+
+
+
+
+
+
+--Wrapper classes
+to wrap the primitives to an object, 
+Wrapper classes are available for each primitive data types
+
+Integer.parseInt(args[0])
+Float.parseFloat(args[0])
+Double.parseDouble(args[0])
+
+--methods of  Integer Wrapper class
+1. parseInt()
+2. toString()		: to convert to string
+3. toHexString()
+4. floatValue()		: returns value of the integer as float
+5. equals() 
+6. doubleValue()
+7. longValue()
+8. hashCode() 
+
+--different Wrapper class
+1. Integer		: int
+2. Long			: long
+3. Short		: short
+4. Byte			: byte
+5. Float		: float
+6. Double		: double
+
+
+
+
+
+
+
+
+
+====
+--assignment 
+1. accept the number and calculate the factorial of the no.
+
+
+
+
+
+
+
+
+
+

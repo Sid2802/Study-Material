@@ -1,0 +1,264 @@
+--Exception handling (Error handling)
+it is unwanted , unexpected event which has occoured during program execution
+because of the Exception, the rest of program is never executed 
+if handle the Exception, the  rest of program is executed  and user can display his own error message
+
+if you have not handled the exception then, it will execute the "Genealized Exception".
+
+eg : Rohit attending a marriage
+eg : Praduny --> walking on the road
+eg : signals 
+
+--types of Exception
+1 checked Exception / compile time Exception
+    it is neccessory to handle the Exception
+   eg : IOException , SQLException, FileNotFoundException
+   eg : passport is required for international travel 
+  eg :  id card --> employee of company --> time in / out 
+
+
+2 unchecked Exception / runtimeException
+    it is not compulsory to handle the Exception
+   you may handle or you may not handle
+	eg : ArithmeticException, NumberFormatException
+
+--types of block
+1 try
+	will have code which may result to an error should be included in this block
+
+2 catch
+       is followed after the try block
+	every try should have at least one catch
+	we can have multiple catch block
+	will be executed if there an Exception
+	always matching catch block will be executed
+
+3 finally
+	it is optional
+	will be executed always irrespective of Exception
+
+--why to use the finally block
+	database objects(jdbc) , file io  object will be closed here 
+	used to deallocate the memory used by resources
+
+--1
+try{
+..
+..
+}catch(e){
+..
+..
+}
+
+--2
+try{
+..
+..
+}catch(e){
+..
+..
+}
+catch(e){
+..
+..
+}
+---
+
+3
+try{
+..
+..}
+catch(e){
+..
+..
+}
+finally{
+..
+..
+}
+
+--propogation of exception
+we can have nested try catch , if the exception is present inner most try catch, if you handled will show the messge, if matching catch not found, then will pass the exception to the next catch .
+if matching catch is found , will be executing the block.
+
+try{
+..
+	try{
+	..
+		try{
+		.. sdlfksldkfldskk
+		..
+		}catch(e){
+		..
+		..}
+	}
+	catch(e){
+	..
+	..}
+..
+}catch(e){
+..
+..
+}
+sdfsdlkf
+df
+sdf
+sdfsd
+}
+1. ArithmeticException		: dividing by 0
+2. NumberFormatException  : expected num , but given the string
+3. Exception
+
+
+java.io.FileInputStream;
+--------- ---------------------
+package   class
+
+==
+Error vs Exception?
+1.  ; " +  missing
+2.  name of the variable is not correct
+3. mismatch of the method 
+
+--to handle the Exception
+1 try catch
+2 throws		: code is less	 
+	and we need not to have to use try and catch for the same exception
+	written with main() method or any other method 
+
+1 class has 6 exception
+3 : try catch
+3  : throws 
+
+--diff in throw and throws 
+throw  -->  it used with " if condition " 
+	can be used with user defined and checked and unchecked exception
+	
+throws  --> used to throw the exception , used with either main() method of other method
+
+--1
+package exception;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
+public class CheckedExceptionDemo {
+
+	public static void main(String[] args) throws IOException {
+		try {
+		FileInputStream fis=new FileInputStream("d:\\Priti\\myfile123.txt");
+		int k;
+		while((k=fis.read()) != -1) {  //
+			System.out.print((char)k);
+		}
+		fis.close();
+	}catch(FileNotFoundException e) {
+		System.out.println("Error : path is wrong for the file, check the path..");
+	}
+		
+	}
+	
+}
+--2
+public static void main(String[] args) throws IOException , FileNotFoundException{
+		FileInputStream fis=new FileInputStream("d:\\Priti\\myfile123.txt");
+		int k;
+		while((k=fis.read()) != -1) {  //
+			System.out.print((char)k);
+		}
+		fis.close();	
+		
+	}
+
+===============
+user defined exception / custom exception
+ user is creating the exception, and handling the same
+
+--steps
+1. need to have a class with constructor, with the parent class "Exception"
+2. constructor should be there with a parameter , in which we will call the constructor of the parent class
+3. if condition
+4 throw the Exception
+
+--eg validation password
+1.  > 8
+2 . special ch  should be there
+
+--validation can be done using 2 ways
+1 checkage() , checkAll(), checkBal()  --> using functions
+2 using Exception
+
+
+The Exception class inherits from the Throwable class. 
+		      java.lang 
+			|
+		     Object
+			|
+		    Throwable
+			|
+	-----------------------------------
+	|			|		|
+	Error			Exception
+	|			|
+				|
+	--------------------------------------------------
+	|								|	
+RuntimeException  	 			Compiletime Exception(Checked)
+   | (UNCHECKED/logical err)   				|
+   |			--------------------------------------------------------------------------------------
+   |			|	     			|	  		|     				 |
+   |			SQLException EOFException IOException FileNotFoundException    				
+--------------------------------------------------------------------------
+|		    |	|	|		   |					|
+ArithmeticException |   | NumberFormatException  CheckPassword 
+		    |   |
+   NullPointerException |	IndexOutOfBoundsException
+							|
+							------------------------------------
+								|				|
+				ArrayIndexOutOfBoundsException StringIndexOutOfBoundsException
+
+
+--details
+NumberFormatException : datatype is integer and stored the string into
+
+ArithmeticException   : divide by 0
+
+IOException 	      : file i/o : need to be handle if using file I/O
+
+IndexOutOfBounds      : If a request for a negative or an index greater than or equal to size of array
+
+ArrayIndexOutOfBounds :  access an ele of an array for which index given wrongly
+
+StringIndexOutOfBounds :  thrown by the methods of the String class, in order to indicate that an index is either negative, or greater than the size of the string 
+
+	String str="cdac nashik";
+		//          0123
+		System.out.println(str.substring(22));
+	
+NullPointer	      :  If we have a null value in any variable, performing any operation on the variable
+
+       emp=null;
+	   emp.display();
+	   emp.completeProject();
+
+MySQL ------------> java
+emp table  ----------> java jdbc
+
+SQLException  : The SQLException class provides information on a database access error.
+
+EOFException  : Signals that an end of file or end of stream has been reached unexpectedly during input.
+
+FileNotFoundException : specified pathname has failed.
+
+=============================================
+ds ,  3/4 
+apptitude test --  2
+Monday --> mcq    30q
+
+
+
+
+
+

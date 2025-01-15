@@ -1,0 +1,297 @@
+--Layers Concepts
+entity					<---- package  <---POJO classes
+   		Account
+		SavingAccount
+		CurrentAccount
+		LoanAccount
+		
+operations				<---- package
+		AccountOperations
+		SavingAccountOperations
+		CurrentAccountOperations
+		LoanAccountOpertions
+
+validation				<---- package
+		AccountValidation
+		SavingAccountValidation
+		CurrentAccountValidation
+		LoanAccountValidation
+
+dao						database access object		<---- package
+		AccountDao
+		SavingAccountDao
+		CurrentAccountDao
+		LoanAccountDao
+
+   
+userInterface				<---- package
+		TestAccount
+			main() method
+				create objects of all the classes 
+				call the methods
+
+BankProject
+
+============
+POJO class / entity class
+mv
+def const
+para const
+getter setter
+toString
+===================
+Account  services /operations
+1 checkBalance(){...}
+2 withdraw()
+3 deposit()
+4 transfer()
+5 printPassbook()
+6 openAccount()
+7 KYCupdate()
+8 applyLoan()
+9 closeAccount()
+10 changeName()
+11 changeMobile()
+12 changeAddress()
+..
+..
+==============
+validation
+	age --------> >18		< 100
+	email 	--> @ , .
+	mobile 		--> 12 ch , -8787 
+	sal		> 10000			< 100000	
+	balance   >=0
+	name     only ch 
+
+account1		---------------->			account2			-5000
+1, Rohit, 30000					2, Pratik, 40000
+	       bal1								bal2	 
+balq1= b	0 : 25000			bal2=bal2+ 5000  :  45000
+
+=============
+types of functions
+1 there is no parameters and no return type
+	public void apperExam()
+	public void competeAssignment()
+
+2 there is  parameters and  return type
+	public boolean withdraw(Account account, double amount)
+
+3 there is no parameters and has return type
+	public int getAccNo()
+
+4 there is  parameters and no return type
+	public void add(int a, int b)
+	public void setEmpid(int empId)
+==================
+
+--finalized()  method of Object class
+  used for memory clean up
+  disposes the system resources 
+  garbage collection calls the finalized()  method
+
+==================
+Inheritance
+  reusability of the code
+  extensibility of the code
+  child class acquires the properties of parent class 
+  "protected" access specifier is used 
+  "extends" keyword is used for Inheritance
+   child class inherits all the mv and mf 
+   "constructors" are not inherited 
+  to  inherit "constructors" we use super keyword 
+  to call the methods of the parent class "super " keyword is used
+
+--why inheritance ? 
+reusability of the code, 
+understanding is easy, 
+modification , maintenance of the code is easy, 
+
+
+				Account
+				 |  mv: accNo, accHolderName, bal
+				 |   mf: withdraw(), deposit(), transfer()
+		---------------------------------------------
+		|					|				
+SavingAccount				CurrentAccount
+accNo, accHolderName, bal		accNo, accHolderName, bal
+withdraw(), deposit(), transfer()    withdraw(), deposit(), transfer()
+         +								+
+fdAmount, isSalaried 				creditAmount
+
+specialization : uncommon mv, mf in child class
+eg fdAmount, isSalaried 				creditAmount
+
+generalization : common mv, mf in child class
+eg withdraw(), deposit(), transfer()
+accNo, accHolderName, bal
+
+
+======================
+						Emp
+						  | mv:  empno, ename , compName, address
+						  |
+			-----------------------------------------------
+			|							|
+		TempEmp					ConfirmedEmp
+empno, ename , compName, address	empno, ename , compName, address
+			+								+
+      travelAllowance, foodAllow			sal, pf, instPolicy, bonus, paidLeaves, desg
+
+
+
+
+
+						CAr
+						  |
+				-----------------------------------------------
+			|									|
+		
+			
+
+mobile
+vehicle
+Televisionset
+Plains
+Airports
+Birds
+Animal
+Matches
+Players
+Movies
+Fan
+AC 
+Bag
+Transportation 
+
+==================
+Creating an Array of objects
+Array of Person
+====
+email validations
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Person		P
+| mv : name, age, gender
+| para const, display(), fun1() , toString()
+Student		C
+| mv : rollNo,  stream , score
+| mf : display(), para const, toString()
+|
+Emp
+| mv : empNo, company, sal
+| para const, toString()
+
+
+
+--fun overloadding
+add(int a, int b)
+add(int a, float b)
+add(float a, int b)
+add(int a, int b, int c)
+
+--binding 
+1 static binding  / compile time
+Person person2=new Person("uma", 22, 'F');
+
+2 dynamic binding/ runtime binding 
+person2=new Student("uma", 22, 'F', 33, "IT", 77);
+// p                       ch
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Account
+	private int accNo;
+	private String accName;
+	private double accBalance;
+
+       def cost
+       para const
+       getter setter
+       toString()
+
+
+TestAccount 
+	1. create an object without parameters
+	2. display all the details
+	3. create an object with parameters
+	4 display all the details
+

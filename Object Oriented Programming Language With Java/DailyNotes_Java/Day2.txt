@@ -1,0 +1,437 @@
+--naming convension
+1 mv : camel case : eg rollNo, accHolderName
+2 mf : : camel case : eg attendClass(), competeAssignment() , displayDetails()
+3 class name : Pascal case :  eg:Student, SavingAccount
+4 package name : lower case : eg module1
+5 final variables : upper case 
+  constants
+eg : double final PI =3.14;
+eg : double final TAX= 0.10;
+
+----Architecture of java
+JVM : java virtual m/c
+JDK : java development kit
+JRE : java runtime environment
+
+a.java			-------------------------------->	a.class(given to jvm)
+			java compiler(javac)
+
+jvm --> byte code -----------> machine language executable code
+
+fun1(){
+sfdsfs
+fsd
+sdf
+sd
+sd
+200 lines}
+
+--JIT compiler 
+obj1.fun1();
+..
+..
+obj2.fun1();
+..
+..
+obj1.fun1();
+obj1.fun1();
+obj1.fun1();
+20 times 
+======
+Math class in Java
+     it is immutable(can not be changed) class in java
+     has mathematical functions.
+--
+
+Math.sqrt()
+Math.random()     --> generates the number between 0 -1
+Math.pow(2,3)
+Math.abs(-200)	--> 200 --> returns the +ve number
+Math.min(10,20)			--> 10
+Math.max(10, 20)			--> 20
+Math.round(1234.56)
+Math.ceil(123.4)		 	--> upper number
+Math.floor(1234.4)			--> lower number	
+
+
+
+--modularity of the code
+Student 
+  private int rollNo;
+  private String name;
+  private double score;
+   
+  public void attendClass()
+  public void apperExam() 
+  public void competeAssignment() 
+  public void display()
+
+TestStudent
+   main()
+	create a object Student 4
+	call the methods
+
+=========
+access specifier :
+1 private : mv , mf are accessible to the same class only
+2 public :    mv , mf  are accessible to all classes : 
+       in the same package and outside the package
+3 protected  : mv and mf are accessible to sub class (child class)
+4 default  :  if the access specifier is not given
+   mv , mf  have the package scope, accessible in the same package
+   module2 -- > yes
+   module1 --> no
+  module3 --> no
+
+--hierarchy of access specifier
+1 private
+2 protected 
+3 default
+4 public
+
+==
+Scanner class
+  used to accept the values from the user
+  Java 1.5 onwards before the same we have used the BufferInput classes
+
+
+nextInt()
+nextFloat()
+nextDouble()
+next()			: string : works
+nextBoolean()
+nextByte()
+nextShort()
+nextLong()
+nextLine()		: : string  : do not use
+
+==
+import java.util.Scanner;
+
+java.util : package
+Scanner : class
+
+
+===
+package module2;
+Emp 		
+  	private int empNo;
+	private String ename;
+	private double empSalary;
+
+       public void accept()   < ---- to accept the empno, ename , sal
+      public void display()
+      public void  compleProject()
+      public void checkAttendance()
+      public void applyLoan()
+
+TestEmp				--> tester class  / driver class  < module1
+     main method
+     create an obj 2 call methods
+
+==============
+-shortcut
+System.out.println		: ctrl +spacebar  : sy
+ctrl + f11			: run
+ctrl + shift + f		: format
+comment ---------> ctrl + /
+uncomment ---------> ctrl + /
+
+
+---to import the class
+import module2.Emp;
+import module2.Stduent;
+import module2.Loan;
+
+--to import all the classes
+import module2.*;
+import module3.*;
+
+--what is package ?
+  it is a collection of multiple classes
+
+--why to package?
+  it is used avoid the naming conflict
+ 
+
+pack1				pack2	
+Stduent				Stduent
+
+=====================
+--airthmatic op
++
+-
+*
+/
+%
+
++=				a+=5;
+*=
+-=
+/=
+%=
+
+++
+--
+
+
+
+--logical op
+&&			: and
+||			: or
+!			not
+
+--relational op / comparison op
+>
+<
+>=
+<=
+=
+==   		compare
+
+--if cond
+if (cond ){
+..
+}
+else{
+..
+}
+
+--2
+if (cond ){
+..
+}
+else if (condi2){
+..
+}
+else if (condi3){
+..
+}
+else
+{
+...
+..
+}
+--accept a number from the user and check the number is +ve , -ve
+--accept 2 numbers from the user and find the greatest of the numbers
+
+--assignment
+--accept 3 numbers from the user and find the greatest of the numbers
+--accept a number from the user and check where the number is 1 digit , 2 digit, 3 digit, 4 digit  
+
+--or   
+--not
+
+
+--default values
+short, byte, int   = 0
+Boolean  = false
+string = null
+float , double = 0.0
+object  = null
+char  =\u0000
+
+--loops
+1 for
+2 do while
+3 while
+
+--accept a number from the user
+1 ,2,3,4 		: working day
+5			: movie time
+6			: super sat
+7			: sleepy sun
+
+--switch case 
+
+--assignment  : OddDemo
+1. display the first 10 odd number using the while loop (use mod)
+1,3,5....19
+
+--EvenDemo
+2. display the first 10 even number using the do while loop (use mod)
+2,4,6,......10
+
+--Validations
+age  --> >0   		<=100
+sal       >=3000		<=100000
+balance 		>=0			<=50000
+ename 	-->can not be null 
+
+=============
+User
+    private String name
+    private int age
+    private double sal
+
+    public void accept()
+    public void display()
+    public void checkSal()		>0		< 100000   "salary is valid"
+    public void checkAge()		>18 			
+		>18 "you are eligible to vote"
+               > 18 and < 100	
+		valid age
+TestUser
+
+====
+Emp
+    private int empNo
+    private String ename
+    private double bal
+
+    public void accept()
+    public void display()
+    public void checkEmpNo()		> 0  --> valid empno
+	else invalid empno
+    public void checkBal()	>=0 		< 100000		valid balance
+			> 100000		--> produce the proof
+TestEmp
+
+=====
+attribures   : data members / instance variables / member variables
+=======
+OOP
+Object Oriented Programming 
+1 abstraction
+2 encapsulation
+3 polymorphism
+4 inheritance
+
+--abstraction
+process in which the developers will fetch the only the required data or attributes as per the business requirements. 
+getting the data , gathering the data
+
+eg: election details to be collected, 
+survey : educated ,  un: educated 
+KYC details
+visa details
+
+eg : 
+
+Emp
+  empid
+  ename 
+  sal
+  favColor ---->
+  carNo ---------> no
+
+-- encapsulation
+process of wrapping up the member variables, member functions into a single unit (class) is called as  encapsulation
+creating a class
+forming a class
+hiding the unwanted information
+
+--to hide : private, protected 
+
+--eg : assemble the car  or laptop
+--eg capsule , password not see
+--buy a fan ---> motor details are not explained 
+eg : smart watch --> s/w , technologies , equipments are wrapped together
+eg : coffee vending m/c --> process , proportion of ingredients
+eg : resume --> family b/g , back logs , is hidden
+eg : television set : internal circuit hidden
+eg : using the atm card, we do not know name of the server ,  we do not know location of server
+
+--diff encapsulation and abstraction
+encapsulation  : forming  / wrapping / creating 
+abstraction : getting required information / details 
+	filter the data 
+
+--polymorphism
+poly : many
+morph : forms
+
+Anvita 
+1 daughter
+2 sister
+3 friends
+4 grand child 
+5 student of cdac
+
+--inheritance
+  it is reusability of the code
+  extensibility of the code 
+  the mv , mf of the parent class is automatically inherited to the child class 
+  "protected" access specifier is used 
+
+				Emp
+				 | mv : id, name , address, mobile, email
+		---------------------------------------
+		|					    |
+		TempEmp			ConfiredEmp
+ id, name , address, mobile, email     id, name , address, mobile, email
+		+						+
+    travelAllowance, foodAllowance     salary, bonus, comm, loan, medicalFac, pf
+ 							
+					Mobile
+				           | modelno, color, price, camera 
+			--------------------------------------
+			|					  |
+		TextMobile			SmartMobile
+
+eg : house
+eg : watch
+eg : television
+=================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+String equals
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Circle class
+	radius------------> int  mv
+	area1------------> double  mv
+	peri --------------> double  mv
+	accept()
+	display()
+	calArea()-------------> 3.14* r* r
+	calPeri()---------------> 2*3.14 *r
+TestCircle-----------------> main
+
+
+==
+--rule 
+class which has the main method should have the higher accessiblity than other classes 
+
+
+==assignment
+-- 34 ----------> 3 raise to 4
+3*3*3*3

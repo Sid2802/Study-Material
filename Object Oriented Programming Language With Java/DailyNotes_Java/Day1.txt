@@ -1,0 +1,384 @@
+Java
+
+--to check the installation
+cmd 
+javac
+cls
+
+--to check the version 
+java -version
+
+--to check the version of compiler
+javac -version
+
+--to compile the code 
+javac file1.java    ---------> file1.class(bytecode )
+
+JVM has bytecode verifier 
+
+--to execute
+java file1
+
+JDK   java development kit
+JRE  java runtime environment
+JVM  java virtual machine
+
+===============================
+Java Features
+---------------------
+1. Java is 100% Object oriented
+2. Java byte code is platform neutral* ( not the JVM)
+       JVM is platform dependent
+       JVM for windows is different, JVM for unix , JVM for mac OS is different 
+       bytecode is platform independent (file1.class)
+
+javac file1.java    ---------> file1.class(bytecode )
+					   JVM
+file1.class  --> macos
+file1.class --> windows
+file1.class --> unix
+
+3. Java is simple
+	- legacy code
+	- no pointers
+	- no need of h/w knowledge
+	- no need of memory management
+		allocation,deallocation,reallocation
+
+4. Java is compiled and interpreted
+
+5. Robust
+	something which is strong / tuff
+	c , c++ do not have well structured try catch. 
+	ability to run in runtime errors
+		- "exception" handling is strong, for every exception in java 
+there is a separate class , structured exception handling
+	automatic garbage collection
+
+6. Dynamic
+	A "super class reference" can point to any of its child class object
+
+7. Networked
+	socket programming, API is available , peer to peer n/w
+	transfer the data from one machine to other m/c, ie sending a message from 	
+1 m/c to another on a n/w in the form of byte using TCP/IP 
+
+	machine1			machine2
+	msg---------------------->
+        file1 -------------------->
+8. secure 
+  if you change the byte code , JVM will not accept the file. there is byte code verifier 
+present in JVM. Virus is not affected in Java. Security packages are there in java 
+
+file1.java ------------> file1.class
+java file1  	
+
+9 Distributed
+ 	there are some added feature of Java RMI (Remote method invocation) 
+with which a method display(), method in 1 m/c can be invoke from 2nd m/c. 
+for distributed it should be n/w oriented. API is available, java RMI package 
+available for service, client server application
+eg : amazon, facebook
+gmail acc:
+user
+pass: 
+inbox(1000), sent , trash , spam 
+
+					server display()
+					 |
+			-------------------------------------
+			|		  |			|
+			client1	  client2		client3
+			display()
+
+
+10 Multithreaded
+	1 process for multiple threads. JVM manages the threads.
+th1  ------>  even no display
+th2   ---> odd no display
+th3 ----->1, 2,.........100
+
+11 Architecture neutral 
+	CPU architecture is same for all the m/c
+     16bit, 32 bit, 64 bit ---------> int ---> 4B
+================
+
+write-once / run any where a.class
+old name : Oak
+
+javac complier
+
+what is java?
+it is a programming lang which allows to create a platform independent application
+
+Developed by : James Gosling
+Realeased by Sun Microsystems
+presently owned by : Oracle corp
+
+===============	
+versions:
+java 1.02		: 250 classes
+java 1.1		: 500 classes : better GUI
+java 2	(1.2-1.4)	: 2300 classes : powerful : Comes in three
+Standard Edition (J2SE) ,
+	core java
+
+Enterprise Edition (J2EE) and
+ 		JDBC
+		servlet, JSP
+
+flavors: Micro Edition (J2ME),
+	
+java 5 (1.5)		: 3500 classes  : More power,(known as"Tiger"')
+java 6 (1.6)		 		  : (known as"Mustang"')
+java 7 (1.7)		 		  : (known as"Dolphin"')
+java 8 (1.8)		 		  : (known as"Spider"') : Lambda expression
+java SE 9 (1.9)		 		  : 
+java SE 10 (1.10)				  : on March, 20, 2018
+java SE 11 (1.11)				  : on sep 25 2018			
+java 12						  : mar 19 2019
+java 13						   : sep 10 2019
+..
+..
+===
+Java case sensitive
+===
+System.out.println()		: starts with new line
+  |            |       |
+1           2        3
+
+1 : class name 
+out  : PrintStream object
+3 : method 
+
+in : InputStream object
+==
+System.out.print()	--> same line
+
+===================
+public static void main(String args[])
+
+==========
+static method -------> we do not have to create an obj
+==
+what is use of main() method
+it is an entry point of the program
+the program execution starts with main method
+JVM will search for the class which has the main method, after finding the main method JVM will execute what ever is there in the main method
+in an application , we  should be one class, which has main() method 
+
+=====
+public static void main(String args[])
+public  : it is accessible to all the classes
+static  : no need to create an object to call this method
+void  : no return type
+main() : method : entry point
+String args[] : command line arguments 
+args : name of the array 
+====
+command line arguments
+    
+String args[]
+   
+
+
+--to compile
+javac Myclass2.java
+
+--to run
+java Myclass2 10 20 30
+                          |     |     |
+		         0     1     2
+0  --> args[0]
+1  --> args[1]
+2  --> args[2]
+
+args --------> name of the array
+
+==
+java Myclass2 priti  uma yatin 
+java Myclass2 10.44 20.11 30.44
+
+java Myclass2 p b n 
+
+
+
+===
+
+--single line  comments
+// sdfsdf
+
+--multiple line  comments
+/*sdf
+dsf
+sdf
+sdfsd */
+
+--documentation comments
+/*sdf
+*dsf
+*sdf
+*sdfsd 
+*/
+====
+Integer.parseInt(args[0])
+   |             |
+class       method
+
+
+
+
+===
+public static void main(String args[])
+===
+data types in java
+
+						data types 
+						    |
+				------------------------------------------------
+				|							|
+		    primitive 						 reference
+			|								|
+	-------------------------						   --String
+	|			     |						   --Class
+	numeric		non numeric				   -- array
+	|			     |						   --Collection
+byte				char							   Stack
+short			        boolean						   List
+int											   Set
+long											   Queue
+float
+double
+
+=====
+1000---------> byte
+
+a Type	Size	Description
+byte	1 byte	Stores whole numbers from 	-128 to 127
+short	2 bytes	Stores whole numbers from 	-32,768 to 32,767
+int	4 bytes	Stores whole numbers from 	-2,147,483,648 to 2,147,483,647
+long	8 bytes	Stores whole numbers from 	-9,223,372,036,854,775,808 to 9,223,372,036,854,775,807
+float	4 bytes	Stores fractional numbers. Sufficient for storing 6 to 7 decimal digits
+double	8 bytes	Stores fractional numbers. Sufficient for storing 15 decimal digits
+boolean	1 bit	Stores true or false values
+char	2 bytes	Stores a single character/letter or ASCII values
+===
+file --new --java project
+
+===
+rt src --- new --package --> module1
+
+--shortcuts
+sys 
+
+--TO RUN  a file
+1.  rt  --run as --java appl
+2. ctrl +  F11
+3. run on the top
+4. rt on file --run as-- java appl
+=======
+public static void main(String[] args) 
+
+1. remove "public"
+compile : success
+runtime : err
+
+--2 remove "static"
+compile : success
+runtime : err
+
+3 -- string ====> int
+compile : success
+runtime : err
+
+4 string[]  ---> int[]
+compile : success
+runtime : err
+
+5 args ---> num
+compile : success
+runtime : success
+
+--6 String args[]  -- > String[] args
+compile : success
+runtime : success
+
+====
+what is class ?
+  it is a blue print, template , protype
+ collection of objects
+ collection of member variables , member function
+
+
+what is an object?
+it is an instance of the class
+
+								Car
+								 | mv/ state / attribute :
+								 |  model, color, price, 
+								 |
+								 | mf / behaviour / method/ 
+								 |  changeSpeed(), start() , stop(),  changeGear(), 
+				----------------------------------------------------------
+				|					|				|
+			BMW				  i10				  audi
+model=1						model=2				model=3
+color="white"					color="red"			color="black"
+price=4000000				price=1000000				price=5000000
+changeSpeed(), start() , stop(),  changeGear(),				changeSpeed(), start() , stop(),  changeGear(),
+							  |
+						changeSpeed(), start() , stop(),  changeGear(),
+
+===================
+Student
+mv
+   rollNo
+   fname
+   lname 
+   age
+   mobile
+   address
+   panCard
+   adharCard
+   Dob
+   gender 
+  boodGroup
+
+mf
+  attendClass()
+  apperExam()
+  competeAssignment()
+  payFees()
+  checkDefaulterList()
+  checkResult()
+  performPracticles()
+  prepareExams()
+
+
+
+
+
+
+
+
+1000 obj
+
+Car BMW=new Car();
+Car i10=new Car();
+Car audi=new Car();
+
+========================
+Mobile
+   mv
+   mf
+   main()
+	create an obj call the methods  : 2
+
+
+
+
+--naming convension
+
+
+
+

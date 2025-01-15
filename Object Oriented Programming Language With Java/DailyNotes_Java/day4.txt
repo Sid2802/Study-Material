@@ -1,0 +1,342 @@
+--interview  topics
+OOP
+TYPES OF inheritance
+TYPES OF polymorphism
+fun overloadding
+fun overriding
+inheritance
+abstract class
+interface
+String  class
+wrapper class
+StringBuilder  class
+StringBuiffer  class
+array
+command line arg
+
+--Wrapper class
+ it wraps the primitive data type  
+ for every  primitive data type  , we have a separate wrapper class
+ it converts into an object so that we can use the functions associated
+
+Wrapper class 		primitive data types
+Integer				int
+Float				float
+Double 				double
+Byte					byte
+Short				short
+Boolean				boolean
+Character				char					
+Long				long
+..
+..
+
+--Methods of Wrapper class object
+1 parseInt()
+2 parseFloat()
+3 parseDouble()
+4 min_value()
+5 max_value()
+6 size()
+7 min()
+8 max()
+9 hashCode()
+10 toString()
+11 toHexString()
+12valueOf()
+13 sum()
+...
+------------------------------------------------------------------------
+Autoboxing 
+  The automatic conversion of primitive types to the object 
+
+Unboxing:
+converting an object of a wrapper class to its corresponding primitive data type
+
+	int a=100;
+		Integer i=a;
+		
+		System.out.println("==============");
+		
+		int a1=i;  //Unboxing
+------------------------------------------------------------------------
+
+
+=============
+Constructor
+  it is a method has the same name as class
+  it is automatically called as and when the object is created
+  it is public
+  it does not return a value
+  it is used to initialise the object
+  can overload the Constructor
+  
+ --types of Constructor
+1 default Constructor
+	has no parameters
+2 parameterized Constructor
+   	has parameters
+
+--note 
+if you do not provide any Constructor, the application will provide the default Constructor 
+if you do  provide a parameterized Constructor, the application will not provide the default 
+Constructor .
+
+Student
+    private int rollNo;
+     private String name;
+     private double score;
+
+    def cons
+    para cons
+    display()
+   markAttendance()
+
+--
+para cons          1             pr             88
+    public Student(int rollNo, String name , double score) {
+    	//this : current object 
+    	System.out.println("this is parameterized constructor");
+    	this.rollNo=rollNo;
+    	//    mv      parameter
+    	this.name=name;
+    	this.score=score;
+    	//    mv      parameter
+    }
+
+==========================
+---shortcut for para const
+rt--source ---generate const using fields -- generate
+
+---shortcut for def const
+ctrl + space bar
+
+--getter  method
+  to retrieve value
+
+--setter  method
+  to change value
+
+---shortcut for adding getter and setter
+rt--source ---generate getter and setter
+
+
+==
+Customer				<---- POJO (plain old java object )
+	//mv
+	private int custId	
+	name	: String
+	mobile	: int
+	address	: String
+
+       default  constructors
+       parameterized const
+       getter and setter 
+       toString().
+
+TestCustomer 	: 	
+	1. create an object without parameters
+	2. display all the details
+	3. create an object with parameters
+	4 display all the details
+
+Object 
+^
+|
+Student
+
+ toString() 
+	method  Object class
+	it is used to convert the Object to String 
+
+=
+Account
+	private int accNo;
+	private String accName;
+	private double accBalance;
+
+       def cost
+       para const
+       getter setter
+       toString()
+
+TestAccount 
+	1. create an object without parameters
+	2. display all the details
+	3. create an object with parameters
+	4 display all the details
+
+---constant pools in java or String pool
+str1, str2........... str20
+String str=new String("siddhi");
+-----------   -----------------------------
+stack		heap
+
+A Java String Pool is a place in heap memory where all the strings defined in the program are stored.
+A separate place in a stack is there where the variable storing the string is stored.
+Whenever we create a new string object, JVM checks for the presence of the object in the String pool, 
+If String is available in the pool, the same object reference is shared with the variable, 
+else a new object is created.
+
+--Java Tokens
+are the smallest elements of a program that is meaningful to the compiler.
+are also known as the fundamental building blocks of the program
+these are :
+1.Keywords
+2.Identifiers : variables
+3. Constants
+4. Special Symbols { } [ ]
+5. Operators
+6. Comments
+7. Separators ;
+
+Garbage collection : 
+each time an object is created in java, it goes into an area memory called as Heap.
+called Garbage-Collectible Heap.
+
+when JVM sees that an object can never be used again, that object become
+ eligible for Garbage collection. when you run low in the memory, 
+the Garbage collector will run, throw  out the unreachable objects and free up 
+the space so that the space can be reused. 
+
+Array
+   it is a collection of values of same data types 
+  eg : store marks of student, 20 names of student
+ 
+names[5]
+
+uma		isha		rohan	Yogesh		tia
+[0]		[1]		[2]		[3]			[4]
+|
+index
+subscript		
+
+int[]  arr1=new int[5];
+String[]  names=new String[5];
+
+--adv Array
+1. faster to access , the elements stored contiguously
+
+--dis adv
+1. elements are of the same datatype
+2. size is fixed
+
+--type of Array
+1 single dimentional
+2 multi dimentional
+
+ --1
+int[] arr=new int[5];
+	  
+	  arr[0]=99;
+	  arr[1]=11;
+	  arr[2]=22;
+	  arr[3]=933;
+	  arr[4]=44;
+
+--2
+  int[] arr= {11,22,33,44,55};
+	  
+--3
+ int[] arr=new int[5];
+  for(int i=0; i<arr.length; i++) {
+		  arr[i]=sc.nextInt();
+	  }
+	  	  
+--multi dimentional
+0             1      		2		3 
+rollNo	C++		Java		MySQL
+1		77		88		99		0
+2		70		55		81		1
+3		69		80		77		2
+
+80   -- arr[2][2]
+99   -- arr[0][3]
+
+int[][]   arr=new arr[3][4]
+				 r   c
+--
+empno	basic	hra		bonus	comm
+1	         30000	2000	1000	5000
+2	         30000	1000	1000	5000
+3	        20000	2000	1000	5000
+4	         21000	2000	1000	5000
+
+
+
+
+
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+====================
+--assignment
+1. accept the number and calculate the factorial of the no.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
